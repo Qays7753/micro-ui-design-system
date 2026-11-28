@@ -2052,6 +2052,13 @@ export function App() {
           </div>
         </section>
 
+        {/* The demo sheets render BEFORE the domains wing in the catalog
+             DOM (they are fixed overlays — visual order unchanged): the
+             23.2 press scan walks in DOM order, so every sheet's own
+             buttons (including its close) are pressed and settled before
+             the domain sections, and a sheet one of the earlier specimens
+             opened can never swallow the domain presses below it. */}
+        {demoSheets}
         {/* ---- Domains (plan B, stage 5): one rendering block, the
              sections themselves live in ds/lab/src/domains/ ---- */}
         {domainSections.map((sec) => (
@@ -2061,7 +2068,6 @@ export function App() {
         ))}
 
         </main>
-        {demoSheets}
       </div>
       </>
       )}

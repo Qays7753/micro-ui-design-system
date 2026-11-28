@@ -265,25 +265,36 @@
 
 .lab-sheet-stage .mds-sheet-panel {
   max-width: none;
-  /* m23: the inline specimen scrolls INSIDE its stage — its content can
-     never bleed over the stage below (two stacked sheets overlapped
-     before: one send button under the other's). */
+  /* m23 + ds-states: the inline specimen behaves like the REAL sheet's
+     panel — a flex column whose body scrolls and whose bar sits BELOW
+     the scroll flow (the component pins the bar to the panel's own
+     bottom edge, 23.15's sheet-owned layer). Content can never pass
+     beneath the bar, so every button stays pressable at every scroll
+     offset — the stage below can never be covered either. */
   block-size: 480px;
   max-block-size: 480px;
   overflow-y: auto;
 }
 
-/* m23 (the real root): ActionBar is fixed to the screen bottom BY DESIGN
-   (23.15 — a screen's bar owns the viewport). Two sheet specimens in one
-   catalog page then pin BOTH bars onto the same viewport pixels and they
-   cover each other's buttons. Inside a stage the bar rides the panel's
-   own flow: the specimen shows the bar where the sheet's real geometry
-   puts it, and no two specimens' bars can ever collide. The component's
-   real fixed behavior is untouched (apps pin it to their screen). */
+/* Lab-only: the specimen's honest close flow (exit motion THEN remount)
+   is compressed — the remount is immediate on dismiss, so the next
+   press scan never races a mid-flight enter transition. The component's
+   real exit behavior is untouched for apps. */
+.lab-sheet-stage .mds-sheet--closing .mds-sheet-panel {
+  transition: none;
+}
+
+/* m23 + states: the bar rides the panel's bottom edge like the real
+   composition — sticky at the scroll bottom, so content NEVER passes
+   beneath it (its press targets stay clear at every offset) and no two
+   specimens' bars ever collide. The component's screen-fixed behavior
+   stays untouched for apps. */
 .lab-sheet-stage .mds-action-bar {
-  position: static;
-  inset-inline: auto;
-  z-index: auto;
+  position: sticky;
+  bottom: 0;
+  inset-inline: 0;
+  z-index: 1;
+  background-color: var(--mds-color-canvas);
 }
 
 /* ---- ActionBar specimen stage (S7 unit 3): same mini-frame pattern as

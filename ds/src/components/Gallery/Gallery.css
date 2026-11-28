@@ -97,3 +97,14 @@
   white-space: nowrap;
   display: inline-block;
 }
+
+/* 23.2: the sr-only arrows answer a press — the clipped box still
+   computes a pressed background — and disable reads the disabled word
+   color (the arrows carry the same words for assistive tech). */
+.mds-gallery-nav:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-gallery-nav:disabled {
+  color: var(--mds-color-disabled-fg);
+}

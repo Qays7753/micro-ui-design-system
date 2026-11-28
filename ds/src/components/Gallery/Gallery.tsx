@@ -73,9 +73,7 @@ export function Gallery({
             className="mds-gallery-item"
             key={`${item.value}-${i}`}
             role="img"
-            aria-label={t('gallery.imageOf')
-              .replace('{current}', String(i + 1))
-              .replace('{total}', String(items.length))
+            aria-label={t('gallery.imageOf', { current: i + 1, total: items.length })
               + (item.caption ? `${t('sr.listSeparator')}${item.caption}` : '')}
           >
             <img className="mds-gallery-photo" src={item.value} alt="" aria-hidden="true" loading="lazy" />

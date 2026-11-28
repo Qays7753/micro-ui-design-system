@@ -109,25 +109,38 @@ function ListingStatusBadgeGarden() {
 }
 
 function ReportSheetGarden() {
-  // Frozen (press-stable): the sheet renders inline with its states side
-  // by side; the real dismissal stays with the app.
+  // The honest close flow (و-2 item 30, the lab's documented pattern):
+  // the sheet plays its exit motion on the X press, THEN the app removes
+  // it — remounted fresh at once so the sample stays for review and the
+  // press scan (23.2) keeps hitting it.
+  const [sampleKey, setSampleKey] = useState(0);
   return (
     <div>
       <div className="lab-row lab-row--full"><span className="lab-label">{t('state.normal')}</span>
-        <div className="lab-sheet-stage"><ReportSheet items={['محتوى مضلل', 'سعر غير صحيح', 'منتج مقلد']} onDismiss={() => {}} /></div>
+        <div className="lab-sheet-stage">
+          <ReportSheet
+            key={sampleKey}
+            items={['محتوى مضلل', 'سعر غير صحيح', 'منتج مقلد']}
+            onDismiss={() => setSampleKey((k) => k + 1)}
+          />
+        </div>
       </div>
     </div>
   );
 }
 
 function ListingEditorGarden() {
+  // Both specimens ride the honest close loop: the X press plays the
+  // exit motion, then the app removes and remounts the sample at once.
+  const [newKey, setNewKey] = useState(0);
+  const [editKey, setEditKey] = useState(0);
   return (
     <div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['editor.newTitle'].text}</span>
-        <div className="lab-sheet-stage"><ListingEditor onDismiss={() => {}} /></div>
+        <div className="lab-sheet-stage"><ListingEditor key={newKey} onDismiss={() => setNewKey((k) => k + 1)} /></div>
       </div>
       <div className="lab-row lab-row--full"><span className="lab-label">{ar['editor.editTitle'].text}</span>
-        <div className="lab-sheet-stage"><ListingEditor editing onDismiss={() => {}} draft={{ label: 'طحين أبيض 50 كغ', unit: 'كيس 50 كغ', mode: 'tiers', items: TIERS }} /></div>
+        <div className="lab-sheet-stage"><ListingEditor key={editKey} editing onDismiss={() => setEditKey((k) => k + 1)} draft={{ label: 'طحين أبيض 50 كغ', unit: 'كيس 50 كغ', mode: 'tiers', items: TIERS }} /></div>
       </div>
     </div>
   );

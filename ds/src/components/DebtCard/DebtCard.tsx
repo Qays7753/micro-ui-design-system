@@ -72,7 +72,10 @@ export function DebtCard({
     formatMoney(value, { debt: debtFlow, texts: getMoneyTexts() }).aria,
     caption,
     paid !== undefined && total !== undefined
-      ? t('sr.debtProgress', { paid: formatMoney(paid, { texts: getMoneyTexts() }).aria }).replace('{total}', formatMoney(total, { texts: getMoneyTexts() }).aria)
+      ? t('sr.debtProgress', {
+        paid: formatMoney(paid, { texts: getMoneyTexts() }).aria,
+        total: formatMoney(total, { texts: getMoneyTexts() }).aria,
+      })
       : '',
     tone === 'overdue' ? t('debt.overdue') : '',
     tone === 'done' ? t('debt.settled') : '',

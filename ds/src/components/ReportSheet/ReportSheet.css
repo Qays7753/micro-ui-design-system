@@ -29,6 +29,17 @@
   background-color: var(--mds-color-surface-pressed);
 }
 
+/* 23.2: a disabled reason row reads differently — the disabled word
+   color and no press treatment. */
+.mds-report-sheet-reason:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-report-sheet-reason:disabled:active {
+  background-color: transparent;
+}
+
 .mds-report-sheet-reason-label {
   flex: 1;
   min-width: 0;
