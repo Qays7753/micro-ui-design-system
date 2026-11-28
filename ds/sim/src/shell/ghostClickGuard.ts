@@ -31,11 +31,23 @@
  * library Sheet dismisses on the closing pointer instead of click.
  */
 
+/** A sheet ignores ONE dismiss-click during the first moments of its life
+ * (جولة المستخدم: the second tap of a double-tap on the opener lands on the
+ * scrim while the sheet is still settling in — the owner's «تظهر لحظة ثم
+ * تختفي»). The window covers the library's own entry motion
+ * (--mds-motion-standard-ms: 240ms) plus the browser's double-tap margin;
+ * a deliberate close-tap — a human aiming at the scrim — arrives later and
+ * passes untouched. Identity- and lifetime-based, no timers installed. */
+const SETTLE_MS = 350;
+
 export function installGhostClickGuard(): () => void {
   // The sheet overlay the current tap STARTED in (null = outside any
   // sheet), and whether that tap is still awaiting its click.
   let downSheet: Element | null = null;
   let tapActive = false;
+  // Each sheet's first sighting (the ghost of the tap that opened it);
+  // the settle window runs from there.
+  const bornAt = new WeakMap<Element, number>();
 
   const onDown = (e: Event) => {
     const t = e.target;
@@ -59,9 +71,30 @@ export function installGhostClickGuard(): () => void {
     if (clickSheet && startedOutside) {
       // The tap started outside the sheet it now lands in: the ghost of
       // the opening tap. Stop it before React's delegated listeners (at
-      // the root) ever see it.
+      // the root) ever see it — and this click is the sheet's birth
+      // certificate: the settle window starts here.
+      if (clickSheet instanceof Element && !bornAt.has(clickSheet)) {
+        bornAt.set(clickSheet, performance.now());
+      }
       e.stopPropagation();
       e.preventDefault();
+      return;
+    }
+    if (clickSheet instanceof Element) {
+      // A tap that STARTED inside this sheet. Normally a deliberate close
+      // (scrim) or an in-sheet action — passes. But a SCRIM click inside
+      // the settle window is the second tap of a double-tap on the opener:
+      // swallow it so a freshly opened sheet cannot be killed by the tap
+      // that opened it (reproduced on Pixel 7 + iPhone 13 profiles:
+      // frames at 0ms open, gone by 100ms). In-panel taps (the X button,
+      // rows) pass even inside the window — only the scrim dismiss is
+      // suppressed while the sheet settles.
+      const born = bornAt.get(clickSheet);
+      const onScrim = t instanceof Element && !!t.closest('.mds-sheet-scrim');
+      if (born !== undefined && onScrim && performance.now() - born < SETTLE_MS) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
     }
   };
 

@@ -156,7 +156,17 @@ export function OrdersScreen() {
           <FilterChips
             leading={LIST_FILTERS}
             value={[filter]}
-            onChange={(v) => setFilter(v[0] ?? 'all')}
+            onChange={(v) => {
+              // FilterChips toggles ADDITIVELY (multi-select): with «الكل»
+              // selected, tapping «يحتاجك» produced ['all','needsYou'] and
+              // v[0] kept the filter on 'all' FOREVER — the owner taps the
+              // chip and nothing ever moves (جولة المستخدم، Pixel 7).
+              // The orders filter is single-select with «الكل» as the reset:
+              // the newest non-all choice wins, an empty toggle returns to
+              // «الكل».
+              const chosen = v.filter((x) => x !== 'all');
+              setFilter(chosen[chosen.length - 1] ?? 'all');
+            }}
             label="حالات الطلبات"
           />
           {show('needsYou') && needsList.length ? (

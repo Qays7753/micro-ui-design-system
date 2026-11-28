@@ -92,14 +92,21 @@ describe('جولة المستخدم — الطلبات تعمل من أولها 
     expect(document.querySelector('.mds-sheet')).toBeNull();
   });
 
-  test('ر3.3: تسليم طلب 1175 من ورقته — الضغطتان السريعتان تُسجَّلان مرة', async () => {
+  test('ر3.3: تسليم طلب 1175 من ورقته — حالته صارت «تم التسليم» ويظل في «يحتاجك» لحين التسوية', async () => {
     await ownerOrders();
     // 1175 جاهز في «يحتاجك» (بطاقة OrderCard)
     await clickEl(screen.getByText(/طلب 1175/));
     expect(screen.getByText('سجّل التسليم')).toBeTruthy();
     await press(screen.getByText('سجّل التسليم'));
-    // الورقة أُغلقت والطلب غادر «يحتاجك» نحو «تم التسليم» في السجل
-    expect(screen.queryByText(/طلب 1175 · سلمى الحوراني · فستان سهرة · جاهز/)).toBeNull();
+    // الورقة أُغلقت، وحالة البطاقة صارت «تم التسليم» — الطلب يظل في «يحتاجك»
+    // (تسويته المالية ما زالت على المالك)، و«السجل» لحين التسوية لا يعرضه
+    expect(screen.queryByText(/طلب 1175 · سلمى الحوراني · فستان سهرة — بتالة كتف · جاهز/)).toBeNull();
+    expect(screen.getAllByText(/طلب 1175 .* تم التسليم/).length).toBeGreaterThanOrEqual(1);
+    // الرقائق تعمل الآن (كانت عالقة على «الكل»): «السجل» يخفي بطاقة يحتاجك —
+    // 1175 لم تُسوَّ بعد فلا هي في السجل — والعودة إلى «الكل» تظهرها مجددًا
+    await press(screen.getByText('السجل'));
+    expect(screen.queryByText(/طلب 1175/)).toBeNull();
+    expect(screen.getAllByText(/تمت التسوية|ملغى/).length).toBeGreaterThanOrEqual(1);
     await press(screen.getByText('السجل'));
     expect(screen.getAllByText(/1175/).length).toBeGreaterThanOrEqual(1);
   });
@@ -123,5 +130,33 @@ describe('جولة المستخدم — الطلبات تعمل من أولها 
     expect(screen.getByText('الحالة')).toBeTruthy();
     // 1175 مرتبط بتوصيل ت1
     expect(screen.getByText('مرتبط بتوصيل')).toBeTruthy();
+  });
+
+  test('رقائق الفلتر تعمل: «يحتاجك» يخفي «الجارية» و«السجل» (كانت عالقة على الكل — جولة المستخدم)', async () => {
+    await ownerOrders();
+    const chipLabel = (t: string) =>
+      [...document.querySelectorAll('button.mds-filter-chip')].find(
+        (c) => c.querySelector('.mds-filter-chip-label')?.textContent === t,
+      );
+    const sections = () =>
+      [...document.querySelectorAll('.mds-section')].map(
+        (s) => s.querySelector('.mds-section-title')?.textContent ?? '',
+      );
+    // قبل الفلتر: الأقسام الثلاثة كلها ظاهرة
+    expect(sections()).toContain('يحتاجك');
+    expect(sections()).toContain('الجارية');
+    // لمسة على رقاقة «يحتاجك»: FilterChips متعدد الاختيار فأرسل ['all','needsYou']
+    // وكان onChange يأخذ v[0] فيبقى الفلتر 'all' للأبد — الآن يفوز الاختيار الأخير
+    await press(chipLabel('يحتاجك')!);
+    expect(chipLabel('يحتاجك')!.getAttribute('aria-pressed')).toBe('true');
+    expect(chipLabel('الكل')!.getAttribute('aria-pressed')).toBe('false');
+    // قسما «الجارية» و«السجل» خرجا من القائمة
+    expect(sections()).not.toContain('الجارية');
+    expect(sections()).not.toContain('السجل');
+    expect(sections()).toContain('يحتاجك');
+    // العودة إلى «الكل»: لمسة على الرقاقة النشطة تعيد الكل
+    await press(chipLabel('يحتاجك')!);
+    expect(chipLabel('الكل')!.getAttribute('aria-pressed')).toBe('true');
+    expect(sections()).toContain('الجارية');
   });
 });
