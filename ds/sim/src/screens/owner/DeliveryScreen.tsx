@@ -14,7 +14,11 @@ export function DeliveryScreen() {
   const dispatch = useSimDispatch();
 
   const needs = projectView(state).deliveries.filter((d) => d.status === 'quoteArrived');
-  const running = projectView(state).deliveries.filter((d) => d.status === 'inProgress');
+  // جولة المستخدم: «الجارية» تشمل كل ما ليس في السجل ولا في «يحتاجك» —
+  // بانتظار عرض السعر، مقبول، قيد التنفيذ (كانت تختفي الطلبات الجديدة!).
+  const running = projectView(state).deliveries.filter((d) =>
+    ['awaitingQuote', 'accepted', 'inProgress'].includes(d.status),
+  );
   const done = projectView(state).deliveries.filter((d) => d.status === 'done');
 
   return (
@@ -34,14 +38,18 @@ export function DeliveryScreen() {
           <div className="sim-cards">
             {needs.map((d) => {
               const valid = d.quotes.find((q) => q.state === 'valid');
+              const minutesLeft = valid?.expiresInMinutes ? Math.max(0, Math.round(valid.expiresInMinutes - minutesSinceOpen())) : 0;
               const expiring = valid?.expiresInMinutes
-                ? `ينتهي بعد ${Math.max(0, Math.round(valid.expiresInMinutes - minutesSinceOpen()))} دقيقة`
+                ? minutesLeft >= 90
+                  ? `ينتهي بعد ساعتين تقريبًا`
+                  : `ينتهي بعد ${minutesLeft} دقيقة`
                 : null;
               return (
                 <LaterMark
                   key={d.id}
                   name="DeliveryRequestCard"
                   note={`${d.id} · إلى ${d.to} · ${moneyText(valid?.amount ?? 0)} د${expiring ? ` · ${expiring}` : ''}`}
+                  onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${d.id}` })}
                 />
               );
             })}
@@ -52,7 +60,12 @@ export function DeliveryScreen() {
         <Section label="الجارية" caption={running.length}>
           <div className="sim-cards">
             {running.map((d) => (
-              <LaterMark key={d.id} name="DriverJobCard" note={`${d.id} · إلى ${d.to} · قيد التنفيذ`} />
+              <LaterMark
+                key={d.id}
+                name="DriverJobCard"
+                note={`${d.id} · إلى ${d.to} · ${d.status === 'awaitingQuote' ? 'بانتظار عرض السعر' : d.status === 'accepted' ? 'مقبول — بانتظار بدء السائق' : 'قيد التنفيذ'}`}
+                onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${d.id}` })}
+              />
             ))}
           </div>
         </Section>

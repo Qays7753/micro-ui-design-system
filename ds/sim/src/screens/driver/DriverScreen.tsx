@@ -21,11 +21,13 @@ const SEGMENTS: readonly SegmentOption[] = [
   { value: 'jobs', label: 'مهامي' },
 ];
 
-/** The driver's live job line for a DriverJobCard marker's note. */
+/** The driver's live job line for a DriverJobCard marker's note — جولة
+ *  المستخدم: the OWNER's name leads the line (the driver serves more than
+ *  one project; ت4 comes from صالون لمسة not ورشة الياسمين). */
 function jobLine(d: Delivery): string {
   const valid = d.quotes.find((q) => q.state === 'valid');
   const superseded = d.quotes.find((q) => q.state === 'superseded');
-  const parts = [`${d.id} · إلى ${d.to}`, `من ${d.from}`, whenLine(d.date, d.time)];
+  const parts = [`${d.id} · ${d.owner}`, `إلى ${d.to}`, `من ${d.from}`, whenLine(d.date, d.time)];
   if (d.status === 'quoteArrived') {
     parts.push(
       `عرضك ${moneyText(valid?.amount ?? superseded?.amount ?? 0)} د بانتظار قرار المالك${superseded && !valid ? ' (السابق مستبدل)' : ''}`,
@@ -72,14 +74,14 @@ export function DriverScreen() {
         {part === 'orders' ? (
           <div className="sim-cards">
             {orders.map((d) => (
-              <LaterMark key={d.id} name="DriverJobCard" note={jobLine(d)} />
+              <LaterMark key={d.id} name="DriverJobCard" note={jobLine(d)} onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${d.id}` })} />
             ))}
           </div>
         ) : (
           <>
             <div className="sim-cards">
               {running.map((d) => (
-                <LaterMark key={d.id} name="DriverJobCard" note={jobLine(d)} />
+                <LaterMark key={d.id} name="DriverJobCard" note={jobLine(d)} onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${d.id}` })} />
               ))}
             </div>
             {done.length ? (

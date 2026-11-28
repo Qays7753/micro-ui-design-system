@@ -42,17 +42,17 @@ describe('SA7ب — the driver screens (§5.1)', () => {
     // No TabBar for the driver (9.1: عنصران فقط).
     expect(screen.queryByRole('tablist')).toBeNull();
     // ت4: awaiting his quote (the quote form rides the real card in part B).
-    expect(screen.getByText(/ت4 · إلى إربد، شارع الجامعة/)).toBeTruthy();
+    expect(screen.getByText(/ت4 · صالون لمسة · إلى إربد، شارع الجامعة/)).toBeTruthy();
     expect(screen.getByText(/بانتظار عرضك/)).toBeTruthy();
     // ت1: his quote awaits the owner.
-    expect(screen.getByText(/ت1 · إلى مرج الحمام/)).toBeTruthy();
+    expect(screen.getByText(/ت1 · ورشة الياسمين · إلى مرج الحمام/)).toBeTruthy();
     expect(screen.getByText(/عرضك 3 د بانتظار قرار المالك/)).toBeTruthy();
   });
 
   test('مهامي: ت3 in progress with the photo evidence + السجل (ت2)', async () => {
     await enterDriver();
     await press(screen.getByText('مهامي'));
-    expect(screen.getByText(/ت3 · إلى الزرقاء، حي معصوم/)).toBeTruthy();
+    expect(screen.getByText(/ت3 · ورشة الياسمين · إلى الزرقاء، حي معصوم/)).toBeTruthy();
     expect(screen.getByText(/الإثبات المطلوب: صورة/)).toBeTruthy();
     expect(screen.getByText('يُركَّب لاحقًا: Disclosure')).toBeTruthy();
     expect(screen.getByText(/«السجل»: ت2 تمّ/)).toBeTruthy();
@@ -74,6 +74,6 @@ describe('SA7ب — the driver screens (§5.1)', () => {
     await press(screen.getByText('مهامي'));
     // Back to الطلبات through the segment.
     await press(screen.getByText('الطلبات'));
-    expect(screen.getByText(/ت4 · إلى إربد، شارع الجامعة/)).toBeTruthy();
+    expect(screen.getByText(/ت4 · صالون لمسة · إلى إربد، شارع الجامعة/)).toBeTruthy();
   });
 });

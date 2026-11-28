@@ -37,6 +37,7 @@ import { FUNDS, PROJECTS, fundBalance } from '../data';
 import type { FundId, Listing } from '../data/types';
 import type { MovementInput, OrderInput, DeliveryInput, SimState } from '../state/types';
 import { LaterMark, moneyText, needsCard, todayNeedsYouList, whenLine } from './parts';
+import { minutesSinceOpen } from '../clock';
 import { dateDisplay, parseTimeInput, time12 } from '../format';
 
 /** The sheet's own body rhythm. */
@@ -296,6 +297,77 @@ export function ObjectSheetShell({ title, refId, onDismiss }: { title: string; r
             </>
           ) : order.status === 'draft' && order.missing?.length ? (
             <p className="sim-form-help">{`مسودة — الناقص: ${order.missing.join(' و')}.`}</p>
+          ) : null}
+        </SheetBody>
+      </Sheet>
+    );
+  }
+
+  const delivery = state.deliveries.find((d) => d.id === refId);
+  if (delivery) {
+    const driverView = state.role === 'driver';
+    const valid = delivery.quotes.find((q) => q.state === 'valid');
+    const expired = valid?.expiresInMinutes !== undefined && minutesSinceOpen() > valid.expiresInMinutes;
+    const STAGE_WORDS: Record<string, string> = {
+      created: 'أُنشئ', awaitingQuote: 'بانتظار عرض سعر', quoteArrived: 'عرض سعر وصل',
+      accepted: 'مقبول', inProgress: 'قيد التنفيذ', done: 'تمّ', failed: 'تعذّر',
+    };
+    return (
+      <Sheet label={title} onDismiss={onDismiss}>
+        <SheetBody>
+          <LaterMark name="ObjectSheet" note="مكان ورقة الكائن الحقيقية" />
+          <Surface>
+            <ObjectRow label={delivery.owner} caption="المالك" leading={<EntityMark value={delivery.owner} />} />
+            <ObjectRow label={`${delivery.from} ← ${delivery.to}`} caption="من ← إلى" />
+            <ObjectRow label="الموعد" value={<span>{`${dateDisplay(delivery.date)}${delivery.time ? ` · ${time12(delivery.time)}` : ''}`}</span>} />
+            <ObjectRow label={delivery.driver ?? '—'} caption={delivery.driver ? 'السائق' : 'السائق: —'} />
+            <ObjectRow label="المرحلة" value={<span>{STAGE_WORDS[delivery.status] ?? delivery.status}</span>} />
+            {delivery.description ? <ObjectRow label={delivery.description} caption="الوصف" /> : null}
+            {delivery.quotes.map((q, i) => (
+              <ObjectRow
+                key={i}
+                label={`${moneyText(q.amount)} د · ${time12(q.time)}`}
+                caption={q.state === 'accepted' ? 'عرض مقبول' : q.state === 'superseded' ? 'مستبدل' : expired ? 'انتهى' : 'ساري'}
+                value={<span className="sim-money">{moneyText(q.amount)} د</span>}
+              />
+            ))}
+          </Surface>
+          {delivery.status === 'quoteArrived' && !driverView && !expired ? (
+            <ActionBar
+              label="اقبل العرض"
+              onPress={() => {
+                dispatch({ type: 'quote/accept', deliveryId: delivery.id });
+                dispatch({ type: 'ui/openSheet', id: null });
+              }}
+            />
+          ) : null}
+          {delivery.status === 'quoteArrived' && !driverView && expired ? (
+            <p className="sim-form-help">انتهى عرض السعر — اطلب عرضًا جديدًا.</p>
+          ) : null}
+          {delivery.status === 'awaitingQuote' && driverView ? (
+            <DriverQuoteForm deliveryId={delivery.id} />
+          ) : null}
+          {delivery.status === 'quoteArrived' && driverView ? (
+            <p className="sim-form-help">عرضك بانتظار قرار المالك.</p>
+          ) : null}
+          {delivery.status === 'inProgress' && driverView ? (
+            <DriverCompleteForm deliveryId={delivery.id} />
+          ) : null}
+          {delivery.status === 'failed' && !driverView && !delivery.issueClosed ? (
+            <>
+              <p className="sim-form-help">سائقك اعتذر عن التسليم — القرار لك دون إعادة البيانات:</p>
+              <ActionBar
+                label="وافق على المقترح"
+                onPress={() => {
+                  dispatch({ type: 'issue/resolve', deliveryId: delivery.id, approve: true });
+                  dispatch({ type: 'ui/openSheet', id: null });
+                }}
+              />
+              <div className="sim-sheet__gap" />
+              <Button variant="text" onPress={() => { dispatch({ type: 'issue/resolve', deliveryId: delivery.id, approve: false }); dispatch({ type: 'ui/openSheet', id: null }); }}>
+                ارفض وأعد المهمة للسائق
+              </Button>
+            </>
           ) : null}
         </SheetBody>
       </Sheet>
@@ -813,54 +885,183 @@ export function NewOrderSheet({ onDismiss }: { onDismiss: () => void }) {
   );
 }
 
-/** The delivery form (م1 §4.10's ورقة «اطلب توصيلاً»). */
+/** The delivery form (م1 §4.10's ورقة «اطلب توصيلاً») — جولة المستخدم: the
+ *  form WORKS. The location/date/time/driver pickers are still markers; the
+ *  sim offers TEMPORARY real inputs (from/to TextFields with the known
+ *  areas' placeholders, اليوم/غدًا chips, a time TextField parsing «4:00 م»،
+ *  and a driver SegmentedControl over the APPROVED drivers only) — the
+ *  temporary accommodation is documented in REPORT-SIM. */
 export function NewDeliverySheet({ onDismiss }: { onDismiss: () => void }) {
   const dispatch = useSimDispatch();
+  const state = useSim();
   const [form, setForm] = useState<{
-    from: string | null;
-    to: string | null;
-    date: string | null;
-    time: string | null;
+    from: string;
+    to: string;
+    day: 'today' | 'tomorrow';
+    time: string;
     description: string;
     driver: string | null;
-  }>({ from: null, to: null, date: null, time: null, description: '', driver: null });
-  const complete = Boolean(form.from && form.to && form.date && form.driver);
+  }>({ from: '', to: '', day: 'today', time: '', description: '', driver: null });
+  const approvedDrivers = state.drivers.filter((d) => d.status === 'approved');
+  const timeIso = form.time.trim() ? parseTimeInput(form.time) : null;
+  const timeInvalid = form.time.trim() !== '' && timeIso === null;
+  const complete =
+    form.from.trim() !== '' && form.to.trim() !== '' && form.driver !== null && !timeInvalid;
   return (
     <Sheet label="اطلب توصيلاً" variant="form" onDismiss={onDismiss}>
       <SheetBody>
         <div className="sim-later-inline" data-sim-later="LocationSlot">
           <span className="sim-later__name">يُركَّب لاحقًا: LocationSlot</span>
-          <span className="sim-later__note">من · إلى</span>
+          <span className="sim-later__note">بديل مؤقت: كتابة المنطتين مباشرة</span>
         </div>
+        <TextField label="من" placeholder="مثال: طبربور" value={form.from} onChange={(from) => setForm((f) => ({ ...f, from }))} />
+        <TextField label="إلى" placeholder="مثال: الزرقاء، حي معصوم" value={form.to} onChange={(to) => setForm((f) => ({ ...f, to }))} />
         <div className="sim-later-inline" data-sim-later="DateQuickChips">
           <span className="sim-later__name">يُركَّب لاحقًا: DateQuickChips</span>
+          <span className="sim-later__note">بديل مؤقت: اليوم / غدًا</span>
         </div>
+        <SegmentedControl
+          leading={[
+            { value: 'today', label: 'اليوم' },
+            { value: 'tomorrow', label: 'غدًا' },
+          ]}
+          value={form.day}
+          onChange={(v) => setForm((f) => ({ ...f, day: v as 'today' | 'tomorrow' }))}
+          label="اليوم"
+        />
         <div className="sim-later-inline" data-sim-later="TimePicker">
           <span className="sim-later__name">يُركَّب لاحقًا: TimePicker</span>
+          <span className="sim-later__note">بديل مؤقت: كتابة الوقت</span>
         </div>
+        <TextField label="الوقت" placeholder="مثال: 4:00 م أو 16:00" value={form.time} onChange={(time) => setForm((f) => ({ ...f, time }))} caption="اختياري" />
+        {timeInvalid ? <p className="sim-form-help sim-form-help--error">اكتب الوقت مثل 4:00 م أو 16:00.</p> : null}
         <TextArea
           label="الوصف"
           value={form.description}
           onChange={(description) => setForm((f) => ({ ...f, description }))}
+          caption="اختياري"
         />
         <div className="sim-later-inline" data-sim-later="PartyPicker">
           <span className="sim-later__name">يُركَّب لاحقًا: PartyPicker</span>
-          <span className="sim-later__note">السائق — وضع السائقين المعتمدين</span>
+          <span className="sim-later__note">بديل مؤقت: السائقون المعتمدون</span>
         </div>
+        <SegmentedControl
+          leading={approvedDrivers.map((d) => ({ value: d.id, label: d.name }))}
+          value={form.driver ?? ''}
+          onChange={(v) => setForm((f) => ({ ...f, driver: approvedDrivers.find((d) => d.id === v)?.name ?? null }))}
+          label="السائق"
+        />
         <SaveState saveState="draft" />
+        {!complete ? (
+          <p className="sim-form-help">
+            {form.from.trim() === '' ? 'اكتب من أين يبدأ التوصيل.' : form.to.trim() === '' ? 'اكتب إلى أين.' : form.driver === null ? 'اختر السائق.' : ''}
+          </p>
+        ) : null}
         <ActionBar
           label="أرسل الطلب"
+          disabled={!complete}
           onPress={() => {
-            if (!complete || !form.from || !form.to || !form.date || !form.driver) return;
+            if (!complete || !form.driver) return;
+            const iso = form.day === 'tomorrow' ? '2026-11-28' : '2026-11-27';
             const input: DeliveryInput = {
-              from: form.from,
-              to: form.to,
-              date: form.date,
-              time: form.time,
+              from: form.from.trim(),
+              to: form.to.trim(),
+              date: iso,
+              time: timeIso,
               content: form.description,
               driver: form.driver,
             };
             dispatch({ type: 'delivery/create', input });
+            dispatch({ type: 'ui/openSheet', id: null });
+          }}
+        />
+      </SheetBody>
+    </Sheet>
+  );
+}
+
+/** جولة المستخدم: the driver's quote form inside ت4's sheet (ر4.1's engine —
+ *  the real DriverJobCard mounts its own in part B; this is the sim's
+ *  temporary form with the marker riding it). */
+function DriverQuoteForm({ deliveryId }: { deliveryId: string }) {
+  const dispatch = useSimDispatch();
+  const [amount, setAmount] = useState('');
+  const fils = Math.round(Number.parseFloat(amount) * 1000);
+  const ok = Number.isFinite(fils) && fils > 0;
+  return (
+    <>
+      <div className="sim-later-inline" data-sim-later="QuoteForm">
+        <span className="sim-later__name">يُركَّب لاحقًا: نموذج العرض داخل DriverJobCard</span>
+        <span className="sim-later__note">بديل مؤقت — السعر حقيقي ويُستبدل العرض السابق</span>
+      </div>
+      <AmountField label="سعرك" value={amount} onChange={setAmount} caption="بالدينار" />
+      <ActionBar
+        label="أرسل العرض"
+        disabled={!ok}
+        onPress={() => {
+          if (!ok) return;
+          dispatch({ type: 'quote/submit', deliveryId, amount: fils });
+          dispatch({ type: 'ui/openSheet', id: null });
+        }}
+      />
+    </>
+  );
+}
+
+/** جولة المستخدم: the driver's completion on ت3 — the photo is a temporary
+ *  toggle until PhotoUploader mounts (ر4.3: without it the button is
+ *  disabled with its reason; SlideToConfirm rides the real card in part B). */
+function DriverCompleteForm({ deliveryId }: { deliveryId: string }) {
+  const dispatch = useSimDispatch();
+  const [photo, setPhoto] = useState(false);
+  return (
+    <>
+      <div className="sim-later-inline" data-sim-later="PhotoUploader">
+        <span className="sim-later__name">يُركَّب لاحقًا: PhotoUploader</span>
+        <span className="sim-later__note">بديل مؤقت: تأكيد رفع صورة الإثبات</span>
+      </div>
+      <Toggle label="صورة الإثبات أُرفقت (مؤقت حتى يُركَّب رافع الصور)" selected={photo} onChange={setPhoto} />
+      <ActionBar
+        label="تمّ التسليم"
+        disabled={!photo}
+        onPress={() => {
+          if (!photo) return;
+          dispatch({ type: 'delivery/complete', deliveryId, evidence: 'photo' });
+          dispatch({ type: 'ui/openSheet', id: null });
+        }}
+      />
+      {!photo ? <p className="sim-form-help">أضف صورة الإثبات أولاً.</p> : null}
+      <Button variant="text" onPress={() => dispatch({ type: 'ui/openSheet', id: `issue:${deliveryId}` })}>
+        لم أستطع التسليم
+      </Button>
+    </>
+  );
+}
+
+/** ورقة التعذّر (ر4.4): the reason + the proposed action (the owner's
+ *  recorded proposal texts) — «أرسل للمالك» closes the sheet; the SimBar
+ *  then carries «بدّل إلى المالك». */
+function IssueSheet({ deliveryId, onDismiss }: { deliveryId: string; onDismiss: () => void }) {
+  const dispatch = useSimDispatch();
+  const [reason, setReason] = useState('');
+  const [action, setAction] = useState<string | null>(null);
+  const ACTIONS: readonly SegmentOption[] = [
+    { value: 'أعد المحاولة لاحقًا', label: 'أعد المحاولة لاحقًا' },
+    { value: 'أرجع الطلب للورشة', label: 'أرجع الطلب للورشة' },
+  ];
+  const ok = reason.trim() !== '' && action !== null;
+  return (
+    <Sheet label="لم أستطع التسليم" variant="form" onDismiss={onDismiss}>
+      <SheetBody>
+        <TextArea label="السبب" value={reason} onChange={setReason} placeholder="مثال: المستلم لا يرد" />
+        <p className="sim-form-help">الإجراء المقترح (صفوف اختيار):</p>
+        <SegmentedControl leading={ACTIONS} value={action ?? ''} onChange={(v) => setAction(v)} label="الإجراء المقترح" />
+        <ActionBar
+          label="أرسل للمالك"
+          disabled={!ok}
+          onPress={() => {
+            if (!ok || !action) return;
+            dispatch({ type: 'issue/propose', deliveryId, reason: reason.trim(), action });
             dispatch({ type: 'ui/openSheet', id: null });
           }}
         />
@@ -901,6 +1102,9 @@ export function SharedSheets() {
   }
   if (sheet.startsWith('pay:')) {
     return <PaymentSheet debtId={sheet.slice('pay:'.length)} onDismiss={close} />;
+  }
+  if (sheet.startsWith('issue:')) {
+    return <IssueSheet deliveryId={sheet.slice('issue:'.length)} onDismiss={close} />;
   }
   if (sheet.startsWith('object:')) {
     const refId = sheet.slice('object:'.length);
