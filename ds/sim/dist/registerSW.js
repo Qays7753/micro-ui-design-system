@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/micro-ui-design-system/sw.js', { scope: '/micro-ui-design-system/' })})}
