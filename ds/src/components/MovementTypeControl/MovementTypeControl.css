@@ -1,0 +1,23 @@
+/*
+ * MovementTypeControl.css — BATCH2-SPECS §1.5.
+ *
+ * The control IS the SegmentedControl anatomy (§1.5-2: «SegmentedControl
+ * من الدفعة الأولى بثلاثة أجزاء») — the track and the segments render the
+ * mds-segmented-* classes from SegmentedControl.css (loaded through the
+ * package stylesheet), so the anatomy is composed, never copy-pasted
+ * (ds-dup). This file owns only what the spec adds ON TOP: the column root
+ * that stacks the track and the save-time error line. Every value rides a
+ * token by name; no raw hex/px/ms (ds-raw-values).
+ */
+
+.mds-movement-type {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* The save-time error under the control (§1.5-4). */
+.mds-movement-type-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}

@@ -19,7 +19,8 @@
  */
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import type { MovementTypeValue } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, MovementTypeControl, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -77,6 +78,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'text-area', name: t('lab.h.textArea') },
   { id: 'amount-field', name: t('lab.h.amountField') },
   { id: 'amount-keypad', name: t('title.keypad') },
+  { id: 'movement-type-control', name: t('title.movementTypeControl') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -113,6 +115,12 @@ export function App() {
   const [composeLanded, setComposeLanded] = useState(false);
   const composeRowValue = useCountUp(rowFrom, rowValue, composeLanded);
   const saveMovement = () => {
+    // 4.8 (§1.5-4): a movement with no type chosen is NOT saved — the line
+    // appears under the control and the sheet stays open.
+    if (!movementSheetType) {
+      setMovementSheetError(true);
+      return;
+    }
     setSaving(true);
     window.setTimeout(() => {
       setSaving(false);
@@ -153,6 +161,15 @@ export function App() {
   // 4.7 — the AmountKeypad demo: the field above, the pad below (its keys
   // APPLY to the value; the long backspace press clears it — §1.4).
   const [keypadValue, setKeypadValue] = useState('');
+  // 4.8 — MovementTypeControl: the lab garden (§1.5-10: «خارج» selected) and
+  // the save-error demo (a save with nothing chosen shows the line under the
+  // control, §1.5-4). The movement SHEET integration rides its own state so
+  // the error logic is real: the save refuses until a type exists.
+  const [movementDemoType, setMovementDemoType] = useState<MovementTypeValue | undefined>('out');
+  const [movementFormType, setMovementFormType] = useState<MovementTypeValue | undefined>(undefined);
+  const [movementFormError, setMovementFormError] = useState(false);
+  const [movementSheetType, setMovementSheetType] = useState<MovementTypeValue | undefined>(undefined);
+  const [movementSheetError, setMovementSheetError] = useState(false);
   // Every interactive lab sample stays LIVE (owner note §1 / ds-lab-live):
   // the error and long samples keep their point (the error contract, the
   // long-number drop) while remaining editable.
@@ -317,6 +334,18 @@ export function App() {
            (spinner + «يُرسل…» wait out motion.pending-delay; response at
            600ms), then the sheet closes and the affected row LANDS. */
         <Sheet variant="form" label={t('button.recordMovement')} onDismiss={() => setSheetOpen(false)}>
+          {/* 4.8 — §1.5-1: the type switch is the FIRST element of the
+              movement form; a save with nothing chosen shows the line under
+              it (§1.5-4) and the save refuses. */}
+          <MovementTypeControl
+            value={movementSheetType}
+            onChange={(next) => {
+              setMovementSheetType(next);
+              setMovementSheetError(false);
+            }}
+            state={movementSheetError ? 'error' : 'idle'}
+            data-ds-check="movement-type-sheet"
+          />
           <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
           <SaveState saveState={saving ? 'sending' : 'draft'} />
           <ActionBar
@@ -1570,6 +1599,47 @@ export function App() {
               «.» and the digits go visibly off, §1.4-4) is REACHED by typing
               9.999 through the keys, never pre-rendered: the states gate
               toggles the native disabled attribute and must see a change. */}
+        </section>
+
+        {/* ---- MovementTypeControl (§1.5): the in/out/transfer switch ---- */}
+        <section className="lab-section" id="movement-type-control">
+          <h2 className="lab-title">{t('lab.h.movementTypeControl')}<span className="lab-tech">{t('title.movementTypeControl')}</span></h2>
+          <p className="lab-note">{t('lab.movementTypeHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            {/* §1.5-10: the lab data — «خارج» selected. The words come from
+                the dictionary so the 3ج.1 override flows into them too. */}
+            <MovementTypeControl
+              value={movementDemoType}
+              onChange={setMovementDemoType}
+              data-ds-check="movement-type-control"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.errorRow')}</span>
+            {/* §1.5-4: a save with nothing chosen shows the error line under
+                the control; choosing clears it. The save is REAL — the
+                error appears on press, not pre-rendered (the states gate
+                toggles and must see the change). */}
+            <div className="lab-garden">
+              <MovementTypeControl
+                value={movementFormType}
+                onChange={(next) => {
+                  setMovementFormType(next);
+                  setMovementFormError(false);
+                }}
+                state={movementFormError ? 'error' : 'idle'}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt=""
+                onPress={() => setMovementFormError(!movementFormType)}
+              >
+                {t('button.saveMovement')}
+              </Button>
+            </div>
+          </div>
         </section>
 
         {/* ---- ObjectRow (BRIEF 23.4): the list row ---- */}

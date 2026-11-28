@@ -202,6 +202,14 @@ export const ar = {
   'title.keypad': { kind: 'title', text: 'لوحة المبالغ' },
   'lab.h.keypad': { kind: 'title', text: 'لوحة أرقام المبالغ' },
   'lab.keypadHint': { kind: 'help', text: 'اضغط المفاتيح يدخل المبلغ في الحقل أعلاه.' },
+  // MovementTypeControl (§1.5): the in/out/transfer switch of the movement
+  // form. The group's name is a screen-reader word; the save-time error
+  // under the control is a help sentence.
+  'movementType.srGroup': { kind: 'screen-reader', text: 'نوع الحركة' },
+  'movementType.choose': { kind: 'help', text: 'اختر نوع الحركة' },
+  'title.movementTypeControl': { kind: 'title', text: 'نوع الحركة' },
+  'lab.h.movementTypeControl': { kind: 'title', text: 'مبدّل نوع الحركة' },
+  'lab.movementTypeHint': { kind: 'help', text: 'حاول الحفظ بلا اختيار يظهر خطأ الصياغة تحته.' },
   'lab.h.money': { kind: 'title', text: 'شكل المبلغ ووحدته' },
   'lab.h.statusBadge': { kind: 'title', text: 'شارة الحالة' },
   'lab.h.entityMark': { kind: 'title', text: 'حرف الطرف' },

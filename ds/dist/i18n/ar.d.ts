@@ -532,6 +532,26 @@ export declare const ar: {
         readonly kind: "help";
         readonly text: "اضغط المفاتيح يدخل المبلغ في الحقل أعلاه.";
     };
+    readonly 'movementType.srGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "نوع الحركة";
+    };
+    readonly 'movementType.choose': {
+        readonly kind: "help";
+        readonly text: "اختر نوع الحركة";
+    };
+    readonly 'title.movementTypeControl': {
+        readonly kind: "title";
+        readonly text: "نوع الحركة";
+    };
+    readonly 'lab.h.movementTypeControl': {
+        readonly kind: "title";
+        readonly text: "مبدّل نوع الحركة";
+    };
+    readonly 'lab.movementTypeHint': {
+        readonly kind: "help";
+        readonly text: "حاول الحفظ بلا اختيار يظهر خطأ الصياغة تحته.";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";
@@ -1398,7 +1418,7 @@ export declare const ar: {
     };
     readonly 'state.fractionFull': {
         readonly kind: "badge";
-        readonly text: "ثلاث خانات عشرية";
+        readonly text: "خانات كاملة";
     };
     readonly 'title.checkbox': {
         readonly kind: "title";
