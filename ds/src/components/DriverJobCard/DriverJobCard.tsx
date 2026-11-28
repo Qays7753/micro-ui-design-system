@@ -13,7 +13,7 @@
  * - Screen reader: the title is a real heading; stage changes announce
  *   politely (the app's live region, 23.17).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { ContactBar } from '../ContactBar/index';
 import { JobTrack } from '../JobTrack/index';
 import { LocationSlot } from '../LocationSlot/index';
@@ -62,9 +62,9 @@ export function DriverJobCard({
       data-ds-check="driver-job-card"
       {...rest}
     >
-      <h3 className="mds-driver-job-title">{`${ar['delivery.to'].text} ${label}`}</h3>
-      <LocationSlot label={ar['delivery.fromWord'].text} value={origin} />
-      <LocationSlot label={ar['delivery.to'].text} value={destination} />
+      <h3 className="mds-driver-job-title">{`${t('delivery.to')} ${label}`}</h3>
+      <LocationSlot label={t('delivery.fromWord')} value={origin} />
+      <LocationSlot label={t('delivery.to')} value={destination} />
       <ContactBar value={phone} label={owner} density="large" />
       <JobTrack items={items} value={value} />
       {stage === 'awaiting-owner' && proposal ? (

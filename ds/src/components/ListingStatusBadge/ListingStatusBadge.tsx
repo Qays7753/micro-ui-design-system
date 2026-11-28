@@ -6,7 +6,7 @@
  * - Screen reader: «مرفوض: الصور غير واضحة» (the group's aria composes
  *   the badge word + reason).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { StatusBadge } from '../StatusBadge/index';
 import type { ListingStatusBadgeProps, ListingStatus } from './ListingStatusBadge.types';
 import './ListingStatusBadge.css';
@@ -37,7 +37,7 @@ export function ListingStatusBadge({
   if (tone === 'rejected' && !caption) {
     throw new Error('ListingStatusBadge: rejected requires its reason caption (rule Q1)');
   }
-  const word = ar[WORD[tone]].text;
+  const word = t(WORD[tone]);
   return (
     <div
       ref={ref}
@@ -46,7 +46,7 @@ export function ListingStatusBadge({
       role="status"
       aria-label={[word, tone === 'rejected' ? caption ?? '' : '']
         .filter(Boolean)
-        .join(ar['sr.listSeparator'].text)}
+        .join(t('sr.listSeparator'))}
       className={['mds-listing-status', className].filter(Boolean).join(' ')}
       data-ds-check="listing-status-badge"
       {...rest}

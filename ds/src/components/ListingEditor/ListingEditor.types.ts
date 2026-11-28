@@ -11,7 +11,7 @@
  */
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import type { MoneyInput } from '../../lib/format-money';
-import type { PriceTier } from '../PriceTierTable/PriceTierTable.types';
+import type { PriceTier } from '../PriceTierTable';
 
 export interface ListingEditorDraft {
   /** The listing name. */

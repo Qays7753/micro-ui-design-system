@@ -7,7 +7,7 @@
  * - ق1: the count's wording follows 24.1(8) for 0/1/2/3/11.
  * - Screen reader: «مخبز الأصيل للجملة، معتمد، إربد، 12 عرضاً».
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { EntityMark } from '../EntityMark/index';
 import { Skeleton } from '../Skeleton/index';
 import type { SupplierHeaderProps } from './SupplierHeader.types';
@@ -15,10 +15,10 @@ import './SupplierHeader.css';
 
 /** 24.1(8) count wording: «عرض واحد» / «عرضان» / «N عروض» / «N عرضاً». */
 export function offersCountWord(n: number): string {
-  if (n === 1) return ar['supplier.oneOffer'].text;
-  if (n === 2) return ar['supplier.twoOffers'].text;
-  if (n >= 3 && n <= 10) return ar['supplier.offers'].text.replace('{n}', String(n));
-  return ar['supplier.offersMany'].text.replace('{n}', String(n));
+  if (n === 1) return t('supplier.oneOffer');
+  if (n === 2) return t('supplier.twoOffers');
+  if (n >= 3 && n <= 10) return t('supplier.offers', { n: n });
+  return t('supplier.offersMany', { n: n });
 }
 
 export function SupplierHeader({
@@ -36,10 +36,10 @@ export function SupplierHeader({
   const loading = state === 'loading';
   const ariaLabel = [
     label,
-    approved ? ar['quote.approved'].text : '',
+    approved ? t('quote.approved') : '',
     caption ?? '',
     items !== undefined ? offersCountWord(items) : '',
-  ].filter(Boolean).join(ar['sr.listSeparator'].text);
+  ].filter(Boolean).join(t('sr.listSeparator'));
 
   return (
     <div
@@ -70,7 +70,7 @@ export function SupplierHeader({
               <span className="mds-supplier-header-caption mds-type-caption">
                 {[caption, items !== undefined ? offersCountWord(items) : '']
                   .filter(Boolean)
-                  .join(` ${ar['sr.listSeparator'].text} `)}
+                  .join(` ${t('sr.listSeparator')} `)}
               </span>
             ) : null}
           </span>

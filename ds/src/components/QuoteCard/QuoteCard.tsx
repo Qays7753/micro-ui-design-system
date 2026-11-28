@@ -15,7 +15,7 @@
  * - Screen reader: «عرض من عمر الزعبي، معتمد، 3 دنانير، بالقبول يبدأ
  *   السائق المهمة»; the accept button's name carries the driver's.
  */
-import { ar, getMoneyTexts } from '../../i18n/ar';
+import { t, getMoneyTexts } from '../../i18n/ar';
 import { formatMoney } from '../../lib/format-money';
 import { EntityMark } from '../EntityMark/index';
 import { Money } from '../Money/index';
@@ -43,14 +43,14 @@ export function QuoteCard({
   const loading = state === 'loading';
 
   const ariaLabel = [
-    ar['quote.offerFrom'].text.replace('{label}', label),
-    ar['quote.approved'].text,
+    t('quote.offerFrom', { label: label }),
+    t('quote.approved'),
     formatMoney(value, { texts: getMoneyTexts() }).aria,
-    ar['quote.resultSentence'].text,
-    rejected ? ar['quote.rejected'].text : '',
+    t('quote.resultSentence'),
+    rejected ? t('quote.rejected') : '',
   ]
     .filter(Boolean)
-    .join(ar['sr.listSeparator'].text);
+    .join(t('sr.listSeparator'));
 
   return (
     <div
@@ -76,13 +76,13 @@ export function QuoteCard({
         <span className="mds-object-row-text">
           <span className="mds-quote-card-title mds-type-body-strong">{label}</span>
           {caption ? <span className="mds-quote-card-caption mds-type-caption">{caption}</span> : null}
-          {rejected ? <StatusBadge tone="neutral" label={ar['quote.rejected'].text} /> : null}
+          {rejected ? <StatusBadge tone="neutral" label={t('quote.rejected')} /> : null}
         </span>
       </span>
       <span className="mds-quote-card-price">
         <Money value={value} size="lg" />
         <span className="mds-quote-card-result mds-type-caption">
-          {result ?? ar['quote.resultSentence'].text}
+          {result ?? t('quote.resultSentence')}
         </span>
       </span>
       {inList && !rejected ? (

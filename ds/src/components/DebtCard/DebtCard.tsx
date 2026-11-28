@@ -16,7 +16,7 @@
  *   party («سجّل دفعة، سلمى الحوراني»).
  * - The word «قرض» never appears (ق2) — Micro has no loans.
  */
-import { ar, getMoneyTexts } from '../../i18n/ar';
+import { t, getMoneyTexts } from '../../i18n/ar';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { usePress } from '../../lib/use-press';
 import { formatMoney } from '../../lib/format-money';
@@ -72,13 +72,13 @@ export function DebtCard({
     formatMoney(value, { debt: debtFlow, texts: getMoneyTexts() }).aria,
     caption,
     paid !== undefined && total !== undefined
-      ? ar['sr.debtProgress'].text.replace('{paid}', formatMoney(paid, { texts: getMoneyTexts() }).aria).replace('{total}', formatMoney(total, { texts: getMoneyTexts() }).aria)
+      ? t('sr.debtProgress', { paid: formatMoney(paid, { texts: getMoneyTexts() }).aria }).replace('{total}', formatMoney(total, { texts: getMoneyTexts() }).aria)
       : '',
-    tone === 'overdue' ? ar['debt.overdue'].text : '',
-    tone === 'done' ? ar['debt.settled'].text : '',
+    tone === 'overdue' ? t('debt.overdue') : '',
+    tone === 'done' ? t('debt.settled') : '',
   ]
     .filter(Boolean)
-    .join(ar['sr.listSeparator'].text);
+    .join(t('sr.listSeparator'));
 
   const classes = [
     'mds-card-shell',
@@ -112,10 +112,10 @@ export function DebtCard({
             <Money value={value} debt={debtFlow} />
           </span>
           {tone === 'overdue' ? (
-            <StatusBadge tone="waiting" label={ar['debt.overdue'].text} />
+            <StatusBadge tone="waiting" label={t('debt.overdue')} />
           ) : null}
           {tone === 'done' ? (
-            <StatusBadge tone="done" label={ar['debt.settled'].text} />
+            <StatusBadge tone="done" label={t('debt.settled')} />
           ) : null}
         </span>
       </span>

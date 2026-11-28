@@ -16,12 +16,20 @@
  * - Screen reader: a chronological list — «10:00 إلى 11:30 صباحاً، رنا
  *   العبادي، قيد التجهيز» (§3.3 item 7), not the drawing.
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
+import type { ArKey } from '../../i18n/ar';
+import type { Tone } from '../../tokens/tokens';
 import { formatTime12 } from '../../i18n/time';
 import { EmptyState } from '../EmptyState/index';
 import { Skeleton } from '../Skeleton/index';
 import type { DayTimelineProps } from './DayTimeline.types';
 import './DayTimeline.css';
+
+/** The badge tone's word — resolved through t() so overrides flow (3ج.1). */
+function toneWord(tone: Tone): string {
+  const key = `badge.${tone}` as ArKey;
+  return t(key);
+}
 
 const HOUR = 64; // size.timeline-hour — referenced via CSS var in styles
 
@@ -48,7 +56,7 @@ export function DayTimeline({
   const toY = (minutesPastMidnight: number) => ((minutesPastMidnight / 60 - min) * HOUR);
 
   if (!loading && items.length === 0) {
-    return <EmptyState label={ar['agenda.emptyDay'].text} />;
+    return <EmptyState label={t('agenda.emptyDay')} />;
   }
 
   const sorted = [...items].sort((a, b) => a.hour * 60 + (a.startMinutes ?? 0) - (b.hour * 60 + (b.startMinutes ?? 0)));
@@ -86,7 +94,7 @@ export function DayTimeline({
       <div
         className="mds-day-timeline-area"
         role="list"
-        aria-label={ar['sr.timelineItems'].text}
+        aria-label={t('sr.timelineItems')}
         style={{ height: hours.length * HOUR }}
       >
         {loading ? (
@@ -115,8 +123,8 @@ export function DayTimeline({
                     const ariaText = [
                       item.time,
                       item.label,
-                      item.tone && item.tone !== 'neutral' ? (ar[`badge.${item.tone}` as keyof typeof ar] as { text: string })?.text ?? '' : '',
-                    ].filter(Boolean).join(ar['sr.listSeparator'].text);
+                      !(item.tone && item.tone !== 'neutral') ? '' : toneWord(item.tone as Tone),
+                    ].filter(Boolean).join(t('sr.listSeparator'));
                     if (!item.minutes) {
                       return (
                         <button

@@ -5,3 +5,4 @@ ds/consumer-test/pnpm-lock.yaml
 ds/micro-ds-*.tgz
 .venv/
 __pycache__/
+core

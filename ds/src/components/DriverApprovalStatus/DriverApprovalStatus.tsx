@@ -9,7 +9,7 @@
  * - Screen reader: the state change is announced politely by the app's
  *   live region (23.17); the group itself carries the composed label.
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { StatusBadge } from '../StatusBadge/index';
 import { Well } from '../Well/index';
 import type { DriverApprovalStatusProps } from './DriverApprovalStatus.types';
@@ -37,8 +37,8 @@ export function DriverApprovalStatus({
   ref,
   ...rest
 }: DriverApprovalStatusProps) {
-  const badgeWord = ar[TONE_TO_KEY[tone]] as { text: string };
-  const sentence = children ?? (tone === 'waiting' ? ar['driver.pendingSentence'].text : null);
+  const badgeWord = t(TONE_TO_KEY[tone]);
+  const sentence = children ?? (tone === 'waiting' ? t('driver.pendingSentence') : null);
 
   return (
     <div
@@ -46,14 +46,14 @@ export function DriverApprovalStatus({
       id={id}
       style={style}
       role="group"
-      aria-label={[badgeWord.text, sentence ?? '', tone === 'rejected' ? caption ?? '' : '']
+      aria-label={[badgeWord, sentence ?? '', tone === 'rejected' ? caption ?? '' : '']
         .filter(Boolean)
-        .join(ar['sr.listSeparator'].text)}
+        .join(t('sr.listSeparator'))}
       className={['mds-driver-approval', className].filter(Boolean).join(' ')}
       data-ds-check="driver-approval-status"
       {...rest}
     >
-      <StatusBadge tone={TONE_TO_BADGE[tone]} label={badgeWord.text} />
+      <StatusBadge tone={TONE_TO_BADGE[tone]} label={badgeWord} />
       {sentence ? <p className="mds-driver-approval-sentence mds-type-body">{sentence}</p> : null}
       {tone === 'rejected' ? <Well><span className="mds-type-body">{caption}</span></Well> : null}
     </div>

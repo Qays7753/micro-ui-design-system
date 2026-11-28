@@ -12,7 +12,7 @@
  *   shared row pattern (§3.4 item 7).
  * - Empty (no days at all): EmptyState with NO button (§0.2 item 1).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { EmptyState } from '../EmptyState/index';
 import { ObjectRow } from '../ObjectRow/index';
 import { Skeleton } from '../Skeleton/index';
@@ -50,7 +50,7 @@ export function AgendaList({
   }
 
   if (days.length === 0) {
-    return <EmptyState label={ar['agenda.emptyAll'].text} />;
+    return <EmptyState label={t('agenda.emptyAll')} />;
   }
 
   return (
@@ -67,7 +67,7 @@ export function AgendaList({
           <h4 className="mds-agenda-list-heading">
             <span>{day.label}</span>
             <span className="mds-agenda-list-count">
-              {ar['sr.listSeparator'].text}{day.rows.length}
+              {t('sr.listSeparator')}{day.rows.length}
             </span>
           </h4>
           <Surface>

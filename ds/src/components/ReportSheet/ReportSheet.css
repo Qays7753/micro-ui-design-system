@@ -3,13 +3,6 @@
  * no raw hex/px/ms in this file (ds-raw-values).
  */
 
-.mds-report-sheet-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-layout-field-to-field);
-  padding: var(--mds-layout-surface-padding-phone);
-}
-
 /* The reason rows: one plain row each, radio semantics (§5.5 item 7). */
 .mds-report-sheet-reasons {
   display: flex;

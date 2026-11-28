@@ -75,7 +75,9 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
+  /* ق2: the 2-line box reserves BOTH lines even for one-word titles. */
   min-block-size: calc(2 * var(--mds-type-body-strong-line));
+  overflow-wrap: anywhere;
 }
 
 /* The amount-row price: number + unit on one baseline (23.5). */
@@ -99,13 +101,10 @@
 .mds-listing-card-supplier {
   display: flex;
   align-items: center;
-  gap: var(--mds-space-8);
+  column-gap: var(--mds-space-8);
   min-width: 0;
 }
 
 .mds-listing-card-supplier-name {
   color: var(--mds-color-text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

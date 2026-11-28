@@ -51,6 +51,15 @@ button,
   object-fit: cover;
 }
 
+.mds-truncate {
+  /* The one-line ellipsis quartet — shared on purpose (ds-dup: one owner
+     in base.css next to the .mds-type-* utilities). */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
 .mds-number-lg {
   font-family: var(--mds-type-number-lg-font);
   font-size: var(--mds-type-number-lg-size);

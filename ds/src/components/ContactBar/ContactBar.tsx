@@ -13,7 +13,7 @@
  * - Screen reader: «اتصل بعمر الزعبي» / «واتساب عمر الزعبي، يفتح
  *   تطبيقاً آخر» (§4.5 item 7).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { PhoneIcon, WhatsappIcon } from '../../icons';
 import type { ContactBarProps } from './ContactBar.types';
 import './ContactBar.css';
@@ -47,7 +47,7 @@ export function ContactBar({
         style={style}
         className={['mds-contact-bar', 'mds-contact-bar--locked', className].filter(Boolean).join(' ')}
         data-ds-check="contact-bar"
-        aria-label={ar['contact.marketNote'].text}
+        aria-label={t('contact.marketNote')}
         {...rest}
       >
         <div className="mds-contact-bar-row">
@@ -56,7 +56,7 @@ export function ContactBar({
           <span className="mds-contact-bar-locked" aria-hidden="true">•••••</span>
           <span className="mds-contact-bar-locked" aria-hidden="true">•••••</span>
         </div>
-        {market ? <span className="mds-contact-bar-note mds-type-caption">{ar['contact.marketNote'].text}</span> : null}
+        {market ? <span className="mds-contact-bar-note mds-type-caption">{t('contact.marketNote')}</span> : null}
       </div>
     );
   }
@@ -80,23 +80,23 @@ export function ContactBar({
         <a
           className="mds-button mds-button--secondary mds-button--sm mds-contact-bar-link"
           href={`tel:${intl}`}
-          aria-label={ar['sr.contactCall'].text.replace('{name}', label)}
+          aria-label={t('sr.contactCall', { name: label })}
         >
           <span className="mds-contact-bar-icon" aria-hidden="true"><PhoneIcon size={20} /></span>
-          {ar['contact.call'].text}
+          {t('contact.call')}
         </a>
         <a
           className="mds-button mds-button--secondary mds-button--sm mds-contact-bar-link"
           href={`https://wa.me/${intl.replace('+', '')}`}
           target="_blank"
           rel="noreferrer"
-          aria-label={ar['sr.contactWhatsapp'].text.replace('{name}', label)}
+          aria-label={t('sr.contactWhatsapp', { name: label })}
         >
           <span className="mds-contact-bar-icon" aria-hidden="true"><WhatsappIcon size={20} /></span>
-          {ar['contact.whatsapp'].text}
+          {t('contact.whatsapp')}
         </a>
       </div>
-      {market ? <span className="mds-contact-bar-note mds-type-caption">{ar['contact.marketNote'].text}</span> : null}
+      {market ? <span className="mds-contact-bar-note mds-type-caption">{t('contact.marketNote')}</span> : null}
     </div>
   );
 }

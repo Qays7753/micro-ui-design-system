@@ -14,7 +14,9 @@
  *   4:00 مساءً، وصل عرض سعر» (§4.1 item 7).
  * - No amounts on this card — hidden-amounts mode touches nothing.
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
+import type { ArKey } from '../../i18n/ar';
+import type { Tone } from '../../tokens/tokens';
 import { usePress } from '../../lib/use-press';
 import { ClockIcon, NavDeliveryIcon } from '../../icons';
 import { EntityMark } from '../EntityMark/index';
@@ -22,6 +24,12 @@ import { Skeleton } from '../Skeleton/index';
 import { StatusBadge } from '../StatusBadge/index';
 import type { DeliveryRequestCardProps } from './DeliveryRequestCard.types';
 import './DeliveryRequestCard.css';
+
+/** The badge tone's word — resolved through t() so overrides flow (3ج.1). */
+function toneWord(tone: Tone): string {
+  const key = `badge.${tone}` as ArKey;
+  return t(key);
+}
 
 export function DeliveryRequestCard({
   label,
@@ -57,14 +65,14 @@ export function DeliveryRequestCard({
   }
 
   const ariaLabel = [
-    `${ar['delivery.to'].text} ${label}`,
+    `${t('delivery.to')} ${label}`,
     caption,
     time,
     badge ? (badge as React.ReactElement<{ label?: string }>).props.label ?? '' : '',
-    !badge && tone && tone !== 'neutral' ? (ar[`badge.${tone}` as keyof typeof ar] as { text: string })?.text ?? '' : '',
+    !(tone && tone !== 'neutral') ? '' : toneWord(tone as Tone),
   ]
     .filter(Boolean)
-    .join(ar['sr.listSeparator'].text);
+    .join(t('sr.listSeparator'));
 
   return (
     <button
@@ -97,7 +105,7 @@ export function DeliveryRequestCard({
           </EntityMark>
         )}
         <span className="mds-object-row-text">
-          <span className="mds-type-body-strong">{`${ar['delivery.to'].text} ${label}`}</span>
+          <span className="mds-type-body-strong">{`${t('delivery.to')} ${label}`}</span>
           {caption ? <span className="mds-type-caption">{caption}</span> : null}
         </span>
         {badge ? badge : tone ? <StatusBadge tone={tone} /> : null}

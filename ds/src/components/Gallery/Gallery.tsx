@@ -12,7 +12,7 @@
  *   hidden but present for keyboard users.
  */
 import { useEffect, useRef } from 'react';
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import type { GalleryProps } from './Gallery.types';
 import './Gallery.css';
 
@@ -60,7 +60,7 @@ export function Gallery({
       id={id}
       style={style}
       role="region"
-      aria-roledescription={ar['sr.galleryRegion'].text}
+      aria-roledescription={t('sr.galleryRegion')}
       className={['mds-gallery', single ? 'mds-gallery--single' : '', className]
         .filter(Boolean)
         .join(' ')}
@@ -73,10 +73,10 @@ export function Gallery({
             className="mds-gallery-item"
             key={`${item.value}-${i}`}
             role="img"
-            aria-label={ar['gallery.imageOf'].text
+            aria-label={t('gallery.imageOf')
               .replace('{current}', String(i + 1))
               .replace('{total}', String(items.length))
-              + (item.caption ? `${ar['sr.listSeparator'].text}${item.caption}` : '')}
+              + (item.caption ? `${t('sr.listSeparator')}${item.caption}` : '')}
           >
             <img className="mds-gallery-photo" src={item.value} alt="" aria-hidden="true" loading="lazy" />
           </div>
@@ -95,10 +95,10 @@ export function Gallery({
             ))}
           </div>
           <button type="button" className="mds-gallery-nav" onClick={() => go(-1)}>
-            {ar['gallery.prev'].text}
+            {t('gallery.prev')}
           </button>
           <button type="button" className="mds-gallery-nav" onClick={() => go(1)}>
-            {ar['gallery.next'].text}
+            {t('gallery.next')}
           </button>
         </>
       ) : null}

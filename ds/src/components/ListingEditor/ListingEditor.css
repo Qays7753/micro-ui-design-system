@@ -3,13 +3,6 @@
  * no raw hex/px/ms in this file (ds-raw-values).
  */
 
-.mds-listing-editor-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mds-layout-field-to-field);
-  padding: var(--mds-layout-surface-padding-phone);
-}
-
 .mds-listing-editor-error {
   color: var(--mds-color-status-problem-fg);
 }

@@ -5,8 +5,7 @@
 
 /* The region: strip + dots (23.16). */
 .mds-gallery {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: var(--mds-space-8);
   width: 100%;
 }

@@ -12,7 +12,7 @@
  *   editor's own error line.
  */
 import { useRef, useState } from 'react';
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { ActionBar } from '../ActionBar/index';
 import { AmountField } from '../AmountField/index';
 import { SegmentedControl } from '../SegmentedControl/index';
@@ -48,9 +48,9 @@ export function ListingEditor({
 
   const send = () => {
     const next: Record<string, string> = {};
-    if (!name.trim()) next.name = ar['editor.nameRequired'].text;
-    if (!unit.trim()) next.unit = ar['editor.unitRequired'].text;
-    if (mode === 'single' && !price.trim()) next.price = ar['editor.priceRequired'].text;
+    if (!name.trim()) next.name = t('editor.nameRequired');
+    if (!unit.trim()) next.unit = t('editor.unitRequired');
+    if (mode === 'single' && !price.trim()) next.price = t('editor.priceRequired');
     setErrors(next);
     if (Object.keys(next).length > 0) {
       // 23.17: focus the FIRST error field.
@@ -70,7 +70,7 @@ export function ListingEditor({
 
   return (
     <Sheet
-      label={editing ? ar['editor.editTitle'].text : ar['editor.newTitle'].text}
+      label={editing ? t('editor.editTitle') : t('editor.newTitle')}
       onDismiss={onDismiss}
       className={className}
       id={id}
@@ -79,35 +79,35 @@ export function ListingEditor({
       data-ds-check="listing-editor"
       {...rest}
     >
-      <div className="mds-listing-editor-body">
+      <div className="mds-sheet-body">
         {photos}
         <TextField
-          label={ar['editor.listingName'].text}
+          label={t('editor.listingName')}
           value={name}
           state={errors.name ? 'error' : 'idle'}
           caption={errors.name}
           onChange={setName}
         />
         <TextField
-          label={ar['editor.unit'].text}
+          label={t('editor.unit')}
           value={unit}
-          placeholder={ar['editor.unitHint'].text}
+          placeholder={t('editor.unitHint')}
           state={errors.unit ? 'error' : 'idle'}
           caption={errors.unit}
           onChange={setUnit}
         />
         <SegmentedControl
-          label={ar['editor.priceMode'].text}
+          label={t('editor.priceMode')}
           leading={[
-            { value: 'single', label: ar['editor.singlePrice'].text },
-            { value: 'tiers', label: ar['editor.tiers'].text },
+            { value: 'single', label: t('editor.singlePrice') },
+            { value: 'tiers', label: t('editor.tiers') },
           ]}
           value={mode}
           onChange={(v) => setMode(v as 'single' | 'tiers')}
         />
         {mode === 'single' ? (
           <AmountField
-            label={ar['editor.pricePerUnit'].text}
+            label={t('editor.pricePerUnit')}
             value={price}
             state={errors.price ? 'error' : 'idle'}
             caption={errors.price}
@@ -116,17 +116,17 @@ export function ListingEditor({
         ) : (
           tiers
         )}
-        <Toggle label={ar['editor.available'].text} selected={available} onChange={setAvailable} />
+        <Toggle label={t('editor.available')} selected={available} onChange={setAvailable} />
         <TextArea
-          label={ar['editor.description'].text}
-          caption={ar['report.detailsOptional'].text}
+          label={t('editor.description')}
+          caption={t('report.detailsOptional')}
           value={description}
           onChange={setDescription}
         />
         {save}
         {/* ق1: the ONE primary rides the ActionBar. */}
         <ActionBar
-          label={editing ? ar['editor.sendEdit'].text : ar['editor.sendReview'].text}
+          label={editing ? t('editor.sendEdit') : t('editor.sendReview')}
           onPress={send}
         />
       </div>

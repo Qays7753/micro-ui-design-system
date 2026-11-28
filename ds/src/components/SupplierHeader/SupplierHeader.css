@@ -14,7 +14,9 @@
 .mds-supplier-header-id {
   display: flex;
   flex-direction: column;
-  gap: var(--mds-layout-row-line-gap);
+  /* The name-to-caption rhythm rides the row gap (12) — a section
+     head, not a data row's line pair (4). */
+  gap: var(--mds-layout-row-gap);
   flex: 1;
   min-width: 0;
 }

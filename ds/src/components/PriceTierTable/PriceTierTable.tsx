@@ -8,9 +8,8 @@
  *   numbers in the page at all (ق1).
  * - Screen reader: the table is named «شرائح السعر» (caption).
  */
-import { ar } from '../../i18n/ar';
+import { t, getMoneyTexts } from '../../i18n/ar';
 import { formatMoney } from '../../lib/format-money';
-import { getMoneyTexts } from '../../i18n/ar';
 import type { PriceTierTableProps } from './PriceTierTable.types';
 import './PriceTierTable.css';
 
@@ -29,7 +28,7 @@ export function PriceTierTable({
         ref={ref}
         id={id}
         style={style}
-        aria-label={ar['tier.tableName'].text}
+        aria-label={t('tier.tableName')}
         className={['mds-price-tier-table-locked', className].filter(Boolean).join(' ')}
         data-ds-check="price-tier-table"
         {...rest}
@@ -50,12 +49,12 @@ export function PriceTierTable({
       data-ds-check="price-tier-table"
       {...(rest as React.TableHTMLAttributes<HTMLTableElement>)}
     >
-      <caption>{ar['tier.tableName'].text}</caption>
+      <caption>{t('tier.tableName')}</caption>
       <thead>
         <tr>
-          <th scope="col">{ar['tier.from'].text}</th>
-          <th scope="col">{ar['tier.to'].text}</th>
-          <th scope="col">{ar['tier.pricePerUnit'].text}</th>
+          <th scope="col">{t('tier.from')}</th>
+          <th scope="col">{t('tier.to')}</th>
+          <th scope="col">{t('tier.pricePerUnit')}</th>
         </tr>
       </thead>
       <tbody>
@@ -64,7 +63,7 @@ export function PriceTierTable({
           return (
             <tr key={`${tier.from}-${i}`}>
               <td>{tier.from}</td>
-              <td>{last || tier.to === undefined ? ar['tier.andAbove'].text : tier.to}</td>
+              <td>{last || tier.to === undefined ? t('tier.andAbove') : tier.to}</td>
               <td>{formatMoney(tier.price, { texts: getMoneyTexts() }).display}</td>
             </tr>
           );

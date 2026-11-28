@@ -8,7 +8,7 @@
  *   success the sheet closes and the app's Toast says «أُرسل البلاغ».
  */
 import { useState } from 'react';
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { SelectedIcon } from '../../icons';
 import { ActionBar } from '../ActionBar/index';
 import { Sheet } from '../Sheet/index';
@@ -43,7 +43,7 @@ export function ReportSheet({
 
   return (
     <Sheet
-      label={ar['report.title'].text}
+      label={t('report.title')}
       onDismiss={onDismiss}
       className={className}
       id={id}
@@ -52,11 +52,11 @@ export function ReportSheet({
       data-ds-check="report-sheet"
       {...rest}
     >
-      <div className="mds-report-sheet-body">
+      <div className="mds-sheet-body">
         <div
           className="mds-report-sheet-reasons"
           role="radiogroup"
-          aria-label={ar['report.title'].text}
+          aria-label={t('report.title')}
         >
           {items.map((reason, i) => (
             <button
@@ -78,18 +78,18 @@ export function ReportSheet({
         </div>
         {error ? (
           <span className="mds-report-sheet-error mds-type-caption" role="alert">
-            {ar['report.chooseReason'].text}
+            {t('report.chooseReason')}
           </span>
         ) : null}
         <TextArea
-          label={ar['report.details'].text}
-          caption={ar['report.detailsOptional'].text}
+          label={t('report.details')}
+          caption={t('report.detailsOptional')}
           value={details}
           onChange={setDetails}
         />
         {save}
         <ActionBar
-          label={ar['report.send'].text}
+          label={t('report.send')}
           onPress={send}
         />
       </div>

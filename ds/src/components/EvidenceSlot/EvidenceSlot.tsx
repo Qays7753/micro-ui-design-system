@@ -10,7 +10,7 @@
  * - ق2: the 4:3 aspect-ratio is reserved BEFORE the image loads.
  * - Screen reader: «إثبات التسليم، صورة، لم تُلتقط بعد» (§4.6 item 7).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { CameraIcon, MoreIcon } from '../../icons';
 import { Skeleton } from '../Skeleton/index';
 import { TextField } from '../TextField/index';
@@ -36,11 +36,11 @@ export function EvidenceSlot({
   const hasPhoto = Boolean(value);
 
   const ariaText = [
-    ar['evidence.title'].text,
-    mode === 'photo' ? (hasPhoto ? ar['evidence.photoTaken'].text : ar['evidence.photoMissing'].text) : '',
-    mode === 'code' ? (value ? ar['evidence.entered'].text : ar['evidence.codeLabel'].text) : '',
-    mode === 'owner' ? ar['evidence.ownerSentence'].text : '',
-  ].filter(Boolean).join(ar['sr.listSeparator'].text);
+    t('evidence.title'),
+    mode === 'photo' ? (hasPhoto ? t('evidence.photoTaken') : t('evidence.photoMissing')) : '',
+    mode === 'code' ? (value ? t('evidence.entered') : t('evidence.codeLabel')) : '',
+    mode === 'owner' ? t('evidence.ownerSentence') : '',
+  ].filter(Boolean).join(t('sr.listSeparator'));
 
   return (
     <div
@@ -60,7 +60,7 @@ export function EvidenceSlot({
       data-ds-check="evidence-slot"
       {...rest}
     >
-      <span className="mds-evidence-slot-title">{ar['evidence.title'].text}</span>
+      <span className="mds-evidence-slot-title">{t('evidence.title')}</span>
       {loading ? (
         <span className="mds-evidence-slot-tile" aria-hidden="true">
           <Skeleton variant="body" />
@@ -69,12 +69,12 @@ export function EvidenceSlot({
         hasPhoto ? (
           <span className="mds-evidence-slot-tile" style={{ cursor: 'default' }}>
             {/* The app's uploaded photo URL fills the reserved 4:3. */}
-            <img className="mds-media-fill" src={value} alt={ar['evidence.photoTaken'].text} />
+            <img className="mds-media-fill" src={value} alt={t('evidence.photoTaken')} />
             {!readOnly ? (
               <button
                 type="button"
                 className="mds-evidence-slot-redo"
-                aria-label={ar['evidence.retake'].text}
+                aria-label={t('evidence.retake')}
                 onClick={() => onChange?.('')}
               >
                 <MoreIcon size={20} />
@@ -83,25 +83,25 @@ export function EvidenceSlot({
           </span>
         ) : readOnly ? (
           <span className="mds-evidence-slot-tile" style={{ cursor: 'default' }}>
-            <span className="mds-evidence-slot-done mds-type-label-strong">{ar['evidence.photoMissing'].text}</span>
+            <span className="mds-evidence-slot-done mds-type-label-strong">{t('evidence.photoMissing')}</span>
           </span>
         ) : (
           <button
             type="button"
             className="mds-evidence-slot-tile"
-            aria-label={ar['evidence.takePhoto'].text}
+            aria-label={t('evidence.takePhoto')}
             onClick={() => onChange?.('pending')}
           >
             <span aria-hidden="true"><CameraIcon size={24} /></span>
-            <span>{ar['evidence.takePhoto'].text}</span>
+            <span>{t('evidence.takePhoto')}</span>
           </button>
         )
       ) : mode === 'code' ? (
         readOnly ? (
-          <span className="mds-evidence-slot-done mds-type-label-strong">{value ? ar['evidence.entered'].text : '—'}</span>
+          <span className="mds-evidence-slot-done mds-type-label-strong">{value ? t('evidence.entered') : '—'}</span>
         ) : (
           <TextField
-            label={ar['evidence.codeLabel'].text}
+            label={t('evidence.codeLabel')}
             value={value ?? ''}
             inputMode="numeric"
             state={error ? 'error' : 'idle'}
@@ -111,7 +111,7 @@ export function EvidenceSlot({
         )
       ) : (
         <>
-          <span className="mds-evidence-slot-owner mds-type-body">{ar['evidence.ownerSentence'].text}</span>
+          <span className="mds-evidence-slot-owner mds-type-body">{t('evidence.ownerSentence')}</span>
           {!readOnly && action ? <span className="mds-evidence-slot-action">{action}</span> : null}
         </>
       )}

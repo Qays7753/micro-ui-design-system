@@ -18,7 +18,7 @@
  *   دنانير، 10:42 صباحاً» — the direction word first (§2.1 item 7).
  * - Loading: the Skeleton row in the row's own shape (§0.2 item 1).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { usePress } from '../../lib/use-press';
 import { MovementInIcon, MovementOutIcon } from '../../icons';
 import { EntityMark } from '../EntityMark/index';
@@ -79,14 +79,14 @@ export function MovementRow({
     .join(' ');
 
   const ariaLabel = [
-    direction === 'out' ? ar['sr.movementRowOut'].text : ar['sr.movementRowIn'].text,
+    direction === 'out' ? t('sr.movementRowOut') : t('sr.movementRowIn'),
     label,
     caption,
-    value === null || value === undefined ? ar['money.ariaMissing'].text : '',
-    draft ? ar['state.draft'].text : time ?? '',
+    value === null || value === undefined ? t('money.ariaMissing') : '',
+    draft ? t('state.draft') : time ?? '',
   ]
     .filter(Boolean)
-    .join(ar['sr.listSeparator'].text);
+    .join(t('sr.listSeparator'));
 
   return (
     <button
@@ -113,7 +113,7 @@ export function MovementRow({
           <Money value={value} flow={direction} />
         </span>
         <span className="mds-object-row-time mds-type-caption">
-          {draft ? <StatusBadge tone="waiting" label={ar['state.draft'].text} /> : trailing ?? time}
+          {draft ? <StatusBadge tone="waiting" label={t('state.draft')} /> : trailing ?? time}
         </span>
       </span>
     </button>

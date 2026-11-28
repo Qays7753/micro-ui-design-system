@@ -15,7 +15,8 @@
  *   اليوم، 3 عناصر» (§3.2 item 7).
  * - Loading: the cells render, the dots do not (§3.2 item 4).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
+import type { ArKey } from '../../i18n/ar';
 import type { WeekStripDay, WeekStripProps } from './WeekStrip.types';
 import './WeekStrip.css';
 
@@ -63,19 +64,16 @@ export function WeekStrip({
         const selected = value === day.date;
         const isToday = today === day.date;
         const count = day.items ?? 0;
-        const dayName = ar[`day.${dow}` as keyof typeof ar] instanceof Object
-          ? (ar[`day.${dow}` as keyof typeof ar] as { text: string }).text
-          : String(dow);
-        const monthName = ar[`month.${parts.m}` as keyof typeof ar] instanceof Object
-          ? (ar[`month.${parts.m}` as keyof typeof ar] as { text: string }).text
-          : String(parts.m);
+        // 3ج.1: day/month words resolve through t() so overrides flow.
+        const dayName = t(`day.${dow}` as ArKey) ?? String(dow);
+        const monthName = t(`month.${parts.m}` as ArKey) ?? String(parts.m);
         const ariaLabel = [
           `${dayName} ${parts.d} ${monthName}`,
-          isToday ? ar['sr.weekStripToday'].text : '',
-          count > 0 ? ar['sr.weekStripItems'].text.replace('{counted}', String(count)) : '',
+          isToday ? t('sr.weekStripToday') : '',
+          count > 0 ? t('sr.weekStripItems', { counted: count }) : '',
         ]
           .filter(Boolean)
-          .join(ar['sr.listSeparator'].text);
+          .join(t('sr.listSeparator'));
         return (
           <button
             key={day.date}

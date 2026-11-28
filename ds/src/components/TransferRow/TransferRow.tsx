@@ -12,7 +12,7 @@
  * - Hidden amounts: «•••• د» (§2.2 item 6).
  * - Loading: the Skeleton row in the row's own shape (§0.2 item 1).
  */
-import { ar, t } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { usePress } from '../../lib/use-press';
 import { TransferIcon } from '../../icons';
 import { EntityMark } from '../EntityMark/index';
@@ -69,11 +69,11 @@ export function TransferRow({
   const ariaLabel = [
     t('sr.transferFrom', { from, to }),
     caption,
-    value === null || value === undefined ? ar['money.ariaMissing'].text : '',
+    value === null || value === undefined ? t('money.ariaMissing') : '',
     time ?? '',
   ]
     .filter(Boolean)
-    .join(ar['sr.listSeparator'].text);
+    .join(t('sr.listSeparator'));
 
   return (
     <button
@@ -97,7 +97,7 @@ export function TransferRow({
               whole (§2.2 item 6) — direction-aware overflow. */}
           <span className="mds-transfer-row-route">
             {from}
-            <span className="mds-transfer-row-arrow" aria-hidden="true">{ar['transfer.arrow'].text}</span>
+            <span className="mds-transfer-row-arrow" aria-hidden="true">{t('transfer.arrow')}</span>
             {to}
           </span>
         </span>

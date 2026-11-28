@@ -10,7 +10,7 @@
  * - Screen reader: «مراحل التوصيل: المرحلة 4 من 6، قيد التنفيذ» — an
  *   aria-label composed from value/items, the row itself aria-hidden.
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import type { StatusTrackProps } from './StatusTrack.types';
 import './StatusTrack.css';
 
@@ -26,10 +26,10 @@ export function StatusTrack({
   const current = Math.max(0, Math.min(value, items.length - 1));
   const currentLabel = items[current]?.label ?? '';
   const ariaLabel = [
-    ar['sr.statusTrackStages'].text,
-    ar['sr.statusTrackStep'].text.replace('{n}', String(current + 1)).replace('{m}', String(items.length)),
+    t('sr.statusTrackStages'),
+    t('sr.statusTrackStep', { n: current + 1 }).replace('{m}', String(items.length)),
     currentLabel,
-  ].join(ar['sr.listSeparator'].text);
+  ].join(t('sr.listSeparator'));
 
   return (
     <div

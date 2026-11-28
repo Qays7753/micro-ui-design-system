@@ -17,7 +17,7 @@
  *   words; the app passes the rest.
  * - Press: the ObjectCard press treatment (scale(.98), §2.3 item 5).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { usePress } from '../../lib/use-press';
 import { FundBankIcon, FundCashIcon, FundWalletIcon } from '../../icons';
@@ -54,11 +54,11 @@ export function FundCard({
 
   const ariaLabel = [
     label,
-    ar['fund.balanceWord'].text,
-    draft ? ar['sr.fundHasDraft'].text : '',
+    t('fund.balanceWord'),
+    draft ? t('sr.fundHasDraft') : '',
   ]
     .filter(Boolean)
-    .join(ar['sr.listSeparator'].text);
+    .join(t('sr.listSeparator'));
 
   const classes = [
     'mds-card-shell',

@@ -18,7 +18,9 @@
  * - Screen reader: «سلمى الحوراني، فستان سهرة × 2، 45 دينار، التسليم
  *   اليوم 4:00 مساءً، جاهز» — the aria label composes the same fields.
  */
-import { ar, getMoneyTexts } from '../../i18n/ar';
+import { getMoneyTexts, t } from '../../i18n/ar';
+import type { ArKey } from '../../i18n/ar';
+import type { Tone } from '../../tokens/tokens';
 import { usePress } from '../../lib/use-press';
 import { formatMoney } from '../../lib/format-money';
 import { ClockIcon } from '../../icons';
@@ -28,6 +30,11 @@ import { Skeleton } from '../Skeleton/index';
 import { StatusBadge } from '../StatusBadge/index';
 import type { OrderCardProps } from './OrderCard.types';
 import './OrderCard.css';
+
+/** The badge tone's word — resolved through t() so overrides flow (3ج.1). */
+function toneWord(tone: Tone): string {
+  return t(`badge.${tone}` as ArKey);
+}
 
 export function OrderCard({
   label,
@@ -69,11 +76,11 @@ export function OrderCard({
     caption,
     value !== undefined && value !== null ? formatMoney(value, { texts: getMoneyTexts() }).aria : '',
     time,
-    badge ? (badge as React.ReactElement<{ label?: string }>).props.label ?? '' : tone ? ar[`badge.${tone}` as keyof typeof ar] instanceof Object ? (ar[`badge.${tone}` as keyof typeof ar] as { text: string }).text : '' : '',
-    cancelled ? ar['badge.cancelled'].text : '',
+    badge ? (badge as React.ReactElement<{ label?: string }>).props.label ?? '' : tone ? toneWord(tone) : '',
+    cancelled ? t('badge.cancelled') : '',
   ]
     .filter(Boolean)
-    .join(ar['sr.listSeparator'].text);
+    .join(t('sr.listSeparator'));
 
   const classes = [
     'mds-card-shell',

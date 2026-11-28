@@ -13,7 +13,7 @@
  *   متاحة في هذا اليوم.» (§3.6 item 4).
  * - Screen reader: a radiogroup per group (§3.6 item 7).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { EmptyState } from '../EmptyState/index';
 import { Skeleton } from '../Skeleton/index';
 import type { SlotGroup, SlotPickerProps } from './SlotPicker.types';
@@ -35,7 +35,7 @@ export function SlotPicker({
   const hasSlots = items.some((group: SlotGroup) => group.slots.length > 0);
 
   if (!loading && !hasSlots) {
-    return <EmptyState label={ar['slot.empty'].text} />;
+    return <EmptyState label={t('slot.empty')} />;
   }
 
   return (
@@ -67,7 +67,7 @@ export function SlotPicker({
                     type="button"
                     role="radio"
                     aria-checked={selected}
-                    aria-label={unavailable ? `${slot} ${ar['sr.slotUnavailable'].text}` : slot}
+                    aria-label={unavailable ? `${slot} ${t('sr.slotUnavailable')}` : slot}
                     disabled={unavailable}
                     className={['mds-slot-picker-slot', selected ? 'mds-slot-picker-slot--selected' : '']
                       .filter(Boolean)

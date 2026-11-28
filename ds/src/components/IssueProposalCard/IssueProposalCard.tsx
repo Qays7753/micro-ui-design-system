@@ -12,7 +12,7 @@
  * - Screen reader: «تعذّر التسليم. السبب: … الإجراء المقترح: …» (§4.4
  *   item 7); arrival announced politely (23.17) by the app's live region.
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { JobFailedIcon } from '../../icons';
 import { Skeleton } from '../Skeleton/index';
 import { StatusBadge } from '../StatusBadge/index';
@@ -37,13 +37,13 @@ export function IssueProposalCard({
   ...rest
 }: IssueProposalCardProps) {
   const loading = state === 'loading';
-  const heading = label ?? ar['issue.title'].text;
+  const heading = label ?? t('issue.title');
 
   const ariaLabel = [
     heading,
     ...items.map((row) => `${row.key}: ${row.value}`),
-    audience === 'driver' ? ar['issue.awaitingOwner'].text : '',
-  ].join(ar['sr.listSeparator'].text + ' ');
+    audience === 'driver' ? t('issue.awaitingOwner') : '',
+  ].join(t('sr.listSeparator') + ' ');
 
   return (
     <Surface
@@ -94,7 +94,7 @@ export function IssueProposalCard({
               </>
             )
           ) : (
-            <StatusBadge tone="waiting" label={ar['issue.awaitingOwner'].text} />
+            <StatusBadge tone="waiting" label={t('issue.awaitingOwner')} />
           )}
         </>
       )}

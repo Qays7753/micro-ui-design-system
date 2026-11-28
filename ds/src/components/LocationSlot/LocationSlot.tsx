@@ -11,7 +11,7 @@
  * - Screen reader: «إلى: الزرقاء، حي معصوم»; the link reads «افتح
  *   العنوان في الخرائط، يفتح تطبيقاً آخر» (§4.7 item 7).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import { ForwardIcon, MapPinIcon } from '../../icons';
 import type { LocationSlotProps } from './LocationSlot.types';
 import './LocationSlot.css';
@@ -54,9 +54,9 @@ export function LocationSlot({
           href={mapsUrl}
           target="_blank"
           rel="noreferrer"
-          aria-label={ar['sr.openMaps'].text}
+          aria-label={t('sr.openMaps')}
         >
-          {ar['location.openMaps'].text}
+          {t('location.openMaps')}
           <span aria-hidden="true"><ForwardIcon size={16} /></span>
         </a>
       ) : null}

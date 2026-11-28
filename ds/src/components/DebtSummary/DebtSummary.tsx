@@ -12,7 +12,7 @@
  * - Screen reader: «لك 45 دينار من عميل واحد. عليك 1,280 دينار من مورد
  *   واحد.» — each column reads its own sentence (§2.5 item 7).
  */
-import { ar, getMoneyTexts } from '../../i18n/ar';
+import { t, getMoneyTexts } from '../../i18n/ar';
 import { formatMoney } from '../../lib/format-money';
 import { Money } from '../Money/index';
 import { Skeleton } from '../Skeleton/index';
@@ -58,12 +58,12 @@ export function DebtSummary({
   const loading = state === 'loading';
 
   const forYouAria = [
-    ar['debt.forYou'].text,
+    t('debt.forYou'),
     formatMoney(forYou.value, { texts: getMoneyTexts() }).aria,
     forYou.counted,
   ].join(' ');
   const againstYouAria = [
-    ar['debt.againstYou'].text,
+    t('debt.againstYou'),
     formatMoney(againstYou.value, { texts: getMoneyTexts() }).aria,
     againstYou.counted,
   ].join(' ');
@@ -81,8 +81,8 @@ export function DebtSummary({
       data-ds-check="debt-summary"
       {...rest}
     >
-      <Column label={ar['debt.forYou'].text} counted={forYou.counted} value={forYou.value} loading={loading} />
-      <Column label={ar['debt.againstYou'].text} counted={againstYou.counted} value={againstYou.value} loading={loading} />
+      <Column label={t('debt.forYou')} counted={forYou.counted} value={forYou.value} loading={loading} />
+      <Column label={t('debt.againstYou')} counted={againstYou.counted} value={againstYou.value} loading={loading} />
     </div>
   );
 }
