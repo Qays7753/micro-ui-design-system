@@ -210,7 +210,8 @@
       "avail.unavailable": "BATCH2-SPECS-ADDENDUM §2.5 table verbatim «غير متوفر مؤقتاً» (owner-closed question 6); the badge word ceiling yields to the addendum as it does for saveState.draft",
       "report.offTopic": "BATCH2-SPECS-ADDENDUM §2.8 verbatim report reason «خارج النطاق المسموح» (owner-closed question 9)",
       "report.spam": "BATCH2-SPECS-ADDENDUM §2.8 verbatim report reason «إعلان مزعج» (owner-closed question 9); the 24.3 lexicon bans «إعلان» as the name of a MARKET LISTING — the report taxonomy is a different concept and the addendum outranks BRIEF 24",
-      "report.contact": "BATCH2-SPECS-ADDENDUM §2.8 verbatim report reason «مشكلة في التواصل» (owner-closed question 9)"
+      "report.contact": "BATCH2-SPECS-ADDENDUM §2.8 verbatim report reason «مشكلة في التواصل» (owner-closed question 9)",
+      "party.add": "BATCH2-SPECS §1.10-8 mandates the add-row wording verbatim: «أضف «<النص>» عميلاً جديداً»"
     },
     "lexicon_banned_tokens": [
       "إيراد",

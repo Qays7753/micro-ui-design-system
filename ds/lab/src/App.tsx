@@ -229,17 +229,18 @@ export function App() {
   // line shows when a save happens with nothing chosen (§3.4-4).
   const [dueDate, setDueDate] = useState<string | undefined>('30/11/2026');
   const [dueDateError, setDueDateError] = useState(false);
-  // 4.16 — PartyPicker: §1.10-10's data (سلمى الحوراني chosen at rest)
-  // with a phone second line and a debt line (Money at the end — hidden
-  // amounts apply), and the supplier-mode garden with the empty list's
-  // add flow.
+  // 4.16 — PartyPicker: §1.10-10's data (the four parties) with phone
+  // second lines and a debt line (Money at the end — hidden amounts
+  // apply). The field starts EMPTY: the clear button unmounts on its own
+  // press (the 4.11 lesson — it shows with ANY value), so it never rests
+  // in the scan; a pick fills the field and reveals it live.
   const partyItems: readonly PartyOption[] = [
     { value: 'salma', label: parties[0], caption: '0790000000' },
     { value: 'abu', label: parties[1], debt: '45' },
     { value: 'rana', label: parties[2] },
     { value: 'khaled', label: parties[3], caption: '0781112223' },
   ];
-  const [saleParty, setSaleParty] = useState<PartyOption | undefined>({ value: 'salma', label: parties[0] });
+  const [saleParty, setSaleParty] = useState<PartyOption | undefined>(undefined);
   const monthItems: Record<string, number> = {
     '23/11/2026': 1,
     '24/11/2026': 2,
@@ -2001,11 +2002,11 @@ export function App() {
           <p className="lab-note">{t('lab.partyPickerHint')}</p>
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
-            {/* §1.10-10's data: سلمى chosen at rest; the sheet opens with
-                the focused search, the rows (phone or debt lines), and
-                the add row on a non-matching query. NO error-garden here:
-                the clear unmounts on its own press (the 4.11 lesson) so
-                the chosen field rides without the optional-pair trap. */}
+            {/* §1.10-10's data: the field starts empty; the sheet opens
+                with the focused search, the rows (phone or debt lines),
+                and the add row on a non-matching query. A pick chooses
+                سلمى (or any row) — the field then shows the mark + name
+                and the clear button (never at rest, the 4.11 lesson). */}
             <PartyPicker
               label={t('field.party')}
               value={saleParty}
