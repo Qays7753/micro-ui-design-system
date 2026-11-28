@@ -351,6 +351,7 @@
   "badge": "StatusBadge",
   "money": "Money",
   "controls": "AmountVisibilityToggle",
+  "text-override": "Button",
   "delivery-compose": "Section",
   "finance-compose": "Section",
   "orders-compose": "Section",

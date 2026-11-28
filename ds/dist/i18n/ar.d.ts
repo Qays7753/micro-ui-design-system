@@ -436,6 +436,102 @@ export declare const arBase: {
         readonly kind: "title";
         readonly text: "زر إخفاء الأرقام";
     };
+    readonly 'title.textOverride': {
+        readonly kind: "title";
+        readonly text: "تجاوز النصوص";
+    };
+    readonly 'lab.h.textOverride': {
+        readonly kind: "title";
+        readonly text: "نصوص من التطبيق";
+    };
+    readonly 'lab.overrideHint': {
+        readonly kind: "help";
+        readonly text: "اضغط ليستبدل نص الزر، واضغط ثانية ليعود.";
+    };
+    readonly 'lab.overrideOn': {
+        readonly kind: "button";
+        readonly text: "فعّل التجاوز";
+    };
+    readonly 'lab.overrideOff': {
+        readonly kind: "button";
+        readonly text: "أعد نص المكتبة";
+    };
+    readonly 'lab.overrideTarget': {
+        readonly kind: "help";
+        readonly text: "الهدف الحي";
+    };
+    readonly 'lab.overrideReplacement': {
+        readonly kind: "button";
+        readonly text: "دبّر الحركة";
+    };
+    readonly 'keypad.srGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "لوحة المبالغ";
+    };
+    readonly 'keypad.sr0': {
+        readonly kind: "screen-reader";
+        readonly text: "صفر";
+    };
+    readonly 'keypad.sr1': {
+        readonly kind: "screen-reader";
+        readonly text: "واحد";
+    };
+    readonly 'keypad.sr2': {
+        readonly kind: "screen-reader";
+        readonly text: "اثنان";
+    };
+    readonly 'keypad.sr3': {
+        readonly kind: "screen-reader";
+        readonly text: "ثلاثة";
+    };
+    readonly 'keypad.sr4': {
+        readonly kind: "screen-reader";
+        readonly text: "أربعة";
+    };
+    readonly 'keypad.sr5': {
+        readonly kind: "screen-reader";
+        readonly text: "خمسة";
+    };
+    readonly 'keypad.sr6': {
+        readonly kind: "screen-reader";
+        readonly text: "ستة";
+    };
+    readonly 'keypad.sr7': {
+        readonly kind: "screen-reader";
+        readonly text: "سبعة";
+    };
+    readonly 'keypad.sr8': {
+        readonly kind: "screen-reader";
+        readonly text: "ثمانية";
+    };
+    readonly 'keypad.sr9': {
+        readonly kind: "screen-reader";
+        readonly text: "تسعة";
+    };
+    readonly 'keypad.sr000': {
+        readonly kind: "screen-reader";
+        readonly text: "ثلاثة أصفار";
+    };
+    readonly 'keypad.srDecimal': {
+        readonly kind: "screen-reader";
+        readonly text: "فاصلة";
+    };
+    readonly 'keypad.srBackspace': {
+        readonly kind: "screen-reader";
+        readonly text: "احذف";
+    };
+    readonly 'title.keypad': {
+        readonly kind: "title";
+        readonly text: "لوحة المبالغ";
+    };
+    readonly 'lab.h.keypad': {
+        readonly kind: "title";
+        readonly text: "لوحة أرقام المبالغ";
+    };
+    readonly 'lab.keypadHint': {
+        readonly kind: "help";
+        readonly text: "اضغط المفاتيح يدخل المبلغ في الحقل أعلاه.";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";
@@ -1299,6 +1395,10 @@ export declare const arBase: {
     readonly 'state.errorRow': {
         readonly kind: "badge";
         readonly text: "حالة الخطأ";
+    };
+    readonly 'state.fractionFull': {
+        readonly kind: "badge";
+        readonly text: "ثلاث خانات عشرية";
     };
     readonly 'title.checkbox': {
         readonly kind: "title";
@@ -3684,10 +3784,24 @@ export declare const ar: {
     };
 };
 export type ArKey = keyof typeof ar;
+/** What the host app may override: key -> replacement text. */
+export type TextOverrides = Partial<Record<ArKey, string>>;
+/**
+ * Replace fixed library texts from the host app. Call ONCE at startup
+ * (before the first render — the values are read at render time, so a call
+ * after mount still applies to the next render, but startup is the contract).
+ * A later call REPLACES the whole override set (it is not additive).
+ */
+export declare function overrideTexts(next: TextOverrides): void;
+/** Drop every override (tests and the lab's live sample only). */
+export declare function resetTextOverrides(): void;
+/** The override for `key`, or undefined when the app passed none. */
+export declare function overriddenText(key: ArKey): string | undefined;
 /**
  * Resolve a dictionary entry with `{param}` interpolation.
- * Unknown params are left as-is; missing params throw nothing (defensive —
- * the copy gate checks completeness separately).
+ * The host app's override (3ج.1) wins over the library text; unknown params
+ * are left as-is; missing params throw nothing (defensive — the copy gate
+ * checks completeness separately).
  */
 export declare function t(key: ArKey, params?: Record<string, string | number>): string;
 export declare const pluralNouns: {
@@ -3728,4 +3842,4 @@ export declare const pluralNouns: {
     };
 };
 export type PluralNoun = keyof typeof pluralNouns;
-export declare const moneyTexts: MoneyAriaTexts;
+export declare function getMoneyTexts(): MoneyAriaTexts;

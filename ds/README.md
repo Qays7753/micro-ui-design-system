@@ -21,11 +21,11 @@ pnpm add @micro/ds
 ## Use
 
 ```tsx
-import { formatMoney, moneyTexts, NavTodayIcon, t } from '@micro/ds';
+import { formatMoney, getMoneyTexts, NavTodayIcon, t } from '@micro/ds';
 import '@micro/ds/styles.css'; // or rely on the JS entry's CSS import
 
-const money = formatMoney('12.500', { texts: moneyTexts });
-// money.display -> '12.500 د.أ'   money.aria -> '12 دينار و500 فلس'
+const money = formatMoney('12.500', { texts: getMoneyTexts() });
+// money.display -> '12.500 د'     money.aria -> '12 دينار و500 فلس'
 ```
 
 CSS import order (already handled inside `styles.css`): base defaults → token
@@ -34,6 +34,41 @@ the two font stacks) → icon rules. Tailwind 4 users additionally import
 `@micro/ds/src/tokens/tailwind-theme.css` (or copy it) so Tailwind's color /
 spacing / radius / font / text namespaces map to our tokens instead of
 Tailwind's defaults (BRIEF 0.7).
+
+## Change the library's texts from your app (overrideTexts)
+
+Every fixed word inside the components — button labels, sheet titles,
+screen-reader names, status words, the money aria set — comes from one
+dictionary. If your product wants a different word (Micro's own wording, or
+a whole different register), pass an override ONCE at app startup:
+
+```tsx
+import { overrideTexts } from '@micro/ds';
+
+// anywhere before the first render (main.tsx):
+overrideTexts({
+  'button.recordMovement': 'دبّر الحركة',
+  'sheet.sampleTitle': 'حركة جديدة',
+});
+```
+
+- Every component, current and future, reads its texts through `t()` (and
+  `getMoneyTexts()` for the money aria words), so the override flows
+  everywhere — `Button` labels, `Sheet` titles, `StatusBadge` tone words,
+  the hidden-amounts aria, everything.
+- The argument is typed with the dictionary's own keys: a key that does not
+  exist fails `typecheck` in your build, never a silent miss.
+- Any key you do not pass keeps the library's text.
+- A second call REPLACES the whole override set (it is not additive).
+- Word-length guidance (BRIEF 24.1: buttons ≤ 3 words, and the like) stays a
+  documented recommendation for YOUR wording — nothing in the library blocks
+  a longer or shorter override.
+- Plural grammar (`pluralNouns`) and number formatting are library behavior,
+  not fixed texts; they are not overridable.
+
+A live demo of the same example rides the lab's catalog page (the
+«تجاوز النصوص» section): pressing the toggle swaps «سجّل حركة» for an app
+word and back.
 
 ## Preloading fonts (BRIEF 27.8 — the app's job)
 

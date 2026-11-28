@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { render, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ar, moneyTexts } from '../../i18n/ar';
+import { ar, getMoneyTexts,} from '../../i18n/ar';
 import { AmountVisibilityProvider } from '../../lib/amount-visibility';
 import { HeroSurface } from './HeroSurface';
 import { HeroSurfaceStates } from './HeroSurface.states';
@@ -158,15 +158,15 @@ describe('HeroSurface (BRIEF 1.5, 23.8 + 1.7 ت2)', () => {
         <HeroSurface label={LABEL} value="1,245.750" trailing={UNIT} />
       </AmountVisibilityProvider>,
     );
-    expect(container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(moneyTexts.hiddenGlyph);
+    expect(container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(getMoneyTexts().hiddenGlyph);
     expect(container.querySelector('.mds-hero-unit')?.textContent).toBe(UNIT);
     expect(container.textContent).not.toContain('1,245.750');
-    expect(container.querySelector('.mds-visually-hidden')?.textContent).toBe(moneyTexts.hidden);
+    expect(container.querySelector('.mds-visually-hidden')?.textContent).toBe(getMoneyTexts().hidden);
   });
 
   it('renders the missing em dash ALONE, without the unit (addendum 1.6 w-2 item 9)', () => {
     const { container } = render(<HeroSurface label={LABEL} trailing={UNIT} />);
-    expect(container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(moneyTexts.missingGlyph);
+    expect(container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(getMoneyTexts().missingGlyph);
     expect(container.querySelector('.mds-hero-unit')).toBeNull();
     // and «—» survives hidden (missing wins over hidden, like Money)
     const hiddenRender = render(
@@ -174,7 +174,7 @@ describe('HeroSurface (BRIEF 1.5, 23.8 + 1.7 ت2)', () => {
         <HeroSurface label={LABEL} trailing={UNIT} />
       </AmountVisibilityProvider>,
     );
-    expect(hiddenRender.container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(moneyTexts.missingGlyph);
+    expect(hiddenRender.container.querySelector('.mds-hero-value-glyph')?.textContent).toBe(getMoneyTexts().missingGlyph);
     expect(hiddenRender.container.querySelector('.mds-visually-hidden')).toBeNull();
   });
 });

@@ -11,40 +11,36 @@
  *
  * The hook is a presentation rule, not a data rule: the caller's own
  * `pending` flag is the truth (aria-busy, disabled-while-pending are
- * immediate); only the VISUAL indicator waits. A pending that flips
- * false→true again starts a NEW session and waits the full delay again —
- * the output is derived per session (shown = the CURRENT session's timer
- * fired), so no synchronous setState runs inside the effect (lint:
- * set-state-in-effect).
+ * immediate); only the VISUAL indicator waits. A pending that stops and
+ * restarts waits the full delay again — the effect's cleanup clears the
+ * timer and drops `armed`, so the next pending period arms a fresh one.
+ *
+ * Lint discipline (react-hooks/refs + set-state-in-effect, plugin 7.1.1):
+ * no ref is touched during render (the earlier session-counter-in-refs
+ * adjustment pattern is what the new `react-hooks/refs` rule forbids), and
+ * every setState runs inside a callback — the timer's own callback and the
+ * effect's cleanup — never synchronously in the effect body. The RETURNED
+ * value is derived from the caller's `pending`, so dropping pending hides
+ * the indicator on that very render, with no reset setState to see.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { tokens } from '../tokens/tokens';
 
 /** True only once `pending` has stayed true for motion.pending-delay. */
 export function usePendingDelay(pending: boolean): boolean {
-  // The pending session counter: every false→true transition starts a new
-  // session. Tracked in refs written during render — the React-documented
-  // adjustment pattern for values tied to the current render (no effect,
-  // no state, nothing to cascade).
-  const sessionRef = useRef(0);
-  const wasPending = useRef(false);
-  if (pending !== wasPending.current) {
-    wasPending.current = pending;
-    if (pending) sessionRef.current += 1;
-  }
-  const session = sessionRef.current;
-
-  // `shownSession` = the session whose timer already fired — the ONLY
-  // setState, and it runs inside the timeout, never synchronously in the
-  // effect.
-  const [shownSession, setShownSession] = useState(-1);
+  // `armed` = the current pending period's timer has fired. Reset rides the
+  // effect's cleanup (a callback), so a new period always starts disarmed.
+  const [armed, setArmed] = useState(false);
 
   useEffect(() => {
     if (!pending) return;
-    const started = session;
-    const id = window.setTimeout(() => setShownSession(started), tokens.motion['pending-delay']);
-    return () => window.clearTimeout(id);
-  }, [pending, session]);
+    const id = window.setTimeout(() => setArmed(true), tokens.motion['pending-delay']);
+    return () => {
+      window.clearTimeout(id);
+      // the period is over (ended OR restarted): disarm for the next one.
+      setArmed(false);
+    };
+  }, [pending]);
 
-  return pending && shownSession === session;
+  return pending && armed;
 }

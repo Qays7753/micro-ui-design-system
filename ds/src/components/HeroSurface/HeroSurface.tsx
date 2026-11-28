@@ -35,7 +35,7 @@
  */
 import { usePress } from '../../lib/use-press';
 import { useAmountVisibility } from '../../lib/amount-visibility';
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts } from '../../i18n/ar';
 import { tokens } from '../../tokens/tokens';
 import { SparklineSvg } from '../../lib/sparkline';
 import { AmountVisibilityToggle } from '../AmountVisibilityToggle/index';
@@ -54,8 +54,8 @@ function HeroValue({ value }: { value?: string }) {
   const missing = value === undefined;
   // 23.22 [مؤكد]: hidden = «••••» and the real value never renders; missing
   // = «—» alone (و-2 item 9). Both keep the value's own typography.
-  const glyph = missing ? moneyTexts.missingGlyph : hidden ? moneyTexts.hiddenGlyph : null;
-  const { whole, cents } = splitValue(value ?? moneyTexts.missingGlyph);
+  const glyph = missing ? getMoneyTexts().missingGlyph : hidden ? getMoneyTexts().hiddenGlyph : null;
+  const { whole, cents } = splitValue(value ?? getMoneyTexts().missingGlyph);
   // 23.8: «1,250,000.125 د» does not fit at 40 — drop to number-lg
   // 28/36 in ONE step, no gradual shrinking. 9 chars covers the quoted
   // example without catching «12,345,678» (8) which does fit. The hidden
@@ -137,7 +137,7 @@ export function HeroSurface({
           <HeroValue value={value} />
           {trailing && value !== undefined ? <span className="mds-hero-unit">{trailing}</span> : null}
         </span>
-        {swapped ? <span className="mds-visually-hidden">{moneyTexts.hidden}</span> : null}
+        {swapped ? <span className="mds-visually-hidden">{getMoneyTexts().hidden}</span> : null}
       </p>
       {direction || debt ? (
         /* 1.7 ت2.3: ONE line — the diff, then « · », then the source link

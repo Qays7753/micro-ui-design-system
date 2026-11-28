@@ -14,7 +14,7 @@
  *   lib/format-money; the visual part is aria-hidden.
  * - No raw values: fonts, sizes, gaps and colors all come from tokens.css.
  */
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts } from '../../i18n/ar';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { formatMoney } from '../../lib/format-money';
 import type { MoneyProps } from './Money.types';
@@ -35,7 +35,7 @@ export function Money({
 }: MoneyProps) {
   const { hidden: contextHidden } = useAmountVisibility();
   const hidden = contextHidden && value !== null && value !== undefined;
-  const result = formatMoney(value, { flow, debt, hidden, texts: moneyTexts });
+  const result = formatMoney(value, { flow, debt, hidden, texts: getMoneyTexts() });
   const classes = ['mds-money', `mds-money--${size}`, size === 'lg' ? 'mds-number-lg' : '', disabled ? 'mds-money--disabled' : '', className]
     .filter(Boolean)
     .join(' ');
@@ -56,12 +56,12 @@ export function Money({
       <span className="mds-money-visual" key={hidden ? 'hidden' : 'shown'} aria-hidden="true">
         {result.debtWord ? <span className="mds-money-debt">{result.debtWord}</span> : null}
         {result.missing ? (
-          <span className="mds-money-missing">{moneyTexts.missingGlyph}</span>
+          <span className="mds-money-missing">{getMoneyTexts().missingGlyph}</span>
         ) : (
           <>
             <bdi className="mds-money-value" dir="ltr">
               {result.hidden ? (
-                moneyTexts.hiddenGlyph
+                getMoneyTexts().hiddenGlyph
               ) : (
                 <>
                   <span className="mds-money-integer">

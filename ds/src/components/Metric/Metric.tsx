@@ -20,7 +20,7 @@
  *   on both engines and both views. The diff line stays arrow + word —
  *   the app passes the percent-free node when hidden (23.22 row 2).
  */
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts } from '../../i18n/ar';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { usePress } from '../../lib/use-press';
 import type { MetricProps } from './Metric.types';
@@ -75,11 +75,11 @@ export function Metric({
               aria-hidden="true"
             >
               <bdi dir="ltr">
-                <span className="mds-metric-value-whole">{moneyTexts.hiddenGlyph}</span>
+                <span className="mds-metric-value-whole">{getMoneyTexts().hiddenGlyph}</span>
               </bdi>
               {trailing ? <span className="mds-metric-unit">{trailing}</span> : null}
             </span>
-            <span className="mds-visually-hidden">{moneyTexts.hidden}</span>
+            <span className="mds-visually-hidden">{getMoneyTexts().hidden}</span>
           </>
         ) : (
           <>

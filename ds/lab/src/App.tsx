@@ -18,7 +18,8 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t, useCountUp } from '@micro/ds';
+import type { KeypadKey } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 /* Domains wing (plan B): one import, rendered as one block after the
    batch-1 sections (the sections join SECTIONS through domainSections). */
@@ -31,8 +32,21 @@ const FUND_ICONS = {
   wallet: FundWalletIcon,
 } as const;
 
+/** Apply a keypad key to a raw amount value (the host app's job — the pad
+ * only emits). Mirrors the pad's own disabling rules: one dot, three
+ * fraction digits (BRIEF 8). */
+function applyKeypadKey(value: string, key: KeypadKey): string {
+  if (key === 'backspace') return value.slice(0, -1);
+  const next = value + key;
+  const parts = next.split('.');
+  if (parts.length > 2) return value;
+  if (parts[1] !== undefined && parts[1].length > 3) return value;
+  return next;
+}
+
 const SECTIONS: { id: string; name: string }[] = [
   { id: 'controls', name: t('title.amountToggle') },
+  { id: 'text-override', name: t('title.textOverride') },
   { id: 'money', name: t('title.money') },
   { id: 'badge', name: t('title.statusBadge') },
   { id: 'entity', name: t('title.entityMark') },
@@ -65,6 +79,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'search-field', name: t('lab.h.searchField') },
   { id: 'text-area', name: t('lab.h.textArea') },
   { id: 'amount-field', name: t('lab.h.amountField') },
+  { id: 'amount-keypad', name: t('title.keypad') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -77,6 +92,8 @@ const SECTIONS: { id: string; name: string }[] = [
 export function App() {
   const [hidden, setHidden] = useState(false);
   const [scale, setScale] = useState<100 | 200>(100);
+  // 3ج.1 demo state: is the app-word override active right now?
+  const [textOverridden, setTextOverridden] = useState(false);
   const [segment, setSegment] = useState('today');
   // 2.1 (owner note §1): EVERY interactive lab example actually works when
   // pressed — no onChange={() => {}} anywhere in the lab or the compose page.
@@ -138,6 +155,9 @@ export function App() {
   const [searchDemo, setSearchDemo] = useState('');
   const [noteDemo, setNoteDemo] = useState('');
   const [amountDemo, setAmountDemo] = useState('');
+  // 4.7 — the AmountKeypad demo: the field above, the pad below (its keys
+  // APPLY to the value; the long backspace press clears it — §1.4).
+  const [keypadValue, setKeypadValue] = useState('');
   // Every interactive lab sample stays LIVE (owner note §1 / ds-lab-live):
   // the error and long samples keep their point (the error contract, the
   // long-number drop) while remaining editable.
@@ -182,7 +202,7 @@ export function App() {
               <ObjectRow
                 key={name}
                 label={name}
-                caption={ar['role.owner'].text}
+                caption={t('role.owner')}
                 trailing={i === 0 ? <SelectedIcon size={20} /> : undefined}
                 onPress={() => setProjectOpen(false)}
               />
@@ -267,7 +287,10 @@ export function App() {
             <ObjectRow label={t('kv.phone')} caption={t('placeholder.phone')} />
           </Surface>
           <Surface>
+            {/* خ20 (1.7): an ACTION row carries NO entity letter mark —
+                the movement-in icon rides the icon row (3ب.3ب). */}
             <ObjectRow
+              leading={<MovementInIcon size={20} />}
               label={t('button.recordPayment')}
               caption={t('row.sampleCaption')}
               onPress={() => setToastText(t('toast.movementSaved'))}
@@ -360,27 +383,17 @@ export function App() {
           {toolsPinned ? (
             <div className="lab-compose-top">{toolsStrip}</div>
           ) : (
-            <>
-              <button
-                type="button"
-                className="lab-tools-fab"
-                aria-label={t('lab.tools')}
-                onClick={() => setToolsOpen(true)}
-              >
-                <SlidersIcon size={20} />
-              </button>
-              {toolsOpen ? (
-                <Sheet label={t('lab.toolsTitle')} onDismiss={() => setToolsOpen(false)}>
-                  <div className="lab-compose-top lab-tools-sheet">{toolsStrip}</div>
-                </Sheet>
-              ) : null}
-            </>
+            toolsOpen ? (
+              <Sheet label={t('lab.toolsTitle')} onDismiss={() => setToolsOpen(false)}>
+                <div className="lab-compose-top lab-tools-sheet">{toolsStrip}</div>
+              </Sheet>
+            ) : null
           )}
           <div className="lab-compose-screen" data-ds-check="compose">
             <ContextBar
               label={t('sr.switchProject')}
               leading={
-                <ProjectSwitcher label={projects[0]} caption={ar['role.owner'].text} onPress={() => setProjectOpen(true)} />
+                <ProjectSwitcher label={projects[0]} caption={t('role.owner')} onPress={() => setProjectOpen(true)} />
               }
               trailing={
                 <>
@@ -476,6 +489,24 @@ export function App() {
               </>
               )}
             </div>
+            {/* Owner fix 2026-11-28: the tools button must cover NO content.
+                It rides a reserved dock band between the scrolling content
+                and the TabBar — furniture outside the scroll flow, where
+                nothing can ever pass beneath it (the old fixed overlay
+                covered the finance tile's text at rest and the delivery
+                tile scrolled). */}
+            {toolsPinned ? null : (
+              <div className="lab-tools-dock">
+                <button
+                  type="button"
+                  className="lab-tools-fab"
+                  aria-label={t('lab.tools')}
+                  onClick={() => setToolsOpen(true)}
+                >
+                  <SlidersIcon size={20} />
+                </button>
+              </div>
+            )}
             {confirmOpen ? (
               <ConfirmSheet
                 label={t('confirm.sampleTitle')}
@@ -492,11 +523,11 @@ export function App() {
             {/* خ7 (1.7): tab order ب — المالية، الطلبات، «مشروع اليوم»
                 in the MIDDLE (the default), التوصيل، السوق. */}
             <TabBar value={tab} onChange={setTab}>
-              <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
-              <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
-              <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
-              <TabBarTab label={ar['nav.delivery'].text} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
-              <TabBarTab label={ar['nav.market'].text} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
+              <TabBarTab label={t('nav.finance')} leading={<NavFinanceIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
+              <TabBarTab label={t('nav.orders')} leading={<NavOrdersIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
+              <TabBarTab label={t('nav.todayLong')} leading={<NavTodayIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
+              <TabBarTab label={t('nav.delivery')} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
+              <TabBarTab label={t('nav.market')} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
             </TabBar>
           </div>
         </div>
@@ -545,6 +576,38 @@ export function App() {
               >
                 {t('lab.scale200')}
               </button>
+            </div>
+          </section>
+
+          {/* ---- 3ج.1: the host-app text override, LIVE — the plan's own
+              example: «سجّل حركة» becomes an app word and back. ---- */}
+          <section className="lab-section" id="text-override">
+            <h2 className="lab-title">{t('lab.h.textOverride')}<span className="lab-tech">overrideTexts</span></h2>
+            <div className="lab-row">
+              <span className="lab-label">{t('lab.overrideHint')}</span>
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt="view-toggle"
+                onPress={() => {
+                  if (textOverridden) {
+                    resetTextOverrides();
+                    setTextOverridden(false);
+                  } else {
+                    overrideTexts({ 'button.recordMovement': t('lab.overrideReplacement') });
+                    setTextOverridden(true);
+                  }
+                }}
+              >
+                {textOverridden ? t('lab.overrideOff') : t('lab.overrideOn')}
+              </Button>
+            </div>
+            <div className="lab-row">
+              <span className="lab-label">{t('lab.overrideTarget')}</span>
+              {/* the live target: the same dictionary key the compose
+                  screen's movement entry reads — its word flips on the
+                  override, with no other text moving */}
+              <Button>{t('button.recordMovement')}</Button>
             </div>
           </section>
 
@@ -623,7 +686,7 @@ export function App() {
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('badge.cancelled')}</span>
-            <StatusBadge tone="neutral" label={ar['badge.cancelled'].text} />
+            <StatusBadge tone="neutral" label={t('badge.cancelled')} />
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.longest')}</span>
@@ -1212,11 +1275,11 @@ export function App() {
             <span className="lab-label">{t('state.fiveTabs')}</span>
             <div className="lab-bar-stage" data-ds-check="tab-bar">
               <TabBar value={tab} onChange={setTab}>
-                <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
-                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
-                <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
-                <TabBarTab label={ar['nav.delivery'].text} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
-                <TabBarTab label={ar['nav.market'].text} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
+                <TabBarTab label={t('nav.todayLong')} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
+                <TabBarTab label={t('nav.finance')} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
+                <TabBarTab label={t('nav.orders')} leading={<NavOrdersIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
+                <TabBarTab label={t('nav.delivery')} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
+                <TabBarTab label={t('nav.market')} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
               </TabBar>
             </div>
           </div>
@@ -1224,8 +1287,8 @@ export function App() {
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-bar-stage">
               <TabBar value={tabDemo} onChange={setTabDemo}>
-                <TabBarTab label={ar['nav.today'].text} leading={<NavTodayIcon weight={tabDemo === 0 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(0)} />
-                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tabDemo === 1 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(1)} />
+                <TabBarTab label={t('nav.today')} leading={<NavTodayIcon weight={tabDemo === 0 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(0)} />
+                <TabBarTab label={t('nav.finance')} leading={<NavFinanceIcon weight={tabDemo === 1 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(1)} />
               </TabBar>
             </div>
           </div>
@@ -1242,7 +1305,7 @@ export function App() {
                 leading={
                   <ProjectSwitcher
                     label={projects[0]}
-                    caption={ar['role.owner'].text}
+                    caption={t('role.owner')}
                     onPress={() => setProjectOpen(true)}
                   />
                 }
@@ -1284,7 +1347,7 @@ export function App() {
             <span className="lab-label">{t('state.default')}</span>
             <ProjectSwitcher
               label={projects[0]}
-              caption={ar['role.owner'].text}
+              caption={t('role.owner')}
               onPress={() => setProjectOpen(true)}
               data-ds-check="project-switcher"
             />
@@ -1293,7 +1356,7 @@ export function App() {
             <span className="lab-label">{t('state.singleRole')}</span>
             <ProjectSwitcher
               label={projects[1]}
-              caption={ar['role.owner'].text}
+              caption={t('role.owner')}
               locked
               onPress={() => setProjectOpen(true)}
             />
@@ -1353,8 +1416,8 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
-              <Checkbox label={ar['kv.customer'].text} caption={t('row.sampleCaption')} selected={cbA} onChange={setCbA} />
-              <Checkbox label={ar['kv.delivery'].text} selected={cbB} onChange={setCbB} data-ds-check="checkbox" />
+              <Checkbox label={t('kv.customer')} caption={t('row.sampleCaption')} selected={cbA} onChange={setCbA} />
+              <Checkbox label={t('kv.delivery')} selected={cbB} onChange={setCbB} data-ds-check="checkbox" />
             </Surface>
           </div>
           <div className="lab-row lab-row--full">
@@ -1479,6 +1542,39 @@ export function App() {
             <span className="lab-label">{t('state.longNumber')}</span>
             <AmountField label="المبلغ" value={amountLongDemo} onChange={setAmountLongDemo} />
           </div>
+        </section>
+
+        {/* ---- AmountKeypad (ADDENDUM §1.4): the pad under the field ---- */}
+        <section className="lab-section" id="amount-keypad">
+          <h2 className="lab-title">{t('lab.h.keypad')}<span className="lab-tech">{t('title.keypad')}</span></h2>
+          <p className="lab-note">{t('lab.keypadHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            <AmountField
+              label={t('field.amount')}
+              value={keypadValue}
+              onChange={setKeypadValue}
+              useSystemKeyboard={false}
+              data-ds-check="keypad-field"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <AmountKeypad
+              value={keypadValue}
+              onChange={(key) => setKeypadValue((v) => applyKeypadKey(v, key))}
+              onLongPress={() => setKeypadValue('')}
+              data-ds-check="amount-keypad"
+            />
+            {/* §1.4-7: after each press the field's new value is announced
+                politely (the host integration owns the live region). */}
+            <span className="mds-visually-hidden" aria-live="polite">
+              {keypadValue}
+            </span>
+          </div>
+          {/* The impossible-key state (a dot + three fraction digits — the
+              «.» and the digits go visibly off, §1.4-4) is REACHED by typing
+              9.999 through the keys, never pre-rendered: the states gate
+              toggles the native disabled attribute and must see a change. */}
         </section>
 
         {/* ---- ObjectRow (BRIEF 23.4): the list row ---- */}

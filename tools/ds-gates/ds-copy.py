@@ -13,6 +13,12 @@
 (ج) the literal banned list of BRIEF 24.2 (phrases, generic one-word buttons,
     exclamation marks anywhere) plus the 24.3 "لا تُستخدم" column (matched as
     whole words so Arabic morphology does not false-positive).
+  (د) 3ج.3: components and lib reach their texts ONLY through the override
+    mechanism — t() and getMoneyTexts() consult the host app's
+    overrideTexts() at render time; a direct `ar` dictionary import reads
+    BELOW the override (the text is fixed again). Tests are excluded (they
+    assert the base dictionary itself). The bad fixture proves it: a
+    component importing `ar` and reading .text directly must FAIL here.
 """
 import re
 from pathlib import Path
@@ -29,6 +35,11 @@ LEXICON_BANNED = COPY["lexicon_banned_tokens"]
 EXCLAMATION = COPY["exclamation"]
 
 ENTRY_RX = re.compile(r"'([A-Za-z0-9_.-]+)':\s*\{\s*kind:\s*'([a-z-]+)'\s*,\s*text:\s*'((?:[^'\\]|\\.)*)'\s*\}")
+# (د) 3ج.3: a named `ar` import from the i18n module (aliased or not) in a
+# component/lib file — the dictionary read that bypasses the override.
+AR_IMPORT_RX = re.compile(
+    r"import\s+(?:type\s+)?\{[^}]*\bar\b[^}]*\}\s*from\s*['\"][^'\"]*i18n/ar['\"]")
+
 
 
 SEPARATOR_TOKENS = {"·", "—"}  # punctuation separators, not words
@@ -97,6 +108,31 @@ def run(gate: Gate, target, args):
         gate.ok("ds-copy/hardcoded-arabic",
                 f"{len(scanned)} files in components/lib/icons, zero hardcoded Arabic" if scanned
                 else "no component/lib/icon sources yet (builder starts at S3)")
+
+    # ---- (د) 3ج.3: texts flow ONLY through the override mechanism ----
+    # A component/lib file importing `ar` reads the dictionary below the
+    # host app's overrideTexts() — the text becomes fixed again. t() and
+    # getMoneyTexts() are the only sanctioned readers (tests excluded: they
+    # assert the base dictionary itself).
+    direct = []
+    scanned_d = []
+    for section in ("components", "lib"):
+        for path in source_files(target, f"ds/src/{section}", ["*.ts", "*.tsx"],
+                                 exclude=["ds/src/**/*.test.ts", "ds/src/**/*.test.tsx"]):
+            scanned_d.append(path)
+            rel = rel_of(path, target)
+            code = strip_comments(path.read_text(encoding="utf-8"))
+            if AR_IMPORT_RX.search(code):
+                direct.append(f"{rel}: imports the `ar` dictionary directly — "
+                              "texts must flow through t()/getMoneyTexts() (3ج.1 override mechanism)")
+    if direct:
+        gate.fail("ds-copy/bypasses-override", f"{len(scanned_d)} files scanned, {len(direct)} direct dictionary imports")
+        for f in direct[:30]:
+            gate.fail("ds-copy/direct-import", f)
+    else:
+        gate.ok("ds-copy/bypasses-override",
+                f"{len(scanned_d)} component/lib files, zero direct `ar` imports — every text flows through the 3ج.1 mechanism"
+                if scanned_d else "no component/lib sources yet")
 
     # ---- (ب)+(ج) the ar.ts dictionary itself ----
     # Plan B (B0): the domain dictionary ds/src/i18n/ar-domains.ts joins the

@@ -23,7 +23,7 @@
 import { useState } from 'react';
 import { normalizeAmount } from '../../lib/normalize-amount';
 import { formatMoney } from '../../lib/format-money';
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts } from '../../i18n/ar';
 import type { AmountFieldProps } from './AmountField.types';
 import './AmountField.css';
 
@@ -39,6 +39,7 @@ export function AmountField({
   id,
   style,
   ref,
+  useSystemKeyboard = true,
   ...rest
 }: AmountFieldProps) {
   const [focused, setFocused] = useState(false);
@@ -57,7 +58,7 @@ export function AmountField({
   // present, none when zero).
   const display = focused || value === ''
     ? value
-    : formatMoney(value, { texts: moneyTexts }).int + (value.includes('.') ? formatMoney(value, { texts: moneyTexts }).frac : '');
+    : formatMoney(value, { texts: getMoneyTexts() }).int + (value.includes('.') ? formatMoney(value, { texts: getMoneyTexts() }).frac : '');
 
   return (
     <div id={id} style={style} className={classes} {...rest}>
@@ -74,7 +75,7 @@ export function AmountField({
           ]
             .filter(Boolean)
             .join(' ')}
-          inputMode="decimal"
+          inputMode={useSystemKeyboard ? 'decimal' : 'none'}
           enterKeyHint="next"
           value={display}
           disabled={disabled}
@@ -85,7 +86,7 @@ export function AmountField({
           data-long={display.length > 13 ? 'true' : undefined}
           onChange={(e) => onChange?.(normalizeAmount(e.target.value))}
         />
-        <span className="mds-amount-field-unit">{moneyTexts.unit}</span>
+        <span className="mds-amount-field-unit">{getMoneyTexts().unit}</span>
       </div>
       {state === 'error' && caption ? (
         <span className="mds-amount-field-help">{caption}</span>

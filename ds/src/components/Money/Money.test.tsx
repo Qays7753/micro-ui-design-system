@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { AmountVisibilityProvider } from '../../lib/amount-visibility';
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts,} from '../../i18n/ar';
 import { Money } from './Money';
 import { MoneyStates } from './Money.states';
 
@@ -17,7 +17,7 @@ describe('Money (BRIEF 8)', () => {
     const value = container.querySelector('.mds-money-value')!;
     expect(value.getAttribute('dir')).toBe('ltr');
     expect(value.textContent).toBe('12,450.125');
-    expect(container.querySelector('.mds-money-unit')?.textContent).toBe(moneyTexts.unit);
+    expect(container.querySelector('.mds-money-unit')?.textContent).toBe(getMoneyTexts().unit);
   });
 
   it('keeps three fils digits when present and none when zero (BRIEF 8)', () => {
@@ -57,31 +57,31 @@ describe('Money (BRIEF 8)', () => {
 
   it('renders the debt forms without a sign (BRIEF 8)', () => {
     const forYou = render(<Money value={45} debt="forYou" />);
-    expect(forYou.container.querySelector('.mds-money-debt')?.textContent).toBe(moneyTexts.forYou);
+    expect(forYou.container.querySelector('.mds-money-debt')?.textContent).toBe(getMoneyTexts().forYou);
     expect(digitsOf(forYou.container)).toBe('45');
     // Independently assembled from dictionary parts, not from formatMoney.
-    expect(screen.getByText(`${moneyTexts.forYou} 45 ${moneyTexts.dinar}`)).not.toBeNull();
+    expect(screen.getByText(`${getMoneyTexts().forYou} 45 ${getMoneyTexts().dinar}`)).not.toBeNull();
     const againstYou = render(<Money value={20} debt="againstYou" />);
-    expect(againstYou.container.querySelector('.mds-money-debt')?.textContent).toBe(moneyTexts.againstYou);
+    expect(againstYou.container.querySelector('.mds-money-debt')?.textContent).toBe(getMoneyTexts().againstYou);
   });
 
   it('announces the amount in full words to the screen reader (23.17)', () => {
     render(<Money value="12.500" />);
-    expect(screen.getByText(`12 ${moneyTexts.dinar} ${moneyTexts.and}500 ${moneyTexts.fils}`)).not.toBeNull();
+    expect(screen.getByText(`12 ${getMoneyTexts().dinar} ${getMoneyTexts().and}500 ${getMoneyTexts().fils}`)).not.toBeNull();
     render(<Money value="-35" />);
-    expect(screen.getByText(`${moneyTexts.minus} 35 ${moneyTexts.dinar}`)).not.toBeNull();
+    expect(screen.getByText(`${getMoneyTexts().minus} 35 ${getMoneyTexts().dinar}`)).not.toBeNull();
   });
 
   it('hides the visual part from the accessibility tree, with words kept aside', () => {
     const { container } = render(<Money value="45" debt="forYou" />);
     expect(container.querySelector('.mds-money-visual')?.getAttribute('aria-hidden')).toBe('true');
     expect(container.querySelector('.mds-visually-hidden')?.textContent)
-      .toBe(`${moneyTexts.forYou} 45 ${moneyTexts.dinar}`);
+      .toBe(`${getMoneyTexts().forYou} 45 ${getMoneyTexts().dinar}`);
   });
 
   it('shows «—» for a missing value, never a zero (BRIEF 8)', () => {
     const { container } = render(<Money value={null} />);
-    expect(container.querySelector('.mds-money-missing')?.textContent).toBe(moneyTexts.missingGlyph);
+    expect(container.querySelector('.mds-money-missing')?.textContent).toBe(getMoneyTexts().missingGlyph);
     expect(container.querySelector('.mds-money-value')).toBeNull();
     expect(container.textContent).not.toContain('0');
   });
@@ -138,7 +138,7 @@ describe('Money — hidden amounts (BRIEF 23.22)', () => {
     const root = container.querySelector('.mds-money')!;
     const text = root.textContent ?? '';
     expect((text.match(/\u2022/g) ?? [])).toHaveLength(4);
-    expect(text).toContain(moneyTexts.unit);
+    expect(text).toContain(getMoneyTexts().unit);
     expect(/[0-9]/.test(text)).toBe(false);
     expect(root.getAttribute('aria-label')).toBeNull();
   });
@@ -149,7 +149,7 @@ describe('Money — hidden amounts (BRIEF 23.22)', () => {
         <Money value={45} debt="forYou" />
       </AmountVisibilityProvider>,
     );
-    expect(container.querySelector('.mds-money-debt')?.textContent).toBe(moneyTexts.forYou);
+    expect(container.querySelector('.mds-money-debt')?.textContent).toBe(getMoneyTexts().forYou);
     const text = container.textContent ?? '';
     expect((text.match(/\u2022/g) ?? [])).toHaveLength(4);
   });
@@ -160,7 +160,7 @@ describe('Money — hidden amounts (BRIEF 23.22)', () => {
         <Money value="12450.125" />
       </AmountVisibilityProvider>,
     );
-    expect(screen.getByText(moneyTexts.hidden)).not.toBeNull();
+    expect(screen.getByText(getMoneyTexts().hidden)).not.toBeNull();
   });
 
   it('still shows «—» for a missing value when amounts are hidden', () => {
@@ -169,7 +169,7 @@ describe('Money — hidden amounts (BRIEF 23.22)', () => {
         <Money value={null} />
       </AmountVisibilityProvider>,
     );
-    expect(container.querySelector('.mds-money-missing')?.textContent).toBe(moneyTexts.missingGlyph);
+    expect(container.querySelector('.mds-money-missing')?.textContent).toBe(getMoneyTexts().missingGlyph);
     expect((container.textContent ?? '').match(/\u2022/g) ?? []).toHaveLength(0);
   });
 
