@@ -647,3 +647,31 @@ button.sim-later--tap {
   background: var(--mds-color-brand-anchor);
   border: 2px solid var(--mds-color-surface-card);
 }
+
+/* جولة المستخدم: Ask's temporary answer rendering (the Ask vocabulary's
+   real components mount in part B). */
+.sim-ask-sentence {
+  margin: 0;
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  line-height: var(--mds-type-body-line);
+  color: var(--mds-color-text-primary);
+}
+.sim-ask-computed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-element-to-element);
+}
+.sim-ask-computed .sim-money {
+  font-family: var(--mds-type-money-font);
+  font-size: var(--mds-type-money-size);
+  color: var(--mds-color-text-primary);
+}
+.sim-ask-source {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  color: var(--mds-color-text-secondary);
+}
+.sim-ask-limit p {
+  margin: 0;
+}

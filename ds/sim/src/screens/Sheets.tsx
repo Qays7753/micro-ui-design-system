@@ -14,6 +14,7 @@
 import {
   ActionBar,
   AmountField,
+  Skeleton,
   AmountsHiddenIcon,
   AmountsShownIcon,
   Button,
@@ -38,6 +39,8 @@ import type { FundId, Listing } from '../data/types';
 import type { MovementInput, OrderInput, DeliveryInput, SimState } from '../state/types';
 import { LaterMark, moneyText, needsCard, todayNeedsYouList, whenLine } from './parts';
 import { minutesSinceOpen } from '../clock';
+import { answerQuestion, askRoleOf, availableQuestions } from '../ask/ask';
+import type { AskResult } from '../ask/types';
 import { DecisionSheet, DriverDecisionSheet } from './reviewer/ReviewerSheets';
 import { dateDisplay, parseTimeInput, time12 } from '../format';
 
@@ -46,12 +49,175 @@ function SheetBody({ children }: { children: React.ReactNode }) {
   return <div className="sim-sheet__body">{children}</div>;
 }
 
-/** The ask panel's place (§5.3's engine from SA4 mounts in part B). */
+/** جولة المستخدم: Ask works — SA4's engine answers from the LIVE data with
+ *  the built components standing in for the Ask vocabulary (AskAnswer،
+ *  AskComputedResult، AskInlineTable، AskNavResult، AskLimit، AskDraftCard —
+ *  each part's real component rides as a marker) and the hidden-amounts rule
+ *  applies to every amount. The ready questions list per §5.3's
+ *  unknown-question flow; pressing one fills the field. */
 export function AskSheet({ onDismiss }: { onDismiss: () => void }) {
+  const state = useSim();
+  const dispatch = useSimDispatch();
+  const [question, setQuestion] = useState('');
+  const [thinking, setThinking] = useState(false);
+  const [result, setResult] = useState<AskResult | null>(null);
+  const [draftFund, setDraftFund] = useState<FundId | undefined>(undefined);
+  const askQs = availableQuestions(askRoleOf(state));
+  const hidden = state.amountsHidden;
+
+  const ask = (text: string) => {
+    const q = text.trim();
+    if (!q) return;
+    setThinking(true);
+    setResult(null);
+    // §5.3: AskThinking for sim.ask-delay, then the answer.
+    window.setTimeout(() => {
+      setThinking(false);
+      setResult(answerQuestion(state, q, new Date().getHours() * 60 + new Date().getMinutes()));
+    }, 1200);
+  };
+
+  const amountNode = (fils: number): React.ReactNode =>
+    hidden ? <span className="sim-money">—</span> : <span className="sim-money">{`${moneyText(fils)} د`}</span>;
+
   return (
     <Sheet label="Ask Micro" onDismiss={onDismiss}>
       <SheetBody>
-        <LaterMark name="AskPanel" note="محرك الأسئلة جاهز — يُركَّب معه" />
+        <LaterMark name="AskPanel" note="بديل مؤقت: حقل السؤال والأجوبة من محرك SA4 الحي — لوحة Ask الحقيقية تُركَّب في الجزء ب" />
+        <TextField
+          label="اسأل عن مشروعك"
+          placeholder="مثال: كم دخل هذا الأسبوع؟"
+          value={question}
+          onChange={setQuestion}
+        />
+        <ActionBar label="اسأل" disabled={!question.trim() || thinking} onPress={() => ask(question)} />
+        {thinking ? <Skeleton variant="body" /> : null}
+        {result?.status === 'limit' ? (
+          <Surface>
+            <div className="sim-ask-limit">
+              <LaterMark name="AskLimit" />
+              <p className="sim-form-help">{result.text}</p>
+            </div>
+          </Surface>
+        ) : null}
+        {result?.status === 'unknown' ? (
+          <Surface>
+            <p className="sim-form-help">{result.text}</p>
+            <p className="sim-form-help">الأسئلة المتاحة لدورك — الضغط يكتبها في الحقل:</p>
+            {result.available.map((q) => (
+              <ObjectRow key={q.question} label={q.question} onPress={() => setQuestion(q.question)} />
+            ))}
+          </Surface>
+        ) : null}
+        {result?.status === 'answer' ? (
+          <>
+            {result.parts.map((part, i) => {
+              if (part.kind === 'answer') {
+                return (
+                  <Surface key={i}>
+                    <LaterMark name="AskAnswer" />
+                    <p className="sim-ask-sentence">
+                      {part.inline.map((piece, j) =>
+                        piece.t === 'word' ? (
+                          <span key={j}>{piece.text}</span>
+                        ) : piece.t === 'amount' ? (
+                          <bdi key={j} dir="ltr">{hidden ? '—' : moneyText(piece.fils)} د</bdi>
+                        ) : (
+                          <bdi key={j} dir="ltr">{piece.signed > 0 ? `+${piece.signed}` : piece.signed}%</bdi>
+                        ),
+                      )}
+                    </p>
+                  </Surface>
+                );
+              }
+              if (part.kind === 'computed') {
+                return (
+                  <Surface key={i}>
+                    <LaterMark name="AskComputedResult" />
+                    <div className="sim-ask-computed">
+                      {amountNode(part.fils)}
+                      <span className="sim-ask-source">{part.source}</span>
+                    </div>
+                  </Surface>
+                );
+              }
+              if (part.kind === 'table') {
+                return (
+                  <Surface key={i}>
+                    <LaterMark name="AskInlineTable" />
+                    <ObjectRow label={part.headers.join(' · ')} caption="الجدول" />
+                    {part.rows.map((row, r) => (
+                      <ObjectRow
+                        key={r}
+                        label={'text' in row[0]! ? row[0].text : ''}
+                        value={row[1] ? ('amount' in row[1] ? amountNode(row[1].amount) : <span>{row[1].text}</span>) : undefined}
+                      />
+                    ))}
+                  </Surface>
+                );
+              }
+              if (part.kind === 'nav') {
+                return (
+                  <Surface key={i}>
+                    <LaterMark name="AskNavResult" />
+                    <ObjectRow
+                      label={part.label}
+                      caption="اضغط لفتح الكائن"
+                      onPress={() => {
+                        dispatch({ type: 'ui/openSheet', id: `object:${part.target}` });
+                      }}
+                    />
+                  </Surface>
+                );
+              }
+              if (part.kind === 'draft') {
+                return (
+                  <Surface key={i}>
+                    <LaterMark name="AskDraftCard" />
+                    <ObjectRow label={`${part.type === 'in' ? 'داخل' : 'خارج'} · ${part.note || '—'}`} caption={part.party ?? '—'} value={amountNode(part.amount)} />
+                    {part.fund === null ? (
+                      <>
+                        <p className="sim-form-help">الصندوق فارغ — اختر الصندوق ثم احفظ.</p>
+                        <SegmentedControl
+                          leading={FUNDS.map((f) => ({ value: f.id, label: f.name }))}
+                          value={draftFund ?? ''}
+                          onChange={(v) => setDraftFund(v as FundId)}
+                          label="الصندوق"
+                        />
+                      </>
+                    ) : null}
+                    <ActionBar
+                      label="احفظ المسودة"
+                      disabled={part.fund === null && draftFund === undefined}
+                      onPress={() => {
+                        const fund = part.fund === null ? draftFund : (FUNDS.find((f) => f.name === part.fund)?.id ?? undefined);
+                        if (part.fund === null && !fund) return;
+                        dispatch({
+                          type: 'movement/save',
+                          input: {
+                            type: part.type,
+                            fund: fund as FundId | undefined,
+                            amount: part.amount,
+                            party: part.party,
+                            note: part.note,
+                          },
+                        });
+                        dispatch({ type: 'ui/openSheet', id: null });
+                      }}
+                    />
+                  </Surface>
+                );
+              }
+              return null;
+            })}
+          </>
+        ) : null}
+        <p className="sim-form-help">أسئلة جاهزة لدورك — الضغط يكتبها في الحقل:</p>
+        <Surface>
+          {askQs.map((q) => (
+            <ObjectRow key={q.question} label={q.question} onPress={() => setQuestion(q.question)} />
+          ))}
+        </Surface>
       </SheetBody>
     </Sheet>
   );
