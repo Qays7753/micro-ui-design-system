@@ -1,6 +1,18 @@
 <!doctype html>
 <html dir="rtl" lang="ar"><head><meta charset="utf-8">
-<style>button { width: 48px; height: 48px; background: #e0e0e0; border: none; }</style>
+<style>button { width: 48px; height: 48px; background: #e0e0e0; border: none; }
+#demo-dialog { position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  display: flex; align-items: flex-end; justify-content: center; }
+#demo-dialog[hidden] { display: none; }
+#demo-dialog .panel { width: 100%; height: 40%; background: #fff; }
+</style>
 </head><body>
+<!-- VIOLATION 1: a silent-touch button — no :active change (23.2). -->
 <button>زر صامت اللمس</button>
+<!-- VIOLATION 2: the opener's press opens a dialog that obeys neither
+     Escape nor the backdrop — the gate must record «ورقة لا تُغلق». -->
+<button id="opener" onclick="document.getElementById('demo-dialog').hidden = false">يفتح ورقة لا تُغلق</button>
+<div id="demo-dialog" role="dialog" aria-modal="true" aria-label="ورقة عصية" hidden>
+  <div class="panel"><button id="inside">داخلها</button></div>
+</div>
 </body></html>

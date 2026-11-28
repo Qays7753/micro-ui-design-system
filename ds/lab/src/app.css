@@ -265,25 +265,43 @@
 
 .lab-sheet-stage .mds-sheet-panel {
   max-width: none;
-  /* m23: the inline specimen scrolls INSIDE its stage — its content can
-     never bleed over the stage below (two stacked sheets overlapped
-     before: one send button under the other's). */
+  /* m23 + ds-states: the inline specimen behaves like the REAL sheet's
+     panel — a flex column whose BODY alone scrolls and the bar rides
+     BELOW the scroll flow as the panel's own last child (the real
+     composition pins the bar to the sheet's bottom edge, 23.15's
+     sheet-owned layer). Content can never pass beneath the bar at ANY
+     scroll offset — its press targets stay clear everywhere — and no
+     two specimens' bars can ever collide. The component's own
+     screen-fixed behavior stays untouched for apps. */
   block-size: 480px;
   max-block-size: 480px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-/* m23 (the real root): ActionBar is fixed to the screen bottom BY DESIGN
-   (23.15 — a screen's bar owns the viewport). Two sheet specimens in one
-   catalog page then pin BOTH bars onto the same viewport pixels and they
-   cover each other's buttons. Inside a stage the bar rides the panel's
-   own flow: the specimen shows the bar where the sheet's real geometry
-   puts it, and no two specimens' bars can ever collide. The component's
-   real fixed behavior is untouched (apps pin it to their screen). */
+.lab-sheet-stage .mds-sheet-body {
+  /* the scroll lives HERE and only here: the flex child that grows */
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* Lab-only: the specimen's honest close flow (exit motion THEN remount)
+   is compressed — the remount is immediate on dismiss, so the next
+   press scan never races a mid-flight enter transition. The component's
+   real exit behavior is untouched for apps. */
+.lab-sheet-stage .mds-sheet--closing .mds-sheet-panel {
+  transition: none;
+}
+
+/* m23 + states: the bar is the panel's flex child AFTER the body — out
+   of the scroller entirely, at the panel's bottom edge exactly like the
+   real composition. */
 .lab-sheet-stage .mds-action-bar {
   position: static;
   inset-inline: auto;
   z-index: auto;
+  flex: 0 0 auto;
 }
 
 /* ---- ActionBar specimen stage (S7 unit 3): same mini-frame pattern as

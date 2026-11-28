@@ -12,6 +12,18 @@ on Chromium AND WebKit:
     must differ from the resting state (disabled-fg / disabled-bg, 23.2)
 [role="button] elements are exempt from the disabled half (no native
 disabled semantics — 23.18 handles that per component).
+
+Per-press isolation (the live lab's real lesson): the scan presses in DOM
+order and a press can OPEN a real overlay (a sheet, a dialog). A user never
+presses a button that lies under an open overlay, so the gate must not
+either — after every element it checks whether the press left a new
+dialog/sheet on the page and, if so, closes it THE USER'S WAY (Escape, then
+a touch on the backdrop) and waits out the exit motion before the next
+element. An overlay that refuses to close is itself recorded as a violation
+(«ورقة لا تُغلق») — never skipped, never ignored. The element list is
+collected ONCE before any press (the scan follows remounts through the
+probe-path resolution), so a sheet's own buttons can never close it for the
+scan — isolation after every press is the only honest ordering.
 """
 import json
 from pathlib import Path
@@ -55,8 +67,10 @@ BASE_JS = """
   .map((el, i) => {
     el.setAttribute('data-ds-state-probe', i);
     const r = el.getBoundingClientRect();
+    const sec = el.closest('section[id]');
     return {i, path: pathOf(el), tag: el.tagName.toLowerCase(), x: r.x + r.width / 2, y: r.y + r.height / 2,
-            w: r.width, h: r.height, text: (el.textContent || '').trim().slice(0, 20)};
+            w: r.width, h: r.height, text: (el.textContent || '').trim().slice(0, 20),
+            sec: sec ? sec.id : ''};
   })
 }
 """
@@ -70,6 +84,18 @@ RESOLVE_JS = """
     el = document.querySelector(args.path);
     if (el) el.setAttribute('data-ds-state-probe', String(args.i));
   }
+  if (!el && args.text && args.sec) {
+    // honest-remount fallback: same visible text, same section — the
+    // specimen rebuilt its tree (mode switch, key remount) and both the
+    // probe tag and the structural path moved; identity never did.
+    const sec = document.getElementById(args.sec);
+    if (sec) {
+      el = Array.from(sec.querySelectorAll(args.tag || 'button'))
+        .find(n => (n.textContent || '').trim().slice(0, 20) === args.text)
+        || null;
+      if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+    }
+  }
   return !!el;
 }
 """
@@ -81,6 +107,19 @@ SNAPSHOT_JS = """
     el = document.querySelector(args.path);
     if (el) el.setAttribute('data-ds-state-probe', String(args.i));
   }
+  if (!el && args.text && args.sec) {
+    // honest-remount fallback: same visible text, same section — the
+    // specimen rebuilt its tree (mode switch, key remount) and both the
+    // probe tag and the structural path moved; identity never did.
+    const sec = document.getElementById(args.sec);
+    if (sec) {
+      el = Array.from(sec.querySelectorAll(args.tag || 'button'))
+        .find(n => (n.textContent || '').trim().slice(0, 20) === args.text)
+        || null;
+      if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+    }
+  }
+
   if (!el) return null;
   const st = getComputedStyle(el);
   const props = %s;
@@ -98,6 +137,19 @@ async (args) => {
     el = document.querySelector(args.path);
     if (el) el.setAttribute('data-ds-state-probe', String(args.i));
   }
+  if (!el && args.text && args.sec) {
+    // honest-remount fallback: same visible text, same section — the
+    // specimen rebuilt its tree (mode switch, key remount) and both the
+    // probe tag and the structural path moved; identity never did.
+    const sec = document.getElementById(args.sec);
+    if (sec) {
+      el = Array.from(sec.querySelectorAll(args.tag || 'button'))
+        .find(n => (n.textContent || '').trim().slice(0, 20) === args.text)
+        || null;
+      if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+    }
+  }
+
   if (!el) return false;
   const t0 = performance.now();
   while (performance.now() - t0 < 800) {
@@ -129,6 +181,19 @@ CENTER_JS = """
     el = document.querySelector(args.path);
     if (el) el.setAttribute('data-ds-state-probe', String(args.i));
   }
+  if (!el && args.text && args.sec) {
+    // honest-remount fallback: same visible text, same section — the
+    // specimen rebuilt its tree (mode switch, key remount) and both the
+    // probe tag and the structural path moved; identity never did.
+    const sec = document.getElementById(args.sec);
+    if (sec) {
+      el = Array.from(sec.querySelectorAll(args.tag || 'button'))
+        .find(n => (n.textContent || '').trim().slice(0, 20) === args.text)
+        || null;
+      if (el) el.setAttribute('data-ds-state-probe', String(args.i));
+    }
+  }
+
   if (!el) return null;
   el.scrollIntoView({ block: 'center' });
   const r = el.getBoundingClientRect();
@@ -180,6 +245,58 @@ async () => {
 }
 """
 
+# --- Per-press isolation (the live lab's real lesson) ---------------------
+# A real overlay opened by a press must be closed the user's way before the
+# next element is probed: a user never presses under an open sheet. The
+# overlay set is snapshots of VISIBLE page-level dialogs ([role=dialog] or
+# the confirm/sheet anatomy, never the lab's static garden stages).
+OVERLAYS_JS = """
+() => {
+  const vis = (el) => el.getClientRects().length > 0;
+  return Array.from(document.querySelectorAll('[role="dialog"], [class*="mds-confirm"]'))
+    .filter(el => el.closest('.lab-sheet-stage') === null && vis(el))
+    .map(el => {
+      // A stable identity: the dialog's label (aria-label) + its level, so
+      // a remounted equivalent still counts as the same overlay.
+      const label = el.getAttribute('aria-label') || el.textContent.trim().slice(0, 24) || '';
+      return label + '@' + (el.getAttribute('data-ds-sheet-level') || '');
+    })
+    .sort();
+}
+"""
+
+# Close every overlay the user's way, in order: Escape first (the keyboard
+# path every dialog honors), then a real click on the backdrop for anything
+# that survives. Returns the labels that are STILL open after both attempts.
+ISOLATE_JS = """
+async () => {
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  const vis = (el) => el.getClientRects().length > 0;
+  const openOverlays = () => Array.from(document.querySelectorAll('[role="dialog"], [class*="mds-confirm"]'))
+    .filter(el => el.closest('.lab-sheet-stage') === null && vis(el));
+  let rounds = 0;
+  while (openOverlays().length && rounds < 4) {
+    // 1) Escape — the standard keyboard dismiss (window-level keydown).
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await sleep(220);
+    // 2) Still open? A real mouse tap on its backdrop (the scrim hit area
+    //    is the dialog's own first rect outside the panel — tap the dialog
+    //    element's top-left, which the scrim occupies in the real sheet
+    //    anatomy: fixed, full-inset, panel at the bottom).
+    for (const el of openOverlays()) {
+      const r = el.getBoundingClientRect();
+      const tap = { bubbles: true, cancelable: true, composed: true, pointerId: 1, isPrimary: true, pointerType: 'touch', clientX: r.left + 8, clientY: r.top + 8 };
+      el.dispatchEvent(new PointerEvent('pointerdown', tap));
+      el.dispatchEvent(new PointerEvent('pointerup', tap));
+      el.dispatchEvent(new MouseEvent('click', tap));
+    }
+    await sleep(260);
+    rounds++;
+  }
+  return openOverlays().map(el => el.getAttribute('aria-label') || el.textContent.trim().slice(0, 24) || '').sort();
+}
+"""
+
 
 def run(gate: Gate, target, args):
     kind, resolved = resolve_page_target(target)
@@ -205,7 +322,11 @@ def run(gate: Gate, target, args):
                     elements = page.evaluate(BASE_JS)
                     n_elements = len(elements)
                     for el in elements:
-                        arg = {"i": el["i"], "path": el["path"]}
+                        arg = {"i": el["i"], "path": el["path"], "text": el["text"], "sec": el["sec"], "tag": el["tag"]}
+                        # Per-press isolation precondition: the overlay set
+                        # as it stands BEFORE this element's press. Whatever
+                        # the press adds gets closed the user's way below.
+                        overlays_before = page.evaluate(OVERLAYS_JS)
                         await_stable = page.evaluate(STABLE_JS, arg)
                         base = page.evaluate(SNAPSHOT_JS, arg)
                         # --- :active via a real press (mouse down, hold) ---
@@ -239,6 +360,25 @@ def run(gate: Gate, target, args):
                             if disabled is None or disabled == base:
                                 problems.append(
                                     f"<button> «{el['text']}» shows no :disabled style change (23.2)")
+                        # --- Per-press isolation: a press that OPENED a new
+                        # overlay must be closed the user's way (Escape, then
+                        # the backdrop) and the exit motion waited out, so the
+                        # NEXT element is never pressed under an open sheet —
+                        # exactly the world the user lives in. An overlay that
+                        # refuses to close is itself a violation (recorded,
+                        # never skipped). ---
+                        overlays_after = page.evaluate(OVERLAYS_JS)
+                        new_overlays = [o for o in overlays_after if o not in overlays_before]
+                        if new_overlays or overlays_after:
+                            stuck = page.evaluate(ISOLATE_JS)
+                            if stuck:
+                                problems.append(
+                                    f"«{stuck[0]}» ورقة لا تُغلق "
+                                    "(Escape والخلفية كلاهما يفشل — 23.11/23.15)")
+                            else:
+                                # the exit motion played; rest before the next
+                                # element's resting-state snapshot
+                                page.wait_for_timeout(150)
                         # live-lab hygiene: a press opens real sheets/toasts —
                         # restore the clean page before the next element
                         page.evaluate(CLEANUP_JS)

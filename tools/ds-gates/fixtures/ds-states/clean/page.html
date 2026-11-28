@@ -4,6 +4,25 @@
 button { width: 48px; height: 48px; background: #e0e0e0; border: none; }
 button:active { background: #999999; }
 button:disabled { background: #f5f5f5; color: #999999; }
+/* A real dialog anatomy: fixed, full-inset, closes on Escape AND on a
+   backdrop tap (the scrim hit area) — exactly the user's two paths. */
+#demo-dialog { position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  display: flex; align-items: flex-end; justify-content: center; }
+#demo-dialog[hidden] { display: none; }
+#demo-dialog .panel { width: 100%; height: 40%; background: #fff; }
 </style></head><body>
-<button>زر حيّ</button>
+<button id="opener" onclick="document.getElementById('demo-dialog').hidden = false">يفتح الورقة</button>
+<!-- The covered button: probed AFTER the opener's press — isolation must
+     close the dialog first, so this press reaches the button itself. -->
+<button id="underneath">تحت الورقة</button>
+<div id="demo-dialog" role="dialog" aria-modal="true" aria-label="ورقة العينة" hidden>
+  <div class="panel">
+    <button id="inside" onclick="document.getElementById('demo-dialog').hidden = true">داخلها</button>
+  </div>
+</div>
+<script>
+  const dlg = document.getElementById('demo-dialog');
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') dlg.hidden = true; });
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.hidden = true; });
+</script>
 </body></html>

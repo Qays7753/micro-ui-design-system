@@ -27,7 +27,7 @@ export function StatusTrack({
   const currentLabel = items[current]?.label ?? '';
   const ariaLabel = [
     t('sr.statusTrackStages'),
-    t('sr.statusTrackStep', { n: current + 1 }).replace('{m}', String(items.length)),
+    t('sr.statusTrackStep', { n: current + 1, m: items.length }),
     currentLabel,
   ].join(t('sr.listSeparator'));
 
