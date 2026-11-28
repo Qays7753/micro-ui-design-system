@@ -18,7 +18,7 @@
  *   package dictionary, lab data comes from ./data (BRIEF 25).
  */
 import { useState } from 'react';
-import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, ar, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, Money, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -180,7 +180,7 @@ export function App() {
               <ObjectRow
                 key={name}
                 label={name}
-                caption={ar['role.owner'].text}
+                caption={t('role.owner')}
                 trailing={i === 0 ? <SelectedIcon size={20} /> : undefined}
                 onPress={() => setProjectOpen(false)}
               />
@@ -371,7 +371,7 @@ export function App() {
             <ContextBar
               label={t('sr.switchProject')}
               leading={
-                <ProjectSwitcher label={projects[0]} caption={ar['role.owner'].text} onPress={() => setProjectOpen(true)} />
+                <ProjectSwitcher label={projects[0]} caption={t('role.owner')} onPress={() => setProjectOpen(true)} />
               }
               trailing={
                 <>
@@ -501,11 +501,11 @@ export function App() {
             {/* خ7 (1.7): tab order ب — المالية، الطلبات، «مشروع اليوم»
                 in the MIDDLE (the default), التوصيل، السوق. */}
             <TabBar value={tab} onChange={setTab}>
-              <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
-              <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
-              <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
-              <TabBarTab label={ar['nav.delivery'].text} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
-              <TabBarTab label={ar['nav.market'].text} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
+              <TabBarTab label={t('nav.finance')} leading={<NavFinanceIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
+              <TabBarTab label={t('nav.orders')} leading={<NavOrdersIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
+              <TabBarTab label={t('nav.todayLong')} leading={<NavTodayIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
+              <TabBarTab label={t('nav.delivery')} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
+              <TabBarTab label={t('nav.market')} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
             </TabBar>
           </div>
         </div>
@@ -664,7 +664,7 @@ export function App() {
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('badge.cancelled')}</span>
-            <StatusBadge tone="neutral" label={ar['badge.cancelled'].text} />
+            <StatusBadge tone="neutral" label={t('badge.cancelled')} />
           </div>
           <div className="lab-row">
             <span className="lab-label">{t('state.longest')}</span>
@@ -1253,11 +1253,11 @@ export function App() {
             <span className="lab-label">{t('state.fiveTabs')}</span>
             <div className="lab-bar-stage" data-ds-check="tab-bar">
               <TabBar value={tab} onChange={setTab}>
-                <TabBarTab label={ar['nav.todayLong'].text} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
-                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
-                <TabBarTab label={ar['nav.orders'].text} leading={<NavOrdersIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
-                <TabBarTab label={ar['nav.delivery'].text} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
-                <TabBarTab label={ar['nav.market'].text} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
+                <TabBarTab label={t('nav.todayLong')} leading={<NavTodayIcon weight={tab === 0 ? 'fill' : 'regular'} />} onPress={() => setTab(0)} />
+                <TabBarTab label={t('nav.finance')} leading={<NavFinanceIcon weight={tab === 1 ? 'fill' : 'regular'} />} onPress={() => setTab(1)} />
+                <TabBarTab label={t('nav.orders')} leading={<NavOrdersIcon weight={tab === 2 ? 'fill' : 'regular'} />} onPress={() => setTab(2)} />
+                <TabBarTab label={t('nav.delivery')} leading={<NavDeliveryIcon weight={tab === 3 ? 'fill' : 'regular'} />} onPress={() => setTab(3)} />
+                <TabBarTab label={t('nav.market')} leading={<NavMarketIcon weight={tab === 4 ? 'fill' : 'regular'} />} onPress={() => setTab(4)} />
               </TabBar>
             </div>
           </div>
@@ -1265,8 +1265,8 @@ export function App() {
             <span className="lab-label">{t('state.default')}</span>
             <div className="lab-bar-stage">
               <TabBar value={tabDemo} onChange={setTabDemo}>
-                <TabBarTab label={ar['nav.today'].text} leading={<NavTodayIcon weight={tabDemo === 0 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(0)} />
-                <TabBarTab label={ar['nav.finance'].text} leading={<NavFinanceIcon weight={tabDemo === 1 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(1)} />
+                <TabBarTab label={t('nav.today')} leading={<NavTodayIcon weight={tabDemo === 0 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(0)} />
+                <TabBarTab label={t('nav.finance')} leading={<NavFinanceIcon weight={tabDemo === 1 ? 'fill' : 'regular'} />} onPress={() => setTabDemo(1)} />
               </TabBar>
             </div>
           </div>
@@ -1283,7 +1283,7 @@ export function App() {
                 leading={
                   <ProjectSwitcher
                     label={projects[0]}
-                    caption={ar['role.owner'].text}
+                    caption={t('role.owner')}
                     onPress={() => setProjectOpen(true)}
                   />
                 }
@@ -1325,7 +1325,7 @@ export function App() {
             <span className="lab-label">{t('state.default')}</span>
             <ProjectSwitcher
               label={projects[0]}
-              caption={ar['role.owner'].text}
+              caption={t('role.owner')}
               onPress={() => setProjectOpen(true)}
               data-ds-check="project-switcher"
             />
@@ -1334,7 +1334,7 @@ export function App() {
             <span className="lab-label">{t('state.singleRole')}</span>
             <ProjectSwitcher
               label={projects[1]}
-              caption={ar['role.owner'].text}
+              caption={t('role.owner')}
               locked
               onPress={() => setProjectOpen(true)}
             />
@@ -1394,8 +1394,8 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('state.default')}</span>
             <Surface>
-              <Checkbox label={ar['kv.customer'].text} caption={t('row.sampleCaption')} selected={cbA} onChange={setCbA} />
-              <Checkbox label={ar['kv.delivery'].text} selected={cbB} onChange={setCbB} data-ds-check="checkbox" />
+              <Checkbox label={t('kv.customer')} caption={t('row.sampleCaption')} selected={cbA} onChange={setCbA} />
+              <Checkbox label={t('kv.delivery')} selected={cbB} onChange={setCbB} data-ds-check="checkbox" />
             </Surface>
           </div>
           <div className="lab-row lab-row--full">
