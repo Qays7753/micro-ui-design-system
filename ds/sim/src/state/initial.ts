@@ -2,7 +2,7 @@
  * The initial state — §5.2 verbatim, assembled by the data module, plus the
  * neutral shell defaults (role screen, tab order ب, everything off).
  */
-import { DEBTS, DELIVERIES, DRIVERS, LISTINGS, MOVEMENTS, NOTIFICATIONS, ORDERS, DRIVERS_QUEUE, REPORTS_QUEUE, REVIEW_QUEUE } from '../data';
+import { DEBTS, DELIVERIES, DRIVERS, LISTINGS, MOVEMENTS, NOTIFICATIONS, ORDERS, REEF, DRIVERS_QUEUE, REPORTS_QUEUE, REVIEW_QUEUE } from '../data';
 import type { SimState, TasksState, UiState } from './types';
 
 export function initialUi(): UiState {
@@ -22,7 +22,12 @@ export function initialState(): SimState {
     amountsHidden: false,
     movements: MOVEMENTS.map((m) => ({ ...m })),
     debts: DEBTS.map((d) => ({ ...d })),
-    orders: ORDERS.map((o) => ({ ...o })),
+    // جولة المستخدم ا-12: طلبا حلويات بيت الريف (2041 مؤكد، 2042 مسودة) عاشا
+    // في ثابت REEF.orders ولا يقرأهما أحد — شاشة الطلبات بعد التبديل كانت
+    // فارغة رغم وجود البيانات. الطلبات كلها تعيش في الحالة، وprojectView
+    // هو الذي يفصل المشروعين (الآن: المالك يرى طلبا الريف بعد التبديل،
+    // و«طلب جديد» في الريف يرقّم 2043).
+    orders: [...ORDERS, ...REEF.orders].map((o) => ({ ...o })),
     deliveries: DELIVERIES.map((d) => ({ ...d, quotes: d.quotes.map((q) => ({ ...q })) })),
     drivers: DRIVERS.map((d) => ({ ...d, areas: [...d.areas], attachments: [...d.attachments] })),
     listings: LISTINGS.map((l) => ({

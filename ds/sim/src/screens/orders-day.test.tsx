@@ -159,4 +159,23 @@ describe('جولة المستخدم — الطلبات تعمل من أولها 
     expect(chipLabel('الكل')!.getAttribute('aria-pressed')).toBe('true');
     expect(sections()).toContain('الجارية');
   });
+
+  test('ا-12: طلبا حلويات بيت الريف يظهران بعد التبديل وطلبا ياسمين يختفيان', async () => {
+    // كانا عاشقين في ثابت REEF.orders ولا يقرأهما أحد — شاشة الطلبات بعد
+    // التبديل كانت فارغة رغم أن البيانات موجودة (جولة المستخدم، لمس حقيقي).
+    render(
+      <SimProvider>
+        <App />
+      </SimProvider>,
+    );
+    await press(screen.getByText('ورشة الياسمين للخياطة'));
+    await press(document.querySelector('.mds-project-switcher')!);
+    await press(screen.getByText('حلويات بيت الريف').closest('button') ?? screen.getByText('حلويات بيت الريف'));
+    const tab = screen.getAllByRole('tab').find((b) => b.textContent === 'الطلبات')!;
+    await press(tab);
+    const body = document.body.textContent ?? '';
+    expect(body).toContain('2041'); // مؤكد ← «الجارية»
+    expect(body).toContain('2042'); // مسودة ← «يحتاجك»
+    expect(body).not.toContain('1175'); // عزل المشروعين
+  });
 });

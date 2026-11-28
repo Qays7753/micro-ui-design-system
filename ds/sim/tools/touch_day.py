@@ -60,15 +60,102 @@ class Day:
 
     # ── actions ────────────────────────────────────────────────────────
     def tap(self, sel, label):
-        el = self.page.locator(sel).first
-        el.scroll_into_view_if_needed()
-        el.wait_for(state="visible", timeout=6000)
-        el.tap(timeout=6000)
-        time.sleep(0.25)
+        """Tap the FIRST VISIBLE match (a hidden twin of the same text —
+        e.g. an ended offer's button inside the sheet — times out a blind
+        locator.tap); falls back to a real-coordinate tap when Playwright's
+        actionability checks stall."""
+        loc = self.page.locator(sel)
+        try:
+            n = loc.count()
+        except Exception:
+            n = 0
+        if n == 0:
+            raise RuntimeError(f"العنصر غير موجود: {sel}")
+        target = loc.first
+        for i in range(min(n, 10)):
+            el = loc.nth(i)
+            try:
+                if el.is_visible():
+                    target = el
+                    break
+            except Exception:
+                continue
+        try:
+            target.scroll_into_view_if_needed(timeout=3000)
+            target.tap(timeout=4000)
+            time.sleep(0.25)
+            return
+        except Exception:
+            box = target.bounding_box()
+            if box:
+                self.page.touchscreen.tap(
+                    box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+                time.sleep(0.25)
+                return
+            raise
 
     def tap_xy(self, x, y, label):
         self.page.touchscreen.tap(x, y)
         time.sleep(0.25)
+
+    def tap_card(self, mark: str, contains: str, label: str, expect_sheet: str | None = None):
+        """Tap a data-sim-later card by its marker + text, with a settle wait
+        and a sheet-label check + one retry — the entry animations and the
+        task toast shift the layout in the first seconds after entering a
+        role, so a blind rect tap can land on the wrong card."""
+        time.sleep(0.4)
+        for attempt in range(2):
+            card = self.page.evaluate(
+                """([mark, contains]) => { const el = [...document
+                     .querySelectorAll(`[data-sim-later="${mark}"]`)]
+                     .find(e => e.innerText.includes(contains));
+                     if (!el) return null; el.scrollIntoView({ block: 'center' });
+                     const r = el.getBoundingClientRect();
+                     return { x: Math.round(r.left + r.width / 2),
+                              y: Math.round(r.top + r.height / 2) }; }""",
+                [mark, contains])
+            if not card:
+                self.problem(f"لا بطاقة {mark} تحوي «{contains}»")
+                return None
+            self.tap_xy(card["x"], card["y"], label)
+            time.sleep(0.4)
+            s = self.wait_sheet()
+            if s and (expect_sheet is None or expect_sheet in (s["label"] or "")):
+                return s
+            if self.sheet()["open"]:
+                self.close_sheet()
+        self.problem(f"بطاقة «{contains}» لم تفتح ورقتها {expect_sheet or ''}")
+        return None
+
+    def tap_row(self, contains: str, label: str, expect_sheet: str | None = None, also: str | None = None):
+        """Tap an ObjectRow by its label text (scroll it into view first —
+        the debt rows sit below the fold), with a sheet-label retry like
+        tap_card. `also` disambiguates: the row must contain BOTH strings
+        (the movement «داخل · سلمى الحوراني» shares the debt's party name)."""
+        time.sleep(0.3)
+        for attempt in range(2):
+            row = self.page.evaluate(
+                """([contains, also]) => { const el = [...document
+                     .querySelectorAll('.mds-object-row')]
+                     .find(e => e.innerText.includes(contains)
+                            && (!also || e.innerText.includes(also)));
+                     if (!el) return null; el.scrollIntoView({ block: 'center' });
+                     const r = el.getBoundingClientRect();
+                     return { x: Math.round(r.left + r.width / 2),
+                              y: Math.round(r.top + r.height / 2) }; }""",
+                [contains, also])
+            if not row:
+                self.problem(f"لا صفًّا يحوي «{contains}»")
+                return None
+            self.tap_xy(row["x"], row["y"], label)
+            time.sleep(0.4)
+            s = self.wait_sheet()
+            if s and (expect_sheet is None or expect_sheet in (s["label"] or "")):
+                return s
+            if self.sheet()["open"]:
+                self.close_sheet()
+        self.problem(f"الصف «{contains}» لم يفتح ورقته {expect_sheet or ''}")
+        return None
 
     def fill(self, sel, text):
         el = self.page.locator(sel).first
@@ -134,16 +221,34 @@ class Day:
         return False
 
     def close_sheet(self):
-        y = self.page.evaluate(
-            """(() => {
-              const p = document.querySelector('.mds-sheet-panel');
-              const top = p ? p.getBoundingClientRect().top : 300;
-              return Math.max(12, Math.round(top) - 40);
-            })()"""
-        )
-        self.tap_xy(195, y, "خلف الورقة")
-        time.sleep(0.2)
-        self.wait_no_sheet()
+        """Close whatever opened — scrim tap, then the X, then Escape. An
+        in-sheet action can RE-MOUNT the sheet (a fresh 350ms settle window
+        then swallows the FIRST scrim tap — the guard being right about
+        double-taps), so the fallbacks matter."""
+        for attempt in range(3):
+            if not self.sheet()["open"]:
+                return True
+            if attempt == 0:
+                y = self.page.evaluate(
+                    """(() => {
+                      const all = [...document.querySelectorAll('.mds-sheet-panel')];
+                      const p = all[all.length - 1];
+                      const top = p ? p.getBoundingClientRect().top : 300;
+                      return Math.max(12, Math.round(top) - 40);
+                    })()"""
+                )
+                self.tap_xy(195, y, "خلف الورقة")
+            elif attempt == 1:
+                self.page.evaluate(
+                    """(() => { const b = document.querySelector('.mds-sheet-close button')
+                               || [...document.querySelectorAll('.mds-sheet button')]
+                                    .find(x => ['إغلاق','إلغاء'].some(t => x.textContent.includes(t)));
+                               if (b) b.click(); })()"""
+                )
+            else:
+                self.page.keyboard.press("Escape")
+            self.wait_no_sheet(1400)
+        return not self.sheet()["open"]
 
     def note(self, text):
         print(f"  [{self.role} · {text}]")
@@ -177,56 +282,70 @@ def owner_day(a: Day):
     a.note("مشروع اليوم يفتح أول شاشة")
     # «الآن» — اليوم فيه جلسة قياس 11:00 ص وفستان سهرة 4:00 م
     a.say(f"«الآن» في الصفحة؟ {a.has('الآن')}")
-    # افتح أول بطاقة «يحتاجك» — عرض ت1
-    if a.has("عرض سعر وصل"):
-        a.tap("text=عرض سعر وصل", "بطاقة «يحتاجك»: عرض ت1")
-        s = a.wait_sheet()
+    # افتح أول بطاقة «يحتاجك» — عرض ت1 الساري
+    if a.has("عرض سعر ساري"):
+        s = a.tap_card("QuoteCard", "ت1", "بطاقة «يحتاجك»: عرض ت1", expect_sheet="ت1")
         if s:
             a.shot("needs-you-quote-sheet")
             a.note(f"ورقة الكائن فتحت: {s['label']}")
             a.close_sheet()
-        else:
-            a.problem("بطاقة عرض ت1 لا تفتح ورقة")
     else:
-        a.note("لا بطاقة «عرض سعر وصل» في مشروع اليوم")
+        a.note("لا بطاقة «عرض سعر ساري» في مشروع اليوم")
     # «الكل» في يحتاجك
     if a.has("الكل"):
         pass  # tested separately in the audit
-    # ← تبويب التوصيل: تقبل عرض عمر
+    # ← تبويب التوصيل: تفتح بطاقة ت1 الورقة فيها «اقبل العرض» (ر4.1)
     a.tap('[role="tab"]:has-text("التوصيل")', "تبويب التوصيل")
     a.shot("delivery")
     a.say(f"شاشة التوصيل: {a.screen()}")
-    if a.has("اقبل العرض"):
-        a.tap('button:has-text("اقبل العرض")', "اقبل عرض 3 د على ت1")
-        time.sleep(0.4)
-        a.shot("delivery-accepted")
-        a.say(f"بعد القبول: تظهر «مقبول»؟ {a.has('مقبول')}")
-    else:
-        a.problem("التوصيل: لا زر «اقبل العرض» ظاهر")
-    # ← المالية: الرصيد والصناديق والديون، وسجّل دفعة
+    s2 = a.tap_card("DeliveryRequestCard", "ت1", "بطاقة ت1", expect_sheet="ت1")
+    if s2:
+        a.shot("delivery-sheet")
+        a.note(f"ورقة ت1: {s2['label']}")
+        if a.has("اقبل العرض"):
+            a.tap('button:has-text("اقبل العرض")', "اقبل عرض 3 د على ت1")
+            time.sleep(0.4)
+            a.shot("delivery-accepted")
+            a.say(f"بعد القبول: «مقبول»؟ {a.has('مقبول') or a.has('بانتظار بدء السائق')}")
+        a.close_sheet()
+    # ← المالية: الرصيد والصناديق والديون — ودفع د1 من ورقته (ر2.2)
     a.tap('[role="tab"]:has-text("المالية")', "تبويب المالية")
     a.shot("finance")
     a.say(f"الرصيد الظاهر يحوي 595.500؟ {a.has('595.500')}")
     a.say(f"المحفظة السالبة ظاهرة؟ {a.has('−3')}")
-    # افتح د2 (متأخر)
-    if a.has("متأخر"):
-        a.tap("text=متأخر", "الدين المتأخر د2")
-        s = a.wait_sheet()
-        if s:
-            a.shot("debt-overdue-sheet")
-            a.note(f"ورقة الدين فتحت: {s['label']}")
-            a.close_sheet()
-    # سجّل دفعة على د1 من قسم الديون
-    if a.has("سجّل دفعة"):
-        a.tap('button:has-text("سجّل دفعة")', "سجّل دفعة")
-        s = a.wait_sheet()
-        if s:
+    # د2 المتأخر: ورقته من صفّه (تمرير ثم لمس — قسم الديون تحت الطية)
+    s = a.tap_row("أبو محمد", "صف د2 المتأخر", expect_sheet="د2", also="متأخر")
+    if s:
+        a.shot("debt-overdue-sheet")
+        a.note(f"ورقة الدين فتحت: {s['label']}")
+        a.close_sheet()
+    # سجّل دفعة على د1: من ورقة دين د1 (ر2.2: 35 من 45 يبقى 10)
+    s = a.tap_row("سلمى الحوراني", "صف د1 سلمى", expect_sheet="د1", also="المتبقي")
+    if s:
+        if a.has("سجّل دفعة"):
+            a.tap('button:has-text("سجّل دفعة")', "سجّل دفعة على د1")
+            time.sleep(0.6)
             a.shot("payment-sheet")
-            a.note(f"ورقة الدفعة: {s['label']}")
-            a.close_sheet()
-    # «سجّل حركة»: مصروف واقعي
+            a.note("ورقة الدفعة فتحت من ورقة الدين")
+            a.fill('.mds-sheet input[inputmode="decimal"], .mds-sheet input', "35")
+            time.sleep(0.3)
+            # الصندوق مطلوب (الزر معطّل بسببه المكتوب «اختر الصندوق»)
+            fund = a.page.locator('.mds-sheet button:has-text("درج الكاش")')
+            if fund.count():
+                fund.last.scroll_into_view_if_needed()
+                fund.last.tap()
+                time.sleep(0.4)
+            save = a.page.locator('.mds-sheet button:has-text("احفظ الدفعة")').last
+            save.scroll_into_view_if_needed()
+            save.tap()
+            time.sleep(0.6)
+            a.shot("payment-saved")
+            a.say(f"بعد الدفعة: الباقي 10 د ظاهر؟ {a.has('10 د')}")
+        a.close_sheet()
+    # «سجّل حركة»: مصروف اليوم من الدرج (ر2.1 جزئي)
     if a.has("سجّل حركة"):
         a.tap('button:has-text("سجّل حركة")', "سجّل حركة")
+        time.sleep(0.5)
         s = a.wait_sheet()
         if s:
             a.shot("movement-sheet")
@@ -274,8 +393,16 @@ def owner_day(a: Day):
     if s:
         a.tap('.mds-sheet .mds-object-row:has-text("حلويات بيت الريف")', "حلويات بيت الريف")
         time.sleep(0.5)
+        # التبديل يبقي الشاشة الحالية (السوق) — المالك يعود لليوم ليرى بيانات الريف
+        a.tap('.mds-tab-bar button:has-text("اليوم")', "اليوم بعد التبديل")
+        time.sleep(0.4)
         a.shot("reef-today")
-        a.say(f"بعد التبديل: 170 ظاهرة؟ {a.has('170')}")
+        a.say(f"بعد التبديل: مالية الريف 170 ظاهرة؟ {a.has('170')}")
+        a.say(f"عزل المشروعين: 595.500 غابت؟ {not a.has('595.500')}")
+        a.tap('.mds-tab-bar button:has-text("الطلبات")', "طلبات الريف")
+        time.sleep(0.4)
+        a.shot("reef-orders")
+        a.say(f"طلبا الريف 2041/2042 ظاهران وطلبان ورشة الياسمين غائبان؟ {a.has('2041') and not a.has('1175')}")
         a.note("تبديل المشروع يعيد بياناته")
 
 
@@ -284,30 +411,29 @@ def driver_day(a: Day):
     reset_and_enter(a.page, "عمر الزعبي")
     a.shot("orders")
     a.note(f"أول شاشة: {a.screen()}")
-    # ت4: أرسل عرضًا
-    if a.has("صالون لمسة"):
-        a.say("يرى طلب صالون لمسة (ت4)")
+    # ت4: بطاقة صالون لمسة تفتح ورقتها فيها «سعرك» + «أرسل العرض» (ر4.2)
+    s = a.tap_card("DriverJobCard", "ت4", "بطاقة ت4", expect_sheet="ت4")
+    if s:
+        a.shot("quote-sheet-t4")
+        a.note(f"ورقة ت4: {s['label']}")
         if a.has("أرسل العرض"):
-            a.tap('button:has-text("أرسل العرض")', "أرسل العرض على ت4")
-            s = a.wait_sheet()
-            if s:
-                a.shot("quote-sheet-t4")
-                a.note(f"ورقة العرض الجديد: {s['label']}")
-                a.close_sheet()
-        else:
-            a.problem("ت4 بلا زر «أرسل العرض»")
+            a.fill('.mds-sheet input[inputmode="decimal"], .mds-sheet input', '3.5')
+            a.tap('button:has-text("أرسل العرض")', "أرسل العرض")
+            time.sleep(0.4)
+            a.say(f"بعد الإرسال: «بانتظار قرار المالك»؟ {a.has('بانتظار قرار المالك')}")
+        a.close_sheet()
     # ت1: بانتظار قرار المالك
     a.say(f"يرى «بانتظار قرار المالك»؟ {a.has('بانتظار قرار المالك')}")
     # مهامي
-    seg = a.page.locator('[role="tablist"] button:has-text("مهامي")')
-    if seg.count():
-        seg.first.tap()
-        time.sleep(0.3)
+    a.tap('button:has-text("مهامي")', "الجزء «مهامي»")
     a.shot("myjobs")
-    # ت3: تمّ + إثبات
-    if a.has("تمّ") or a.has("لم أستطع"):
-        a.say("ت3 جارية مع أزرارها")
-        a.shot("job-t3")
+    # ت3: ورقتها فيها الإثبات و«تمّ التسليم» و«لم أستطع التسليم» (ر4.3)
+    s = a.tap_card("DriverJobCard", "ت3", "بطاقة ت3", expect_sheet="ت3")
+    if s:
+        a.shot("job-t3-sheet")
+        a.note(f"ورقة ت3: {s['label']}")
+        a.say(f"«تمّ التسليم» ظاهر؟ {a.has('تمّ التسليم')} · «لم أستطع»؟ {a.has('لم أستطع التسليم')}")
+        a.close_sheet()
     # السجل
     if a.has("السجل"):
         a.tap("text=السجل", "فتح «السجل»")
@@ -341,12 +467,13 @@ def supplier_day(a: Day):
             a.shot("listing-review-sheet")
             a.note(f"ورقة العرض: {s['label']}")
             a.close_sheet()
-    # عرض جديد
+    # عرض جديد: النموذج يعمل (صور مؤقتة + شرائح)
     if a.has("عرض جديد"):
         a.tap('button:has-text("عرض جديد")', "«عرض جديد»")
         time.sleep(0.4)
         a.shot("new-listing")
-        a.note(f"بعد «عرض جديد»: الشاشة {a.screen()}، ورقة {a.sheet()['label'] if a.sheet()['open'] else 'لا'}")
+        a.note(f"ورقة «عرض جديد»: {a.sheet()['label'] if a.sheet()['open'] else 'لا'}")
+        a.say(f"«أضف صورة أولاً.» ظاهر؟ {a.has('أضف صورة أولاً.')}")
         if a.sheet()["open"]:
             a.close_sheet()
     # السوق
@@ -369,18 +496,26 @@ def reviewer_day(a: Day):
     reset_and_enter(a.page, "مراجعة المنصة")
     a.shot("review")
     a.note(f"أول شاشة: {a.screen()}")
-    # ع3: الرفض مع السبب
-    if a.has("ع3"):
-        a.tap("text=ع3", "صف ع3")
+    # ع3: ورقة القرار فيها الاعتماد والرفض
+    if a.has("خبز صاج"):
+        a.tap("text=خبز صاج", "صف ع3")
         s = a.wait_sheet()
         if s:
             a.shot("review-3-sheet")
             a.note(f"ورقة ع3: {s['label']}")
+            a.say(f"«اعتمد العرض»؟ {a.has('اعتمد العرض')} · «ارفض العرض»؟ {a.has('ارفض العرض')}")
             a.close_sheet()
     # البلاغات
     a.tap('[role="tab"]:has-text("البلاغات")', "تبويب البلاغات")
     a.shot("reports")
-    a.say(f"ع6 ببلاغاته ظاهر؟ {a.has('ع6')}")
+    a.say(f"ع6 ببلاغاته ظاهر؟ {a.has('قماش ساتان')}")
+    if a.has("قماش ساتان"):
+        a.tap("text=قماش ساتان", "صف ع6 المبلَّغ")
+        s = a.wait_sheet()
+        if s:
+            a.shot("reports-sheet")
+            a.say(f"«أبقِ العرض»؟ {a.has('أبقِ العرض')} · «أوقف العرض»؟ {a.has('أوقف العرض')}")
+            a.close_sheet()
     # السائقون
     a.tap('[role="tab"]:has-text("السائقون")', "تبويب السائقين")
     a.shot("drivers")
@@ -390,6 +525,7 @@ def reviewer_day(a: Day):
         s = a.wait_sheet()
         if s:
             a.shot("driver-approval-sheet")
+            a.say(f"المرفقات الثلاثة؟ {a.has('صورة الهوية')} · «اعتمد السائق»؟ {a.has('اعتمد السائق')}")
             a.close_sheet()
     # الجرس الفارغ
     a.tap('.mds-context-bar [aria-label*="الإشعارات"]', "الجرس (فارغ)")

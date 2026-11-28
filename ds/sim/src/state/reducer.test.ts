@@ -159,12 +159,13 @@ describe('SA3 · طلب جديد بحالاته الثلاث (ر3.1 / §2.2.5)',
       type: 'order/save',
       input: { customer: ' ', content: 'x', price: 1_000, dueDate: '2026-11-28', time: null, durationMinutes: null, status: 'confirmed' },
     });
-    expect(a.orders).toHaveLength(12);
+    // ا-12: طلبا الريف يعيشان في الحالة أيضًا — العدّ واعٍ بالمشروع (ياسمين 12)
+    expect(a.orders.filter((o) => o.project === 'yasmine')).toHaveLength(12);
     const b = run(S(), {
       type: 'order/save',
       input: { customer: 'سلمى', content: 'x', price: 1_000, dueDate: null, time: null, durationMinutes: null, status: 'confirmed' },
     });
-    expect(b.orders).toHaveLength(12);
+    expect(b.orders.filter((o) => o.project === 'yasmine')).toHaveLength(12);
   });
 });
 
