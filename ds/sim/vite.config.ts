@@ -17,6 +17,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+import { SIM_VERSION } from './src/version';
+
 const simDir = fileURLToPath(new URL('.', import.meta.url));
 const dsDir = resolve(simDir, '..');
 
@@ -33,8 +35,10 @@ export default defineConfig({
       manifest: {
         name: 'Micro',
         short_name: 'Micro',
-        // 5.9: the sim version is non-standard, so it rides the description.
-        description: 'المحاكاة التجريبية 0.2.0 · 27/11/2026',
+        // 5.9: the sim version is non-standard, so it rides the description —
+        // imported from src/version.ts so the badge and the manifest can
+        // never disagree about which build is on the phone.
+        description: `المحاكاة التجريبية ${SIM_VERSION}`,
         lang: 'ar',
         dir: 'rtl',
         display: 'standalone',
