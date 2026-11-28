@@ -577,3 +577,27 @@
 .sim-period {
   width: 100%;
 }
+
+/* جولة المستخدم: a form's help line that is an ERROR (the save's reason) —
+   signal color from the tokens, never raw. */
+.sim-form-help--error {
+  color: var(--mds-color-text-signal);
+}
+
+/* جولة المستخدم: a tappable marker card (the needs-you/الآن cards) — the
+   same surface look, plus the press affordance from the library's row. */
+button.sim-later--tap {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ورقة الدفعة/المسودة: a small gap between the ActionBar and a text button. */
+.sim-sheet__gap {
+  height: var(--mds-layout-field-to-field);
+}

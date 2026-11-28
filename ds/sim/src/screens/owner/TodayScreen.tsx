@@ -31,6 +31,26 @@ import { SIM_TODAY, endOfDayBalances, totalBalance } from '../../data';
 import { time12 } from '../../format';
 import { TODAY_LINE } from '../../texts';
 
+/** The needs-you card's tap destination: the object's own sheet (§5.1:
+ *  «البطاقة ← ObjectSheet الكائن»). */
+function needsTarget(kind: ReturnType<typeof todayNeedsYouList>[number]['kind'], ref: string): string {
+  switch (kind) {
+    case 'quote':
+    case 'proposal':
+      return `object:${ref}`;
+    case 'needsReview':
+    case 'ready':
+    case 'delivered':
+      return `object:${ref}`;
+    case 'overdueDebt':
+      return `object:${ref}`;
+    case 'negativeFund':
+      return `object:${ref}`;
+    case 'draft':
+      return `object:${ref}`;
+  }
+}
+
 export function TodayScreen() {
   const state = useSim();
   const dispatch = useSimDispatch();
@@ -65,7 +85,7 @@ export function TodayScreen() {
         {nearest ? (
           <Section label="الآن">
             <div className="sim-cards">
-              <LaterMark name="OrderCard" note={`طلب ${nearest.id} · ${nearest.customer} · ${time12(nearest.time)}`} />
+              <LaterMark name="OrderCard" note={`طلب ${nearest.id} · ${nearest.customer} · ${time12(nearest.time)}`} onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${nearest.id}` })} />
             </div>
           </Section>
         ) : null}
@@ -77,7 +97,7 @@ export function TodayScreen() {
           {visibleNeeds.length ? (
             <div className="sim-cards">
               {visibleNeeds.map((item) => (
-                <LaterMark key={item.ref} name={needsCard(item.kind)} note={item.line} />
+                <LaterMark key={item.ref} name={needsCard(item.kind)} note={item.line} onPress={() => dispatch({ type: 'ui/openSheet', id: needsTarget(item.kind, item.ref) })} />
               ))}
             </div>
           ) : null}

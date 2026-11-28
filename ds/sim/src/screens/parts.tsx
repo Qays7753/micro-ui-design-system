@@ -36,13 +36,28 @@ import type { SimState } from '../state/types';
 import type { Screen } from '../state/types';
 import { TODAY_LINE } from '../texts';
 
-/** The internal marker at an unbuilt component's place (SA7's rule). */
-export function LaterMark({ name, note }: { name: string; note?: ReactNode }) {
-  return (
-    <div className="sim-later" data-sim-later={name}>
+/** The internal marker at an unbuilt component's place (SA7's rule).
+ *  جولة المستخدم: an optional onPress makes the card's place tappable to the
+ *  object's own sheet (§5.1 «البطاقة ← ObjectSheet الكائن») — the marker
+ *  stays the marker, but it is no longer a dead end. */
+export function LaterMark({ name, note, onPress }: { name: string; note?: ReactNode; onPress?: () => void }) {
+  const body = (
+    <>
       <span className="sim-later__name">يُركَّب لاحقًا: {name}</span>
       {note ? <span className="sim-later__note">{note}</span> : null}
-    </div>
+    </>
+  );
+  if (!onPress) {
+    return (
+      <div className="sim-later" data-sim-later={name}>
+        {body}
+      </div>
+    );
+  }
+  return (
+    <button type="button" className="sim-later sim-later--tap" data-sim-later={name} onClick={onPress}>
+      {body}
+    </button>
   );
 }
 

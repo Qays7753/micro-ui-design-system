@@ -11,6 +11,7 @@ import {
   DeltaDownIcon,
   DeltaUpIcon,
   DraftIcon,
+  EntityMark,
   HeroSurface,
   ObjectRow,
   PageHeader,
@@ -22,6 +23,7 @@ import {
 import { useSim, useSimDispatch } from '../../state/store';
 import {
   ContextBarShell,
+  LaterChip,
   OwnerTabBar,
   WeekBars,
   moneyText,
@@ -118,26 +120,33 @@ export function FinanceScreen() {
               />
             ))}
             {overdue.map((d) => (
-              <div key={d.id} className="sim-later-inline" data-sim-later="DebtCard">
-                <span className="sim-later__name">يُركَّب لاحقًا: DebtCard</span>
-                <span className="sim-later__note">{`${d.id} · ${d.party} · متأخر`}</span>
-              </div>
+              <ObjectRow
+                key={d.id}
+                label={d.party}
+                caption="دين متأخر"
+                value={<Money value={moneyText(d.remaining)} />}
+                leading={<EntityMark value={d.party} />}
+                trailing={<LaterChip name="DebtCard" />}
+                onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${d.id}` })}
+              />
             ))}
           </Surface>
         </Section>
       ) : null}
       <Section label="الصناديق">
-        <div className="sim-cards">
+        <Surface>
           {FUNDS.map((fund) => (
-            <div key={fund.id} className="sim-later-inline" data-sim-later="FundCard">
-              <span className="sim-later__name">يُركَّب لاحقًا: FundCard</span>
-              <span className="sim-later__note">
-                {`${fund.name} · `}
-                <bdi dir="ltr">{moneyText(fundBalance(view.movements, fund.id))} د</bdi>
-              </span>
-            </div>
+            <ObjectRow
+              key={fund.id}
+              label={fund.name}
+              caption="الرصيد الآن"
+              value={<span className="sim-money"><Money value={moneyText(fundBalance(view.movements, fund.id))} /> د</span>}
+              leading={<EntityMark value={fund.name} />}
+              trailing={<LaterChip name="FundCard" />}
+              onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${fund.id}` })}
+            />
           ))}
-        </div>
+        </Surface>
       </Section>
       <Section
         label="الحركات"
@@ -146,26 +155,35 @@ export function FinanceScreen() {
       >
         <Surface>
           {visibleMovements.map((m) => (
-            <div key={m.id} className="sim-later-inline" data-sim-later={m.type === 'transfer' ? 'TransferRow' : 'MovementRow'}>
-              <span className="sim-later__name">يُركَّب لاحقًا: {m.type === 'transfer' ? 'TransferRow' : 'MovementRow'}</span>
-              <span className="sim-later__note">{`${m.id} · ${m.type === 'in' ? 'داخل' : m.type === 'out' ? 'خارج' : 'تحويل'} · ${m.party ?? m.note} · ${moneyText(m.amount)} د`}</span>
-            </div>
+            <ObjectRow
+              key={m.id}
+              label={`${m.type === 'in' ? 'داخل' : m.type === 'out' ? 'خارج' : 'تحويل'} · ${m.party ?? m.note ?? '—'}`}
+              caption={`${m.id} · ${whenLine(m.date, m.time)}`}
+              value={<Money value={moneyText(m.amount)} flow={m.type} />}
+              trailing={<LaterChip name={m.type === 'transfer' ? 'TransferRow' : 'MovementRow'} />}
+              onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${m.id}` })}
+            />
           ))}
         </Surface>
       </Section>
       <Section label="الديون">
-        <div className="sim-cards">
+        <Surface>
           <div className="sim-later-inline" data-sim-later="DebtSummary">
             <span className="sim-later__name">يُركَّب لاحقًا: DebtSummary</span>
             <span className="sim-later__note">لك 57.500 د من عميلين، وعليك 1,280 د</span>
           </div>
           {view.debts.map((d) => (
-            <div key={d.id} className="sim-later-inline" data-sim-later="DebtCard">
-              <span className="sim-later__name">يُركَّب لاحقًا: DebtCard</span>
-              <span className="sim-later__note">{`${d.id} · ${d.party} · ${d.side === 'forYou' ? 'لك' : 'عليك'} ${moneyText(d.remaining)} د`}</span>
-            </div>
+            <ObjectRow
+              key={d.id}
+              label={d.party}
+              caption={`${d.side === 'forYou' ? 'لك' : 'عليك'} · ${d.settled ? 'سُدّد' : d.overdue ? 'متأخر' : 'المتبقي'}`}
+              value={<Money value={moneyText(d.remaining)} />}
+              leading={<EntityMark value={d.party} />}
+              trailing={<LaterChip name="DebtCard" />}
+              onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${d.id}` })}
+            />
           ))}
-        </div>
+        </Surface>
       </Section>
       </div>
       <OwnerTabBar />

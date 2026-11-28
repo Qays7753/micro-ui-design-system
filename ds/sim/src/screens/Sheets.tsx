@@ -16,6 +16,8 @@ import {
   AmountField,
   AmountsHiddenIcon,
   AmountsShownIcon,
+  Button,
+  DraftIcon,
   EmptyState,
   EntityMark,
   ObjectRow,
@@ -34,7 +36,8 @@ import { useSim, useSimDispatch } from '../state/store';
 import { FUNDS, PROJECTS, fundBalance } from '../data';
 import type { FundId, Listing } from '../data/types';
 import type { MovementInput, OrderInput, DeliveryInput, SimState } from '../state/types';
-import { LaterMark, needsCard, moneyText, todayNeedsYouList } from './parts';
+import { LaterMark, moneyText, needsCard, todayNeedsYouList, whenLine } from './parts';
+import { dateDisplay } from '../format';
 
 /** The sheet's own body rhythm. */
 function SheetBody({ children }: { children: React.ReactNode }) {
@@ -160,12 +163,165 @@ export function objectTitle(ref: string, state: SimState): string {
   return ref;
 }
 
-/** An object sheet's place (the batch-2 ObjectSheet mounts in part B). */
-export function ObjectSheetShell({ title, onDismiss }: { title: string; onDismiss: () => void }) {
+/** جولة المستخدم: the object sheets carry the object's REAL data now —
+ *  movement (with the draft's save/discard), debt (with «سجّل دفعة»), fund
+ *  (balance + its movements), order and delivery (SU2/SU3 fill those kinds).
+ *  The ObjectSheet component itself stays a marker — its place rides the
+ *  sheet as a marker chip so part B mounts the real component here. */
+export function ObjectSheetShell({ title, refId, onDismiss }: { title: string; refId: string; onDismiss: () => void }) {
+  const state = useSim();
+  const dispatch = useSimDispatch();
+  const movement = state.movements.find((m) => m.id === refId);
+  const debt = state.debts.find((d) => d.id === refId);
+  const fund = FUNDS.find((f) => f.id === refId);
+
+  if (movement) {
+    const isDraft = !movement.saved;
+    const kindLine = movement.type === 'transfer' ? `تحويل · ${FUNDS.find((f) => f.id === movement.from)?.name} ← ${FUNDS.find((f) => f.id === movement.to)?.name}` : `${movement.type === 'in' ? 'داخل' : 'خارج'} · ${FUNDS.find((f) => f.id === movement.fund)?.name}`;
+    return (
+      <Sheet label={title} onDismiss={onDismiss}>
+        <SheetBody>
+          <LaterMark name="ObjectSheet" note="مكان ورقة الكائن الحقيقية" />
+          <Surface>
+            <ObjectRow label={kindLine} caption={`التاريخ · ${whenLine(movement.date, movement.time)}`} value={<span className="sim-money">{moneyText(movement.amount)} د</span>} />
+            <ObjectRow label={movement.party ?? '—'} caption={movement.party ? 'الطرف' : 'الطرف: —'} />
+            <ObjectRow label={movement.note || '—'} caption={movement.note ? 'الوصف' : 'الوصف: —'} />
+            {movement.linkedOrderId ? <ObjectRow label={`طلب ${movement.linkedOrderId}`} caption="مرتبط بـ" /> : null}
+            {movement.linkedDeliveryId ? <ObjectRow label={movement.linkedDeliveryId} caption="مرتبط بتوصيل" /> : null}
+            {movement.linkedDebtId ? <ObjectRow label={movement.linkedDebtId} caption="مرتبط بدين" /> : null}
+          </Surface>
+          {isDraft ? (
+            <>
+              <p className="sim-form-help">مسودة لم تُحفظ — لا تدخل في أي رصيد.</p>
+              <ActionBar
+                label="احفظ المسودة"
+                onPress={() => {
+                  dispatch({ type: 'draft/save' });
+                  dispatch({ type: 'ui/openSheet', id: null });
+                }}
+              />
+              <div className="sim-sheet__gap" />
+              <Button variant="text" onPress={() => { dispatch({ type: 'draft/discard' }); dispatch({ type: 'ui/openSheet', id: null }); }}>
+                تجاهل المسودة
+              </Button>
+            </>
+          ) : null}
+        </SheetBody>
+      </Sheet>
+    );
+  }
+
+  if (debt) {
+    const settled = debt.settled;
+    return (
+      <Sheet label={title} onDismiss={onDismiss}>
+        <SheetBody>
+          <LaterMark name="ObjectSheet" note="مكان ورقة الكائن الحقيقية" />
+          <LaterMark name="DebtCard" note="بطاقة الدين الحقيقية تُركَّب هنا" />
+          <Surface>
+            <ObjectRow label={debt.party} caption={debt.side === 'forYou' ? 'دين لك' : 'دين عليك'} leading={<EntityMark value={debt.party} />} />
+            <ObjectRow label="الإجمالي" value={<span className="sim-money">{moneyText(debt.total)} د</span>} />
+            <ObjectRow label="المدفوع" value={<span className="sim-money">{moneyText(debt.paid)} د</span>} />
+            <ObjectRow label="المتبقي" value={<span className="sim-money">{moneyText(debt.remaining)} د</span>} />
+            <ObjectRow label="الاستحقاق" value={<span>{debt.dueDate ? dateDisplay(debt.dueDate) : '—'}</span>} />
+            <ObjectRow
+              label={settled ? 'سُدّد' : debt.overdue ? 'متأخر' : '—'}
+              caption={settled ? 'الحالة' : debt.overdue ? 'الحالة: متأخر' : 'الحالة: —'}
+            />
+            {debt.linkedOrderId ? <ObjectRow label={`طلب ${debt.linkedOrderId}`} caption="مرتبط بـ" /> : null}
+          </Surface>
+          {settled ? (
+            <p className="sim-form-help">سُدّد بالكامل — لا دفعة عليه.</p>
+          ) : debt.side === 'forYou' ? (
+            <>
+              <ActionBar
+                label="سجّل دفعة"
+                onPress={() => dispatch({ type: 'ui/openSheet', id: `pay:${debt.id}` })}
+              />
+            </>
+          ) : (
+            <p className="sim-form-help">دين عليك مورد — سجّل تسديدك من «سجّل حركة» ← خارج.</p>
+          )}
+        </SheetBody>
+      </Sheet>
+    );
+  }
+
+  if (fund) {
+    const draft = state.movements.find((m) => !m.saved && (m.fund === fund.id || m.from === fund.id));
+    const fundMovements = state.movements.filter((m) => m.saved && (m.fund === fund.id || m.from === fund.id || m.to === fund.id)).slice(-6).reverse();
+    return (
+      <Sheet label={title} onDismiss={onDismiss}>
+        <SheetBody>
+          <LaterMark name="ObjectSheet" note="مكان ورقة الكائن الحقيقية" />
+          <LaterMark name="FundCard" note="بطاقة الصندوق الحقيقية تُركَّب هنا" />
+          <Surface>
+            <ObjectRow label="الرصيد الآن" value={<span className="sim-money">{moneyText(fundBalance(state.movements, fund.id))} د</span>} />
+            {draft ? <ObjectRow label={`مسودة ${moneyText(draft.amount)} د`} caption="حركة لم تُحفظ على هذا الصندوق" leading={<DraftIcon size={24} />} onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${draft.id}` })} /> : null}
+            {fundMovements.map((m) => (
+              <ObjectRow
+                key={m.id}
+                label={`${m.type === 'in' ? 'داخل' : m.type === 'out' ? 'خارج' : 'تحويل'} · ${m.party ?? m.note ?? '—'}`}
+                caption={`${m.id} · ${whenLine(m.date, m.time)}`}
+                value={<span className="sim-money">{moneyText(m.amount)} د</span>}
+                onPress={() => dispatch({ type: 'ui/openSheet', id: `object:${m.id}` })}
+              />
+            ))}
+          </Surface>
+        </SheetBody>
+      </Sheet>
+    );
+  }
+
   return (
     <Sheet label={title} onDismiss={onDismiss}>
       <SheetBody>
         <LaterMark name="ObjectSheet" note={title} />
+      </SheetBody>
+    </Sheet>
+  );
+}
+
+/** ورقة الدفعة (ر2.3): amount + fund + the «اكتب مبلغاً حتى … د» error. */
+export function PaymentSheet({ debtId, onDismiss }: { debtId: string; onDismiss: () => void }) {
+  const state = useSim();
+  const dispatch = useSimDispatch();
+  const debt = state.debts.find((d) => d.id === debtId);
+  const [form, setForm] = useState<{ amount: string; fund: FundId | undefined }>({ amount: '', fund: undefined });
+  const amount = Math.round(Number.parseFloat(form.amount) * 1000);
+  const tooMuch = debt !== undefined && Number.isFinite(amount) && amount > debt.remaining;
+  const complete = debt !== undefined && amount > 0 && !tooMuch && form.fund !== undefined;
+  if (!debt) return null;
+  return (
+    <Sheet label={`سجّل دفعة · ${debt.party}`} variant="form" onDismiss={onDismiss}>
+      <SheetBody>
+        <AmountField
+          label="المبلغ"
+          value={form.amount}
+          onChange={(v) => setForm((f) => ({ ...f, amount: v }))}
+          caption={`المتبقي ${moneyText(debt.remaining)} د`}
+        />
+        {tooMuch ? <p className="sim-form-help sim-form-help--error">{`اكتب مبلغاً حتى ${moneyText(debt.remaining)} د.`}</p> : null}
+        <div className="sim-later-inline" data-sim-later="FundPicker">
+          <span className="sim-later__name">يُركَّب لاحقًا: FundPicker</span>
+          <span className="sim-later__note">بديل مؤقت هنا حتى يُركَّب</span>
+        </div>
+        <SegmentedControl
+          leading={FUNDS.map((f) => ({ value: f.id, label: f.name }))}
+          value={form.fund ?? ''}
+          onChange={(v) => setForm((f) => ({ ...f, fund: v as FundId }))}
+          label="الصندوق"
+        />
+        <SaveState saveState="draft" />
+        <ActionBar
+          label="احفظ الدفعة"
+          disabled={!complete}
+          onPress={() => {
+            if (!complete || !form.fund) return;
+            dispatch({ type: 'debt/pay', debtId: debt.id, amount, fund: form.fund });
+            dispatch({ type: 'ui/openSheet', id: null });
+          }}
+        />
       </SheetBody>
     </Sheet>
   );
@@ -322,26 +478,50 @@ export function NewListingSheet({ onDismiss }: { onDismiss: () => void }) {
   );
 }
 
-/** The movement form (2.7's ورقة «سجّل حركة») — built fields real. */
+/** The movement form (2.7's ورقة «سجّل حركة») — جولة المستخدم: the form now
+ *  WORKS end to end. The batch-2 controls that own type/fund/date are still
+ *  markers, so until they mount the sim offers TEMPORARY real controls
+ *  (built SegmentedControl rows) under each marker — documented in
+ *  REPORT-SIM as a temporary accommodation; the save stays disabled with its
+ *  reason until the form is complete. */
 export function MovementSheet({ onDismiss }: { onDismiss: () => void }) {
   const dispatch = useSimDispatch();
-  // The form's own state; the batch-2 controls that own type/fund/party are
-  // markers in part A, so those fields stay empty and the save stays a draft.
   const [form, setForm] = useState<{
     type: MovementInput['type'] | undefined;
     fund: FundId | undefined;
+    from: FundId | undefined;
+    to: FundId | undefined;
     amount: string;
+    party: string;
     note: string;
-  }>({ type: undefined, fund: undefined, amount: '', note: '' });
+    day: 'today' | 'yesterday';
+  }>({ type: undefined, fund: undefined, from: undefined, to: undefined, amount: '', party: '', note: '', day: 'today' });
   const amountOk = Number.parseFloat(form.amount) > 0;
-  const complete = form.type !== undefined && form.fund !== undefined && amountOk;
+  const transferReady = form.type !== 'transfer' || (form.from !== undefined && form.to !== undefined && form.from !== form.to);
+  const sameFund = form.type === 'transfer' && form.from !== undefined && form.to !== undefined && form.from === form.to;
+  const complete = form.type !== undefined && amountOk && transferReady && (form.type === 'transfer' || form.fund !== undefined);
+  const fundSegments: readonly SegmentOption[] = FUNDS.map((f) => ({ value: f.id, label: f.name }));
+  const daySegments: readonly SegmentOption[] = [
+    { value: 'today', label: 'اليوم' },
+    { value: 'yesterday', label: 'أمس' },
+  ];
   return (
     <Sheet label="سجّل حركة" variant="form" onDismiss={onDismiss}>
       <SheetBody>
         <div className="sim-later-inline" data-sim-later="MovementTypeControl">
           <span className="sim-later__name">يُركَّب لاحقًا: MovementTypeControl</span>
-          <span className="sim-later__note">داخل · خارج · تحويل</span>
+          <span className="sim-later__note">بديل مؤقت هنا حتى يُركَّب — الاختيار حقيقي</span>
         </div>
+        <SegmentedControl
+          leading={[
+            { value: 'in', label: 'داخل' },
+            { value: 'out', label: 'خارج' },
+            { value: 'transfer', label: 'تحويل' },
+          ]}
+          value={form.type ?? ''}
+          onChange={(v) => setForm((f) => ({ ...f, type: v as MovementInput['type'] }))}
+          label="النوع"
+        />
         <AmountField
           label="المبلغ"
           value={form.amount}
@@ -350,17 +530,61 @@ export function MovementSheet({ onDismiss }: { onDismiss: () => void }) {
         <div className="sim-later-inline" data-sim-later="AmountKeypad">
           <span className="sim-later__name">يُركَّب لاحقًا: AmountKeypad</span>
         </div>
-        <div className="sim-later-inline" data-sim-later="FundPicker">
-          <span className="sim-later__name">يُركَّب لاحقًا: FundPicker</span>
-          <span className="sim-later__note">درج الكاش · الحساب البنكي · المحفظة</span>
-        </div>
+        {form.type === 'transfer' ? (
+          <>
+            <div className="sim-later-inline" data-sim-later="FundPicker">
+              <span className="sim-later__name">يُركَّب لاحقًا: FundPicker</span>
+              <span className="sim-later__note">بديل مؤقت — من وإلى</span>
+            </div>
+            <SegmentedControl
+              leading={fundSegments}
+              value={form.from ?? ''}
+              onChange={(v) => setForm((f) => ({ ...f, from: v as FundId }))}
+              label="من"
+            />
+            <SegmentedControl
+              leading={fundSegments}
+              value={form.to ?? ''}
+              onChange={(v) => setForm((f) => ({ ...f, to: v as FundId }))}
+              label="إلى"
+            />
+            {sameFund ? <p className="sim-form-help sim-form-help--error">من وإلى لا يكونان الصندوق نفسه.</p> : null}
+          </>
+        ) : (
+          <>
+            <div className="sim-later-inline" data-sim-later="FundPicker">
+              <span className="sim-later__name">يُركَّب لاحقًا: FundPicker</span>
+              <span className="sim-later__note">بديل مؤقت هنا حتى يُركَّب</span>
+            </div>
+            <SegmentedControl
+              leading={fundSegments}
+              value={form.fund ?? ''}
+              onChange={(v) => setForm((f) => ({ ...f, fund: v as FundId }))}
+              label="الصندوق"
+            />
+          </>
+        )}
         <div className="sim-later-inline" data-sim-later="PartyPicker">
           <span className="sim-later__name">يُركَّب لاحقًا: PartyPicker</span>
-          <span className="sim-later__note">اختياري</span>
+          <span className="sim-later__note">بديل مؤقت: كتابة الاسم مباشرة</span>
         </div>
+        <TextField
+          label="الطرف"
+          placeholder="مثال: سلمى الحوراني"
+          value={form.party}
+          onChange={(party) => setForm((f) => ({ ...f, party }))}
+          caption="اختياري"
+        />
         <div className="sim-later-inline" data-sim-later="DateQuickChips">
           <span className="sim-later__name">يُركَّب لاحقًا: DateQuickChips</span>
+          <span className="sim-later__note">بديل مؤقت: اليوم أو أمس</span>
         </div>
+        <SegmentedControl
+          leading={daySegments}
+          value={form.day}
+          onChange={(v) => setForm((f) => ({ ...f, day: v as 'today' | 'yesterday' }))}
+          label="التاريخ"
+        />
         <TextArea
           label="ملاحظة"
           value={form.note}
@@ -368,16 +592,33 @@ export function MovementSheet({ onDismiss }: { onDismiss: () => void }) {
           caption="اختياري"
         />
         <SaveState saveState="draft" />
+        {!complete ? (
+          <p className="sim-form-help">
+            {sameFund
+              ? 'اختر صندوقين مختلفين للتحويل.'
+              : !form.type
+                ? 'اختر النوع.'
+                : !amountOk
+                  ? 'اكتب المبلغ.'
+                  : form.type === 'transfer'
+                    ? 'اختر من وإلى.'
+                    : 'اختر الصندوق.'}
+          </p>
+        ) : null}
         <ActionBar
           label="احفظ الحركة"
+          disabled={!complete}
           onPress={() => {
-            if (!complete || !form.type || !form.fund) return;
+            if (!complete || !form.type) return;
             const input: MovementInput = {
               type: form.type,
-              fund: form.fund,
+              fund: form.type === 'transfer' ? undefined : form.fund,
+              from: form.type === 'transfer' ? form.from : undefined,
+              to: form.type === 'transfer' ? form.to : undefined,
               amount: Math.round(Number.parseFloat(form.amount) * 1000),
-              party: null,
+              party: form.party.trim() || null,
               note: form.note,
+              date: form.day === 'yesterday' ? '2026-11-26' : undefined,
             };
             dispatch({ type: 'movement/save', input });
             dispatch({ type: 'ui/openSheet', id: null });
@@ -552,8 +793,12 @@ export function SharedSheets() {
     const target = state.listings.find((l) => l.id === sheet.slice('report:'.length)) ?? state.listings[0]!;
     return <ReportSheetShell listing={target} onDismiss={close} />;
   }
+  if (sheet.startsWith('pay:')) {
+    return <PaymentSheet debtId={sheet.slice('pay:'.length)} onDismiss={close} />;
+  }
   if (sheet.startsWith('object:')) {
-    return <ObjectSheetShell title={objectTitle(sheet.slice('object:'.length), state)} onDismiss={close} />;
+    const refId = sheet.slice('object:'.length);
+    return <ObjectSheetShell title={objectTitle(refId, state)} refId={refId} onDismiss={close} />;
   }
   return null;
 }

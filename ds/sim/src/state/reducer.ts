@@ -78,7 +78,7 @@ export function reducer(state: SimState, action: SimAction): SimState {
       if (input.amount <= 0) return state;
       const m: Movement = {
         id: nextMovementId(state.movements),
-        date: SIM_TODAY,
+        date: input.date ?? SIM_TODAY,
         time: nowTime(),
         type: input.type,
         fund: input.type === 'transfer' ? undefined : input.fund,

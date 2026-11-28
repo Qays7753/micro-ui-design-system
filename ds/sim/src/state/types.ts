@@ -121,7 +121,8 @@ export interface SimState {
   tasks: TasksState;
 }
 
-/** What a new movement's save carries (ر2.1/ر2.2 and the Ask drafts س6/س7). */
+/** What a new movement's save carries (ر2.1/ر2.2 and the Ask drafts س6/س7).
+ *  date: ISO; omitted = the simulation's today (the DateQuickChips default). */
 export interface MovementInput {
   type: Movement['type'];
   fund?: FundId;
@@ -130,6 +131,7 @@ export interface MovementInput {
   amount: number;
   party: string | null;
   note: string;
+  date?: string;
 }
 
 /** What a new order's save carries (ر3.1 with §2.2.5's three states). */
