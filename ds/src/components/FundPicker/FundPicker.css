@@ -1,0 +1,143 @@
+/*
+ * FundPicker.css — ADDENDUM §3.5. The chips ride FilterChips' own chip
+ * class (the composed look), the field TextField's input class + the
+ * shared .mds-picker-field-* anatomy, the rows ObjectRow's, the sheet
+ * Sheet's, the balances Money's. This file owns only the fund-specific
+ * pieces. Every value rides a token by name; no raw hex/px/ms
+ * (ds-raw-values).
+ */
+
+.mds-fund-picker {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The ONE-fund row: row-plain height, no picker (§3.5-2). */
+.mds-fund-single {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+  width: 100%;
+  min-height: var(--mds-size-row-plain);
+  padding-inline: var(--mds-layout-row-padding-inline);
+  box-sizing: border-box;
+  border: none;
+  background: none;
+  color: var(--mds-color-text-primary);
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: var(--mds-radius-xs);
+}
+
+.mds-fund-single--pressed,
+.mds-fund-single:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-fund-single:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+.mds-fund-single:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-fund-single-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-fund-single-prefix {
+  color: var(--mds-color-text-secondary);
+}
+
+/* The 2-4 form: the label above the scrolling chips (§3.5-2). */
+.mds-fund-chips-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-label-to-field);
+}
+
+.mds-fund-chips-label {
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-type-label-color, var(--mds-color-text-primary));
+}
+
+/* The chips row scrolls horizontally (FilterChips' own row behavior). */
+.mds-fund-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-layout-chip-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--mds-size-touch-min);
+  padding-block: var(--mds-layout-segmented-padding);
+  padding-inline: 0;
+  overflow-x: auto;
+}
+
+/* The chip caps at chip-max-width; the NAME truncates before the balance
+   (criterion 3). */
+.mds-fund-chip {
+  max-inline-size: var(--mds-size-chip-max-width);
+  flex: 0 0 auto;
+}
+
+.mds-fund-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+}
+
+.mds-fund-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The balance: caption-strong in text-secondary (§3.5-2) — never
+   truncated. */
+.mds-fund-chip-balance {
+  flex: 0 0 auto;
+  color: var(--mds-color-text-secondary);
+  font-weight: var(--mds-type-caption-strong-weight);
+}
+
+/* The 5+ form's field: the shared picker anatomy (§3.5-2). */
+.mds-fund-field {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mds-fund-field-label {
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-type-label-color, var(--mds-color-text-primary));
+  margin-block-end: var(--mds-layout-label-to-field);
+}
+
+.mds-fund-field-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mds-fund-field-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--mds-color-text-secondary);
+}
+
+/* The save-time error under the row (§3.5-4). */
+.mds-fund-picker-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}
+
+/* The selected row's trailing icon in the sheet. */
+.mds-fund-row-selected {
+  color: var(--mds-color-brand-anchor);
+}

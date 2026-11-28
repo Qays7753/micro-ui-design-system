@@ -908,6 +908,38 @@ export declare const ar: {
         readonly kind: "help";
         readonly text: "اختر الطرف.";
     };
+    readonly 'fund.from': {
+        readonly kind: "badge";
+        readonly text: "من:";
+    };
+    readonly 'fund.to': {
+        readonly kind: "badge";
+        readonly text: "إلى:";
+    };
+    readonly 'fund.srChip': {
+        readonly kind: "screen-reader";
+        readonly text: "{name}، الرصيد {balance}";
+    };
+    readonly 'fund.srChipDisabled': {
+        readonly kind: "screen-reader";
+        readonly text: "{name}، هذا صندوق المصدر";
+    };
+    readonly 'fund.choose': {
+        readonly kind: "help";
+        readonly text: "اختر الصندوق.";
+    };
+    readonly 'title.fundPicker': {
+        readonly kind: "title";
+        readonly text: "منتقي الصندوق";
+    };
+    readonly 'lab.h.fundPicker': {
+        readonly kind: "title";
+        readonly text: "اختيار الصندوق في الحركة";
+    };
+    readonly 'lab.fundPickerHint': {
+        readonly kind: "help";
+        readonly text: "الشكل يتبع عدد الصناديق: صف، أو رقائق، أو حقل.";
+    };
     readonly 'title.partyPicker': {
         readonly kind: "title";
         readonly text: "منتقي الطرف";

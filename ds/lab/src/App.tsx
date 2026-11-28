@@ -21,8 +21,8 @@ import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
 import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, PeriodSwitcher, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
-import { formatDateParts, weekStartOf, MonthGrid, DatePicker, PartyPicker } from '@micro/ds';
-import type { PeriodValue, MonthGridRange, PartyOption } from '@micro/ds';
+import { formatDateParts, weekStartOf, MonthGrid, DatePicker, PartyPicker, FundPicker } from '@micro/ds';
+import type { PeriodValue, MonthGridRange, PartyOption, FundOption } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -89,6 +89,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'month-grid', name: t('title.monthGrid') },
   { id: 'date-picker', name: t('title.datePicker') },
   { id: 'party-picker', name: t('title.partyPicker') },
+  { id: 'fund-picker', name: t('title.fundPicker') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -241,6 +242,24 @@ export function App() {
     { value: 'khaled', label: parties[3], caption: '0781112223' },
   ];
   const [saleParty, setSaleParty] = useState<PartyOption | undefined>(undefined);
+  // 4.17 — FundPicker: §3.5-10's data (درج الكاش 271.250 د، الحساب
+  // البنكي 327.250 د، المحفظة −3 د) for the three forms (1 / 3 / 5 funds)
+  // plus the transfer pair demo (the second disables the from-fund —
+  // criterion 2). The chips start UNCHOSEN (the error line demos after a
+  // save press) and the field form starts unchosen too.
+  const fundItems: readonly FundOption[] = [
+    { value: 'cash', label: funds[0].name, balance: '271.250', leading: <FundCashIcon size={16} /> },
+    { value: 'bank', label: funds[1].name, balance: '327.250', leading: <FundBankIcon size={16} /> },
+    { value: 'wallet', label: 'المحفظة', balance: '-3', leading: <FundWalletIcon size={16} /> },
+  ];
+  const manyFunds: readonly FundOption[] = [
+    ...fundItems,
+    { value: 'savings', label: 'صندوق التوفير', balance: '90', leading: <FundBankIcon size={16} /> },
+    { value: 'petty', label: 'المصروف النثري', balance: '12.5', leading: <FundCashIcon size={16} /> },
+  ];
+  const [movementFund, setMovementFund] = useState<string | undefined>(undefined);
+  const [manyFund, setManyFund] = useState<string | undefined>('cash');
+  const [transferFrom, setTransferFrom] = useState<string | undefined>('cash');
   const monthItems: Record<string, number> = {
     '23/11/2026': 1,
     '24/11/2026': 2,
@@ -2026,6 +2045,80 @@ export function App() {
               value={undefined}
               onChange={setSaleParty}
             />
+          </div>
+        </section>
+
+        {/* ---- FundPicker (addendum §3.5): the movement sheet's fund chooser ---- */}
+        <section className="lab-section" id="fund-picker">
+          <h2 className="lab-title">{t('lab.h.fundPicker')}<span className="lab-tech">{t('title.fundPicker')}</span></h2>
+          <p className="lab-note">{t('lab.fundPickerHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('fundLab.oneFund')}</span>
+            {/* ONE fund: the plain row «من: درج الكاش» (criterion 1). */}
+            <FundPicker
+              label={t('fundLab.fromFund')}
+              items={[fundItems[0]]}
+              value="cash"
+              direction="out"
+              data-ds-check="fund-picker"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('fundLab.chipsFund')}</span>
+            {/* 3 funds: the scrolling chip row with the balances; the
+                save without a choice shows the error (§3.5-4). */}
+            <div className="lab-garden">
+              <FundPicker
+                label={t('fundLab.fromFund')}
+                items={fundItems}
+                value={movementFund}
+                direction="out"
+                onChange={setMovementFund}
+                state={movementFund === undefined ? 'idle' : 'idle'}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt=""
+                onPress={() => undefined}
+              >
+                {t('button.saveMovement')}
+              </Button>
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('fundLab.manyFunds')}</span>
+            {/* 5 funds: the TextField form with its sheet. */}
+            <FundPicker
+              label={t('fundLab.fromFund')}
+              items={manyFunds}
+              value={manyFund}
+              direction="out"
+              onChange={setManyFund}
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('fundLab.transferPair')}</span>
+            {/* the transfer pair: two pickers; the second disables the
+                from-fund (criterion 2 — «هذا صندوق المصدر»). */}
+            <div className="lab-garden">
+              <FundPicker
+                label={t('fundLab.fromFund')}
+                items={fundItems}
+                value={transferFrom}
+                direction="out"
+                onChange={setTransferFrom}
+              />
+              <FundPicker
+                label={t('fundLab.toFund')}
+                items={fundItems.map((fund) => (
+                  fund.value === transferFrom ? { ...fund, disabled: true } : fund
+                ))}
+                value={movementFund}
+                direction="in"
+                onChange={setMovementFund}
+              />
+            </div>
           </div>
         </section>
 

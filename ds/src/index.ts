@@ -31,6 +31,7 @@ export * from './components/PeriodSwitcher';
 export * from './components/MonthGrid';
 export * from './components/DatePicker';
 export * from './components/PartyPicker';
+export * from './components/FundPicker';
 export * from './lib/format-time';
 export * from './lib/format-duration';
 export * from './lib/format-period';

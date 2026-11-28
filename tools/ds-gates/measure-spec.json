@@ -205,6 +205,13 @@
       "_note": "§1.10: root = label 20 + gap 8 + box 56 — the shared TextField anatomy (the picker entries)"
     },
     {
+      "id": "fund-picker",
+      "height": {
+        "token": "size.row-plain"
+      },
+      "_note": "addendum §3.5: the ONE-fund plain row at size.row-plain (criterion 1's first form)"
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192
