@@ -14,7 +14,7 @@ describe('EvidenceSlot (BATCH2-SPECS §4.6)', () => {
 
   it('photo after capture: the image + redo control', () => {
     const { container } = render(<EvidenceSlot mode="photo" value="https://x/y.jpg" />);
-    expect(container.querySelector('.mds-evidence-slot-photo')?.getAttribute('src')).toBe('https://x/y.jpg');
+    expect(container.querySelector('img.mds-media-fill')?.getAttribute('src')).toBe('https://x/y.jpg');
     expect(container.querySelector('.mds-evidence-slot-redo')).not.toBeNull();
   });
 

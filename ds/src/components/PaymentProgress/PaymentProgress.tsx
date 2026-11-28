@@ -15,7 +15,7 @@
  *   bar (§2.6 item 4). A non-positive total is invalid — the bar stays
  *   empty rather than lying with a fake ratio.
  */
-import { moneyTexts, t } from '../../i18n/ar';
+import { getMoneyTexts, t } from '../../i18n/ar';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { formatMoney } from '../../lib/format-money';
 import type { MoneyInput } from '../../lib/format-money';
@@ -71,8 +71,8 @@ export function PaymentProgress({
       className={classes}
       role={hidden || loading ? undefined : 'progressbar'}
       aria-label={t('sr.debtProgress', {
-        paid: formatMoney(value, { texts: moneyTexts }).aria,
-        total: formatMoney(total, { texts: moneyTexts }).aria,
+        paid: formatMoney(value, { texts: getMoneyTexts() }).aria,
+        total: formatMoney(total, { texts: getMoneyTexts() }).aria,
       })}
       aria-valuenow={hidden || loading ? undefined : share}
       aria-valuemin={hidden || loading ? undefined : 0}
@@ -81,7 +81,7 @@ export function PaymentProgress({
       {...rest}
     >
       {hidden ? (
-        <span className="mds-payment-progress-hidden mds-type-caption">{moneyTexts.hidden}</span>
+        <span className="mds-payment-progress-hidden mds-type-caption">{getMoneyTexts().hidden}</span>
       ) : (
         <>
           <span className="mds-payment-progress-track">

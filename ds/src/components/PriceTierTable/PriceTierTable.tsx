@@ -10,7 +10,7 @@
  */
 import { ar } from '../../i18n/ar';
 import { formatMoney } from '../../lib/format-money';
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts } from '../../i18n/ar';
 import type { PriceTierTableProps } from './PriceTierTable.types';
 import './PriceTierTable.css';
 
@@ -65,7 +65,7 @@ export function PriceTierTable({
             <tr key={`${tier.from}-${i}`}>
               <td>{tier.from}</td>
               <td>{last || tier.to === undefined ? ar['tier.andAbove'].text : tier.to}</td>
-              <td>{formatMoney(tier.price, { texts: moneyTexts }).display}</td>
+              <td>{formatMoney(tier.price, { texts: getMoneyTexts() }).display}</td>
             </tr>
           );
         })}

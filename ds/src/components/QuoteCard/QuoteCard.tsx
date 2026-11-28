@@ -15,7 +15,7 @@
  * - Screen reader: «عرض من عمر الزعبي، معتمد، 3 دنانير، بالقبول يبدأ
  *   السائق المهمة»; the accept button's name carries the driver's.
  */
-import { ar, moneyTexts as texts } from '../../i18n/ar';
+import { ar, getMoneyTexts } from '../../i18n/ar';
 import { formatMoney } from '../../lib/format-money';
 import { EntityMark } from '../EntityMark/index';
 import { Money } from '../Money/index';
@@ -45,7 +45,7 @@ export function QuoteCard({
   const ariaLabel = [
     ar['quote.offerFrom'].text.replace('{label}', label),
     ar['quote.approved'].text,
-    formatMoney(value, { texts }).aria,
+    formatMoney(value, { texts: getMoneyTexts() }).aria,
     ar['quote.resultSentence'].text,
     rejected ? ar['quote.rejected'].text : '',
   ]

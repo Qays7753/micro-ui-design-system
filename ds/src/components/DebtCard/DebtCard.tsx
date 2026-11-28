@@ -16,7 +16,7 @@
  *   party («سجّل دفعة، سلمى الحوراني»).
  * - The word «قرض» never appears (ق2) — Micro has no loans.
  */
-import { ar, moneyTexts } from '../../i18n/ar';
+import { ar, getMoneyTexts } from '../../i18n/ar';
 import { useAmountVisibility } from '../../lib/amount-visibility';
 import { usePress } from '../../lib/use-press';
 import { formatMoney } from '../../lib/format-money';
@@ -69,10 +69,10 @@ export function DebtCard({
 
   const ariaLabel = [
     label,
-    formatMoney(value, { debt: debtFlow, texts: moneyTexts }).aria,
+    formatMoney(value, { debt: debtFlow, texts: getMoneyTexts() }).aria,
     caption,
     paid !== undefined && total !== undefined
-      ? ar['sr.debtProgress'].text.replace('{paid}', formatMoney(paid, { texts: moneyTexts }).aria).replace('{total}', formatMoney(total, { texts: moneyTexts }).aria)
+      ? ar['sr.debtProgress'].text.replace('{paid}', formatMoney(paid, { texts: getMoneyTexts() }).aria).replace('{total}', formatMoney(total, { texts: getMoneyTexts() }).aria)
       : '',
     tone === 'overdue' ? ar['debt.overdue'].text : '',
     tone === 'done' ? ar['debt.settled'].text : '',

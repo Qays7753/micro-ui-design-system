@@ -11,7 +11,7 @@
  *   الأصيل للجملة» (§5.1 item 7).
  * - Market prices are not project amounts: hidden mode leaves them.
  */
-import { ar, moneyTexts } from '../../i18n/ar';
+import { ar, getMoneyTexts } from '../../i18n/ar';
 import { formatMoney } from '../../lib/format-money';
 import { usePress } from '../../lib/use-press';
 import { EntityMark } from '../EntityMark/index';
@@ -55,7 +55,7 @@ export function ListingCard({
   const ariaLabel = [
     label,
     unavailable ? ar['listing.unavailable'].text : locked ? '' :
-      value !== undefined ? formatMoney(value, { texts: moneyTexts }).aria : '',
+      value !== undefined ? formatMoney(value, { texts: getMoneyTexts() }).aria : '',
     unavailable || locked || value !== undefined ? `${caption ?? ''}` : '',
     supplier ?? '',
   ].filter(Boolean).join(ar['sr.listSeparator'].text);
@@ -101,7 +101,7 @@ export function ListingCard({
         ) : value !== undefined ? (
           <span className="mds-listing-card-price">
             {tone === 'tiers' ? <span className="mds-listing-card-unit">{ar['listing.from'].text}</span> : null}
-            <span className="mds-number-lg">{formatMoney(value, { texts: moneyTexts }).display}</span>
+            <span className="mds-number-lg">{formatMoney(value, { texts: getMoneyTexts() }).display}</span>
             {caption ? <span className="mds-listing-card-unit">{ar['listing.perUnit'].text.replace('{unit}', caption)}</span> : null}
           </span>
         ) : null}

@@ -18,7 +18,7 @@
  * - Screen reader: «سلمى الحوراني، فستان سهرة × 2، 45 دينار، التسليم
  *   اليوم 4:00 مساءً، جاهز» — the aria label composes the same fields.
  */
-import { ar, moneyTexts } from '../../i18n/ar';
+import { ar, getMoneyTexts } from '../../i18n/ar';
 import { usePress } from '../../lib/use-press';
 import { formatMoney } from '../../lib/format-money';
 import { ClockIcon } from '../../icons';
@@ -67,7 +67,7 @@ export function OrderCard({
   const ariaLabel = [
     label,
     caption,
-    value !== undefined && value !== null ? formatMoney(value, { texts: moneyTexts }).aria : '',
+    value !== undefined && value !== null ? formatMoney(value, { texts: getMoneyTexts() }).aria : '',
     time,
     badge ? (badge as React.ReactElement<{ label?: string }>).props.label ?? '' : tone ? ar[`badge.${tone}` as keyof typeof ar] instanceof Object ? (ar[`badge.${tone}` as keyof typeof ar] as { text: string }).text : '' : '',
     cancelled ? ar['badge.cancelled'].text : '',

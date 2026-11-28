@@ -12,7 +12,7 @@
  * - Screen reader: «لك 45 دينار من عميل واحد. عليك 1,280 دينار من مورد
  *   واحد.» — each column reads its own sentence (§2.5 item 7).
  */
-import { ar, moneyTexts } from '../../i18n/ar';
+import { ar, getMoneyTexts } from '../../i18n/ar';
 import { formatMoney } from '../../lib/format-money';
 import { Money } from '../Money/index';
 import { Skeleton } from '../Skeleton/index';
@@ -59,12 +59,12 @@ export function DebtSummary({
 
   const forYouAria = [
     ar['debt.forYou'].text,
-    formatMoney(forYou.value, { texts: moneyTexts }).aria,
+    formatMoney(forYou.value, { texts: getMoneyTexts() }).aria,
     forYou.counted,
   ].join(' ');
   const againstYouAria = [
     ar['debt.againstYou'].text,
-    formatMoney(againstYou.value, { texts: moneyTexts }).aria,
+    formatMoney(againstYou.value, { texts: getMoneyTexts() }).aria,
     againstYou.counted,
   ].join(' ');
 
