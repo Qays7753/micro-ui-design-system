@@ -218,6 +218,20 @@ export const ar = {
   'title.quantityStepper': { kind: 'title', text: 'عداد الكمية' },
   'lab.h.quantityStepper': { kind: 'title', text: 'عداد كمية صحيحة' },
   'lab.quantityHint': { kind: 'help', text: 'اضغط مطولًا يتسارع العد، واكتب ما تشاء.' },
+  // DateQuickChips (§1.8): the trailing chip's fixed word and the
+  // save-time error line. The quick words (اليوم/أمس/غداً) are the app's
+  // item labels; the date format is the component's own contract.
+  'dateQuick.other': { kind: 'button', text: 'تاريخ آخر' },
+  'dateQuick.choose': { kind: 'help', text: 'اختر التاريخ' },
+  'dateQuick.chipName': { kind: 'screen-reader', text: '{label}، {value}' },
+  'field.saleDate': { kind: 'badge', text: 'تاريخ البيع' },
+  'title.dateQuickChips': { kind: 'title', text: 'التواريخ السريعة' },
+  'lab.h.dateQuickChips': { kind: 'title', text: 'رقائق تاريخ سريعة' },
+  'lab.dateQuickHint': { kind: 'help', text: '«تاريخ آخر» يفتح منتقي التطبيق حتى ورقة الشهر.' },
+  'dateWord.today': { kind: 'badge', text: 'اليوم' },
+  'dateWord.yesterday': { kind: 'badge', text: 'أمس' },
+  'dateWord.tomorrow': { kind: 'badge', text: 'غداً' },
+  'state.customRow': { kind: 'badge', text: 'تاريخ مخصص' },
   'lab.h.money': { kind: 'title', text: 'شكل المبلغ ووحدته' },
   'lab.h.statusBadge': { kind: 'title', text: 'شارة الحالة' },
   'lab.h.entityMark': { kind: 'title', text: 'حرف الطرف' },

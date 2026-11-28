@@ -24,6 +24,7 @@ export * from './components/AmountField';
 export * from './components/AmountKeypad';
 export * from './components/MovementTypeControl';
 export * from './components/QuantityStepper';
+export * from './components/DateQuickChips';
 export * from './lib/normalize-amount';
 export * from './components/StatusBadge';
 export * from './components/EntityMark';

@@ -576,6 +576,50 @@ export declare const ar: {
         readonly kind: "help";
         readonly text: "اضغط مطولًا يتسارع العد، واكتب ما تشاء.";
     };
+    readonly 'dateQuick.other': {
+        readonly kind: "button";
+        readonly text: "تاريخ آخر";
+    };
+    readonly 'dateQuick.choose': {
+        readonly kind: "help";
+        readonly text: "اختر التاريخ";
+    };
+    readonly 'dateQuick.chipName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {value}";
+    };
+    readonly 'field.saleDate': {
+        readonly kind: "badge";
+        readonly text: "تاريخ البيع";
+    };
+    readonly 'title.dateQuickChips': {
+        readonly kind: "title";
+        readonly text: "التواريخ السريعة";
+    };
+    readonly 'lab.h.dateQuickChips': {
+        readonly kind: "title";
+        readonly text: "رقائق تاريخ سريعة";
+    };
+    readonly 'lab.dateQuickHint': {
+        readonly kind: "help";
+        readonly text: "«تاريخ آخر» يفتح منتقي التطبيق حتى ورقة الشهر.";
+    };
+    readonly 'dateWord.today': {
+        readonly kind: "badge";
+        readonly text: "اليوم";
+    };
+    readonly 'dateWord.yesterday': {
+        readonly kind: "badge";
+        readonly text: "أمس";
+    };
+    readonly 'dateWord.tomorrow': {
+        readonly kind: "badge";
+        readonly text: "غداً";
+    };
+    readonly 'state.customRow': {
+        readonly kind: "badge";
+        readonly text: "تاريخ مخصص";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";

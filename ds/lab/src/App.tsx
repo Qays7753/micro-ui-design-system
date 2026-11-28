@@ -20,7 +20,7 @@
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, MovementTypeControl, Money, QuantityStepper, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -80,6 +80,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'amount-keypad', name: t('title.keypad') },
   { id: 'movement-type-control', name: t('title.movementTypeControl') },
   { id: 'quantity-stepper', name: t('title.quantityStepper') },
+  { id: 'date-quick-chips', name: t('title.dateQuickChips') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -175,6 +176,30 @@ export function App() {
   // host-owned polite live region announcing each change (§1.6-7, the
   // §1.4-7 pattern).
   const [quantityDemo, setQuantityDemo] = useState(2);
+  // 4.10 — DateQuickChips: §1.8-10's data («تاريخ البيع», «اليوم» selected)
+  // plus the custom-date sample («14/07/2026») and the app-level picker
+  // sheet the «تاريخ آخر» press opens — the kh16 interim pattern until the
+  // library's month sheet lands (PeriodSwitcher + MonthGrid, then the
+  // DatePicker composition wiring).
+  const [saleDate, setSaleDate] = useState<string | undefined>('27/11/2026');
+  const [saleDateError, setSaleDateError] = useState(false);
+  const [customDateDemo, setCustomDateDemo] = useState<string | undefined>('14/07/2026');
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  // the interim picker serves two targets: the catalog garden and the
+  // movement sheet's own date field (§746's composition order).
+  const [dateTarget, setDateTarget] = useState<'sale' | 'movement'>('sale');
+  const [movementSheetDate, setMovementSheetDate] = useState<string | undefined>('27/11/2026');
+  const applyPickedDate = (date: string) => {
+    if (dateTarget === 'movement') setMovementSheetDate(date);
+    else setSaleDate(date);
+    setSaleDateError(false);
+    setDatePickerOpen(false);
+  };
+  const quickDates = [
+    { value: '27/11/2026', label: t('dateWord.today') },
+    { value: '26/11/2026', label: t('dateWord.yesterday') },
+    { value: '28/11/2026', label: t('dateWord.tomorrow') },
+  ];
   // Every interactive lab sample stays LIVE (owner note §1 / ds-lab-live):
   // the error and long samples keep their point (the error contract, the
   // long-number drop) while remaining editable.
@@ -212,6 +237,24 @@ export function App() {
      (10.2 (5)) and the full needs-you list. */
   const demoSheets = (
     <>
+      {/* 4.10 — the HOST's interim date picker (kh16 pattern): the
+          «تاريخ آخر» press opens it until the library's month sheet lands
+          (PeriodSwitcher + MonthGrid, then the DatePicker composition
+          wiring). Five real upcoming dates; picking one sets the value. */}
+      {datePickerOpen ? (
+        <Sheet label={t('dateQuick.other')} onDismiss={() => setDatePickerOpen(false)}>
+          <Surface>
+            {['29/11/2026', '30/11/2026', '01/12/2026', '02/12/2026', '03/12/2026'].map((date) => (
+              <ObjectRow
+                key={date}
+                label={date}
+                leading={<CalendarIcon size={20} />}
+                onPress={() => applyPickedDate(date)}
+              />
+            ))}
+          </Surface>
+        </Sheet>
+      ) : null}
       {projectOpen ? (
         <Sheet label={t('sheet.projectTitle')} onDismiss={() => setProjectOpen(false)}>
           <Surface>
@@ -352,6 +395,19 @@ export function App() {
             data-ds-check="movement-type-sheet"
           />
           <TextField id="compose-amount" label={t('field.amount')} placeholder={t('placeholder.amount')} />
+          {/* 4.10 — §746's movement-form order: the date chips follow the
+              amount (FundPicker and PartyPicker are not built yet). */}
+          <DateQuickChips
+            label={t('field.saleDate')}
+            items={quickDates}
+            value={movementSheetDate}
+            onChange={setMovementSheetDate}
+            onPress={() => {
+              setDateTarget('movement');
+              setDatePickerOpen(true);
+            }}
+            data-ds-check="date-quick-sheet"
+          />
           <SaveState saveState={saving ? 'sending' : 'draft'} />
           <ActionBar
             label={t('button.saveMovement')}
@@ -1667,6 +1723,44 @@ export function App() {
             <span className="mds-visually-hidden" aria-live="polite">
               {quantityDemo}
             </span>
+          </div>
+        </section>
+
+        {/* ---- DateQuickChips (§1.8): the quick-date single-choice chips ---- */}
+        <section className="lab-section" id="date-quick-chips">
+          <h2 className="lab-title">{t('lab.h.dateQuickChips')}<span className="lab-tech">{t('title.dateQuickChips')}</span></h2>
+          <p className="lab-note">{t('lab.dateQuickHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('field.saleDate')}</span>
+            {/* §1.8-10: «تاريخ البيع», «اليوم» selected. The «تاريخ آخر»
+                press opens the HOST's picker sheet (the kh16 interim
+                pattern) until the library's month sheet lands. */}
+            <DateQuickChips
+              label={t('field.saleDate')}
+              items={quickDates}
+              value={saleDate}
+              onChange={(next) => {
+                setSaleDate(next);
+                setSaleDateError(false);
+              }}
+              state={saleDateError ? 'error' : 'idle'}
+              onPress={() => {
+                setDateTarget('sale');
+                setDatePickerOpen(true);
+              }}
+              data-ds-check="date-quick-chips"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.customRow')}</span>
+            {/* a custom date none of the quick chips carries: the trailing
+                chip BECOMES the date itself, selected (§1.8-2). */}
+            <DateQuickChips
+              label={t('field.saleDate')}
+              items={quickDates}
+              value={customDateDemo}
+              onChange={setCustomDateDemo}
+            />
           </div>
         </section>
 

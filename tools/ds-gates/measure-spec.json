@@ -164,6 +164,12 @@
       }
     },
     {
+      "id": "date-quick-chips",
+      "height": {
+        "token": "size.touch-min"
+      }
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192
