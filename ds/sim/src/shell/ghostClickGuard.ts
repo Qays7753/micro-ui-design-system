@@ -45,9 +45,27 @@ export function installGhostClickGuard(): () => void {
   // sheet), and whether that tap is still awaiting its click.
   let downSheet: Element | null = null;
   let tapActive = false;
-  // Each sheet's first sighting (the ghost of the tap that opened it);
-  // the settle window runs from there.
+  // Each sheet's birth (the moment it MOUNTS — the settle window runs from
+  // there). The ghost of the opening tap may land on the OPENER (the sheet
+  // mounted after pointerup) or on the scrim — both happen on real phones,
+  // so the birth must come from the DOM, not from where a click landed
+  // (reproduced on Pixel 7: tap 1's click hit the button itself).
   const bornAt = new WeakMap<Element, number>();
+  const observer =
+    typeof MutationObserver === 'function'
+      ? new MutationObserver((muts) => {
+          for (const m of muts) {
+            m.addedNodes.forEach((n) => {
+              if (n instanceof Element && n.matches('.mds-sheet')) {
+                bornAt.set(n, performance.now());
+              }
+            });
+          }
+        })
+      : null;
+  if (observer) {
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
 
   const onDown = (e: Event) => {
     const t = e.target;
@@ -71,8 +89,8 @@ export function installGhostClickGuard(): () => void {
     if (clickSheet && startedOutside) {
       // The tap started outside the sheet it now lands in: the ghost of
       // the opening tap. Stop it before React's delegated listeners (at
-      // the root) ever see it — and this click is the sheet's birth
-      // certificate: the settle window starts here.
+      // the root) ever see it. (The sheet's birth is recorded by the
+      // MutationObserver at mount; this click only back-fills.)
       if (clickSheet instanceof Element && !bornAt.has(clickSheet)) {
         bornAt.set(clickSheet, performance.now());
       }
@@ -105,5 +123,6 @@ export function installGhostClickGuard(): () => void {
     window.removeEventListener('pointerdown', onDown, { capture: true });
     window.removeEventListener('pointercancel', onCancel, { capture: true });
     window.removeEventListener('click', onClick, { capture: true });
+    observer?.disconnect();
   };
 }
