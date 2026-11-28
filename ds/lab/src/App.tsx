@@ -21,8 +21,8 @@ import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
 import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, PeriodSwitcher, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
-import { formatDateParts, weekStartOf, MonthGrid, DatePicker } from '@micro/ds';
-import type { PeriodValue, MonthGridRange } from '@micro/ds';
+import { formatDateParts, weekStartOf, MonthGrid, DatePicker, PartyPicker } from '@micro/ds';
+import type { PeriodValue, MonthGridRange, PartyOption } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -88,6 +88,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'period-switcher', name: t('title.periodSwitcher') },
   { id: 'month-grid', name: t('title.monthGrid') },
   { id: 'date-picker', name: t('title.datePicker') },
+  { id: 'party-picker', name: t('title.partyPicker') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -228,6 +229,17 @@ export function App() {
   // line shows when a save happens with nothing chosen (§3.4-4).
   const [dueDate, setDueDate] = useState<string | undefined>('30/11/2026');
   const [dueDateError, setDueDateError] = useState(false);
+  // 4.16 — PartyPicker: §1.10-10's data (سلمى الحوراني chosen at rest)
+  // with a phone second line and a debt line (Money at the end — hidden
+  // amounts apply), and the supplier-mode garden with the empty list's
+  // add flow.
+  const partyItems: readonly PartyOption[] = [
+    { value: 'salma', label: parties[0], caption: '0790000000' },
+    { value: 'abu', label: parties[1], debt: '45' },
+    { value: 'rana', label: parties[2] },
+    { value: 'khaled', label: parties[3], caption: '0781112223' },
+  ];
+  const [saleParty, setSaleParty] = useState<PartyOption | undefined>({ value: 'salma', label: parties[0] });
   const monthItems: Record<string, number> = {
     '23/11/2026': 1,
     '24/11/2026': 2,
@@ -1979,6 +1991,39 @@ export function App() {
               value={undefined}
               optional
               onChange={(next) => setDueDate(next)}
+            />
+          </div>
+        </section>
+
+        {/* ---- PartyPicker (§1.10): the form's party chooser ---- */}
+        <section className="lab-section" id="party-picker">
+          <h2 className="lab-title">{t('lab.h.partyPicker')}<span className="lab-tech">{t('title.partyPicker')}</span></h2>
+          <p className="lab-note">{t('lab.partyPickerHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            {/* §1.10-10's data: سلمى chosen at rest; the sheet opens with
+                the focused search, the rows (phone or debt lines), and
+                the add row on a non-matching query. NO error-garden here:
+                the clear unmounts on its own press (the 4.11 lesson) so
+                the chosen field rides without the optional-pair trap. */}
+            <PartyPicker
+              label={t('field.party')}
+              value={saleParty}
+              items={partyItems}
+              onChange={setSaleParty}
+              data-ds-check="party-picker"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.empty')}</span>
+            {/* the supplier mode: the role word «مورداً» and the empty
+                list's sentence — typing adds a supplier. */}
+            <PartyPicker
+              label={t('field.supplierParty')}
+              mode="supplier"
+              items={[]}
+              value={undefined}
+              onChange={setSaleParty}
             />
           </div>
         </section>

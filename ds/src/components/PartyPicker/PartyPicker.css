@@ -1,0 +1,116 @@
+/*
+ * PartyPicker.css — BATCH2-SPECS §1.10. The field box rides TextField's
+ * own input class + the shared .mds-picker-field-* anatomy (base.css);
+ * the rows ride ObjectRow's, the search SearchField's, the sheet
+ * Sheet's, the mark EntityMark's, the empty EmptyState's and the
+ * skeletons Skeleton's — composed, not copied. This file owns only the
+ * party-specific pieces. Every value rides a token by name; no raw
+ * hex/px/ms (ds-raw-values).
+ */
+
+.mds-party-field {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mds-party-field-label {
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-type-label-color, var(--mds-color-text-primary));
+  margin-block-end: var(--mds-layout-label-to-field);
+}
+
+/* The error border (§1.10-4, like TextField). */
+.mds-party-field-box--error {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+/* The chosen name: truncated with «…» so the MARK and the CLEAR button
+   never clip (§1.10-6). */
+.mds-party-field-box {
+  gap: var(--mds-space-8);
+}
+
+.mds-party-field-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mds-party-field--disabled .mds-party-field-label {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-party-field--disabled .mds-picker-field-box {
+  background-color: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-disabled-bg);
+}
+
+/* The save-time error line under the field. */
+.mds-party-field-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}
+
+/* The sheet's own column: the search, then the rows. */
+.mds-party-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-space-12);
+}
+
+.mds-party-skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-surface-to-surface);
+}
+
+/* The selected row's trailing icon (§1.10-2). */
+.mds-party-row-selected {
+  color: var(--mds-color-brand-anchor);
+}
+
+/* The add row: row-plain height, the plus icon in the mark's place
+   (§1.10-2). */
+.mds-party-add {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-12);
+  width: 100%;
+  min-height: var(--mds-size-row-plain);
+  padding-inline: var(--mds-layout-row-padding-inline);
+  box-sizing: border-box;
+  border: none;
+  background: none;
+  color: var(--mds-color-text-primary);
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: var(--mds-radius-xs);
+}
+
+.mds-party-add--pressed,
+.mds-party-add:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-party-add:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+.mds-party-add:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+/* The plus icon rides the EntityMark's 32 box (the mark's place,
+   §1.10-2) in text-secondary. */
+.mds-party-add-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--mds-size-entity-32);
+  block-size: var(--mds-size-entity-32);
+  border-radius: var(--mds-radius-entity-32);
+  color: var(--mds-color-text-secondary);
+}

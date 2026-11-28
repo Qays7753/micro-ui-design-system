@@ -596,6 +596,14 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "تاريخ الاستحقاق";
     };
+    readonly 'field.party': {
+        readonly kind: "badge";
+        readonly text: "اختر العميل";
+    };
+    readonly 'field.supplierParty': {
+        readonly kind: "badge";
+        readonly text: "المورد";
+    };
     readonly 'title.dateQuickChips': {
         readonly kind: "title";
         readonly text: "التواريخ السريعة";
@@ -863,6 +871,54 @@ export declare const ar: {
     readonly 'datePicker.srName': {
         readonly kind: "screen-reader";
         readonly text: "{label}، {date}";
+    };
+    readonly 'party.roleClient': {
+        readonly kind: "badge";
+        readonly text: "عميلاً";
+    };
+    readonly 'party.roleSupplier': {
+        readonly kind: "badge";
+        readonly text: "مورداً";
+    };
+    readonly 'party.roleParty': {
+        readonly kind: "badge";
+        readonly text: "طرفاً";
+    };
+    readonly 'party.add': {
+        readonly kind: "badge";
+        readonly text: "أضف «{name}» {role} جديداً";
+    };
+    readonly 'party.srAdd': {
+        readonly kind: "screen-reader";
+        readonly text: "أضف {name} {role} جديداً";
+    };
+    readonly 'party.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {name}";
+    };
+    readonly 'party.srNone': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، لم يُختر";
+    };
+    readonly 'party.empty': {
+        readonly kind: "empty";
+        readonly text: "العملاء يظهرون هنا. اكتب اسماً لإضافته.";
+    };
+    readonly 'party.choose': {
+        readonly kind: "help";
+        readonly text: "اختر الطرف.";
+    };
+    readonly 'title.partyPicker': {
+        readonly kind: "title";
+        readonly text: "منتقي الطرف";
+    };
+    readonly 'lab.h.partyPicker': {
+        readonly kind: "title";
+        readonly text: "حقل اختيار الطرف";
+    };
+    readonly 'lab.partyPickerHint': {
+        readonly kind: "help";
+        readonly text: "الحقل يفتح ورقة البحث، والاختيار يغلقها.";
     };
     readonly 'title.datePicker': {
         readonly kind: "title";

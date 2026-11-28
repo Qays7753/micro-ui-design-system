@@ -198,6 +198,13 @@
       "_note": "addendum §3.4: root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + box 56 (size.field) — the shared TextField anatomy (the time-picker entry)"
     },
     {
+      "id": "party-picker",
+      "height": {
+        "px": 84
+      },
+      "_note": "§1.10: root = label 20 + gap 8 + box 56 — the shared TextField anatomy (the picker entries)"
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192
