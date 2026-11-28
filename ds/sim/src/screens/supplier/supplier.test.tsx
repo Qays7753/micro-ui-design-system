@@ -40,8 +40,8 @@ describe('SA7ج — the supplier screens (§5.1)', () => {
     expect(screen.getAllByText('عروضي').length).toBeGreaterThanOrEqual(2); // header + segment
     expect(screen.getByText('عرض جديد')).toBeTruthy();
     // ع1–ع5: his own listings only (not ع6–ع8 of other suppliers).
-    expect(screen.getByText('طحين أبيض 50 كغ')).toBeTruthy();
-    expect(screen.getByText('معمول تمر، علبة 24')).toBeTruthy();
+    expect(screen.getByText('طحين أبيض فاخر 50 كغ')).toBeTruthy();
+    expect(screen.getByText('معمول تمر فاخر — علبة 24')).toBeTruthy();
     expect(screen.getAllByRole('button').filter((b) => /خبز صاج/.test(b.textContent ?? '')).length).toBe(1);
     // The badge words at the rows' ends (the ListingStatusBadge's place).
     expect(screen.getAllByText('قيد المراجعة').length).toBeGreaterThanOrEqual(2);
@@ -72,6 +72,6 @@ describe('SA7ج — the supplier screens (§5.1)', () => {
     expect(screen.getByPlaceholderText('ابحث في السوق')).toBeTruthy();
     // The segments stay for the way back to عروضي.
     await press(screen.getByText('عروضي'));
-    expect(screen.getByText('معمول تمر، علبة 24')).toBeTruthy();
+    expect(screen.getByText('معمول تمر فاخر — علبة 24')).toBeTruthy();
   });
 });

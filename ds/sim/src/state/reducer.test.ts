@@ -93,7 +93,7 @@ describe('SA3 · the draft and Ask (س6 / س7)', () => {
     expect(s.movements.find((m) => !m.saved)).toBeUndefined();
     expect(fundBalance(s.movements, 'cash')).toBe(271_250 - 7_000);
     const promoted = s.movements[s.movements.length - 1]!;
-    expect(promoted.note).toBe('طباعة');
+    expect(promoted.note).toBe('طباعة ملصق أسعار');
     expect(promoted.saved).toBe(true);
   });
   it('discarding the draft removes it and nothing else changes', () => {

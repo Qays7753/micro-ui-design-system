@@ -5,11 +5,11 @@ import type { Listing, ReviewItem, SimNotification } from './types';
 
 /** §5.2.7 السوق. */
 export const LISTINGS: readonly Listing[] = [
-  { id: 'ع1', supplier: 'مخبز الأصيل للجملة', title: 'طحين أبيض 50 كغ', price: 22000, availability: 'available', qty: 40, status: 'approved', imageCount: 4, governorate: 'إربد', category: 'مواد خام', minOrder: 'كيسان' },
+  { id: 'ع1', supplier: 'مخبز الأصيل للجملة', title: 'طحين أبيض فاخر 50 كغ', price: 22000, availability: 'available', qty: 40, status: 'approved', imageCount: 4, governorate: 'إربد', category: 'مواد خام', minOrder: 'كيسان' },
   {
     id: 'ع2',
     supplier: 'مخبز الأصيل للجملة',
-    title: 'بسكويت شاي، كرتونة 12 قطعة',
+    title: 'بسكويت شاي — كرتونة 12 قطعة',
     price: null,
     tiers: [
       { min: 1, max: 9, price: 2500 },
@@ -24,12 +24,12 @@ export const LISTINGS: readonly Listing[] = [
     category: 'مخبوزات',
     minOrder: '5 كراتين',
   },
-  { id: 'ع3', supplier: 'مخبز الأصيل للجملة', title: 'خبز صاج، ربطة 10', price: 1500, availability: 'available', qty: null, status: 'underReview', since: 'منذ 5 ساعات', imageCount: 2, governorate: 'إربد', category: 'مخبوزات', minOrder: '10 ربطات' },
-  { id: 'ع4', supplier: 'مخبز الأصيل للجملة', title: 'كعك بالسمسم، كيس 1 كغ', price: 3000, editedPrice: 2750, availability: 'available', qty: null, status: 'approvedWithEdit', since: 'منذ ساعة', imageCount: 2, governorate: 'إربد', category: 'مخبوزات', minOrder: '5 أكياس' },
-  { id: 'ع5', supplier: 'مخبز الأصيل للجملة', title: 'معمول تمر، علبة 24', price: 6500, availability: 'available', qty: null, status: 'rejected', rejectReason: 'الصور غير واضحة', imageCount: 1, governorate: 'إربد', category: 'حلويات', minOrder: 'علبتان' },
-  { id: 'ع6', supplier: 'مؤسسة الخطيب للأقمشة', title: 'قماش ساتان، لفّة 25 م', price: 95000, availability: 'temporarilyUnavailable', qty: null, status: 'approved', imageCount: 3, governorate: 'الزرقاء', category: 'أقمشة', minOrder: 'لفّة', reports: ['معلومات مضللة', 'معلومات مضللة', 'إعلان مزعج'] },
-  { id: 'ع7', supplier: 'مؤسسة الخطيب للأقمشة', title: 'خيوط بوليستر، علبة 12', price: 6500, availability: 'available', qty: 40, status: 'approved', imageCount: 2, governorate: 'الزرقاء', category: 'خيوط', minOrder: 'علبة' },
-  { id: 'ع8', supplier: 'مطبخ أم خالد', title: 'مقلوبة مجمدة، صينية 4 أشخاص', price: 9000, availability: 'onDemand', qty: null, status: 'underReview', since: 'منذ 3 ساعات', imageCount: 2, governorate: 'الزرقاء', category: 'أطعمة', minOrder: 'صينيتان', firstListing: true },
+  { id: 'ع3', supplier: 'مخبز الأصيل للجملة', title: 'خبز صاج طازج — ربطة 10', price: 1500, availability: 'available', qty: null, status: 'underReview', since: 'منذ 5 ساعات', imageCount: 2, governorate: 'إربد', category: 'مخبوزات', minOrder: '10 ربطات' },
+  { id: 'ع4', supplier: 'مخبز الأصيل للجملة', title: 'كعك بالسمسم — كيس 1 كغ', price: 3000, editedPrice: 2750, availability: 'available', qty: null, status: 'approvedWithEdit', since: 'منذ ساعة', imageCount: 2, governorate: 'إربد', category: 'مخبوزات', minOrder: '5 أكياس' },
+  { id: 'ع5', supplier: 'مخبز الأصيل للجملة', title: 'معمول تمر فاخر — علبة 24', price: 6500, availability: 'available', qty: null, status: 'rejected', rejectReason: 'الصور غير واضحة', imageCount: 1, governorate: 'إربد', category: 'حلويات', minOrder: 'علبتان' },
+  { id: 'ع6', supplier: 'مؤسسة الخطيب للأقمشة والأستك', title: 'قماش ساتان أبيض — لفّة 25 م', price: 95000, availability: 'temporarilyUnavailable', qty: null, status: 'approved', imageCount: 3, governorate: 'الزرقاء', category: 'أقمشة', minOrder: 'لفّة', reports: ['معلومات مضللة', 'معلومات مضللة', 'إعلان مزعج'] },
+  { id: 'ع7', supplier: 'مؤسسة الخطيب للأقمشة والأستك', title: 'خيوط بوليستر — علبة 12 لون', price: 6500, availability: 'available', qty: 40, status: 'approved', imageCount: 2, governorate: 'الزرقاء', category: 'خيوط', minOrder: 'علبة' },
+  { id: 'ع8', supplier: 'مطبخ أم خالد', title: 'مقلوبة مجمدة — صينية 4 أشخاص', price: 9000, availability: 'onDemand', qty: null, status: 'underReview', since: 'منذ 3 ساعات', imageCount: 2, governorate: 'الزرقاء', category: 'أطعمة', minOrder: 'صينيتان', firstListing: true },
 ];
 
 /** §5.2.8 طابور المراجعة (الأقدم أولاً). */

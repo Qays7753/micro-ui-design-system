@@ -42,11 +42,11 @@ describe('SA7د — the reviewer screens (§5.1)', () => {
     // في نهاية كل صف.
     const queue = document.querySelectorAll('[data-sim-later="ReviewQueueItem"]');
     expect(queue.length).toBe(3);
-    expect(screen.getByText('خبز صاج، ربطة 10')).toBeTruthy();
+    expect(screen.getByText('خبز صاج طازج — ربطة 10')).toBeTruthy();
     expect(screen.getByText('عرض جديد · 1.5 د · مخبز الأصيل للجملة · منذ 5 ساعات')).toBeTruthy();
-    expect(screen.getByText('مقلوبة مجمدة، صينية 4 أشخاص')).toBeTruthy();
-    expect(screen.getByText('كعك بالسمسم، كيس 1 كغ')).toBeTruthy();
-    await press(screen.getByText('خبز صاج، ربطة 10'));
+    expect(screen.getByText('مقلوبة مجمدة — صينية 4 أشخاص')).toBeTruthy();
+    expect(screen.getByText('كعك بالسمسم — كيس 1 كغ')).toBeTruthy();
+    await press(screen.getByText('خبز صاج طازج — ربطة 10'));
     // ورقة القرار: بنود التحقق السبعة + اتصال + اعتمد/ارفض
     expect(screen.getByText('أجريت اتصال التحقق')).toBeTruthy();
     expect(screen.getByText('اعتمد العرض')).toBeTruthy();
@@ -58,10 +58,10 @@ describe('SA7د — the reviewer screens (§5.1)', () => {
     await enterReviewer();
     const tab = screen.getAllByRole('tab').find((b) => b.textContent === 'البلاغات')!;
     await press(tab);
-    expect(screen.getByText(/قماش ساتان، لفّة 25 م/)).toBeTruthy();
+    expect(screen.getByText(/قماش ساتان أبيض — لفّة 25 م/)).toBeTruthy();
     expect(screen.getByText(/السبب الأكثر تكرارًا: معلومات مضللة/)).toBeTruthy();
     expect(screen.getByText('3 بلاغات')).toBeTruthy();
-    await press(screen.getByText(/قماش ساتان، لفّة 25 م/));
+    await press(screen.getByText(/قماش ساتان أبيض — لفّة 25 م/));
     expect(screen.getByText('أبقِ العرض')).toBeTruthy();
     expect(screen.getByText('أوقف العرض')).toBeTruthy();
     expect(screen.getAllByText('معلومات مضللة').length).toBeGreaterThanOrEqual(1); // السبب في القائمة خلف الورقة وفي صفوفها

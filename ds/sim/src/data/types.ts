@@ -59,6 +59,8 @@ export type DebtSide = 'forYou' | 'againstYou';
 export interface Debt {
   id: string;
   party: string;
+  /** جولة المستخدم: the debt's own story (one line a tailor would say). */
+  note?: string;
   side: DebtSide;
   /** Integer fils. */
   total: number;

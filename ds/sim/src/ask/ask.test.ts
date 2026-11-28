@@ -112,7 +112,7 @@ describe('SA4 · س4: شو عندي اليوم؟', () => {
     const table = r.parts.find((p) => p.kind === 'table')!;
     expect(table.rows).toEqual([
       [{ text: '11:00 ص' }, { text: 'سلمى الحوراني' }, { text: 'جلسة قياس' }],
-      [{ text: '4:00 م' }, { text: 'سلمى الحوراني' }, { text: 'فستان سهرة' }],
+      [{ text: '4:00 م' }, { text: 'سلمى الحوراني' }, { text: 'فستان سهرة — بتالة كتف' }],
     ]);
   });
   it('the nav follows the device clock: after noon it is 1175, before 11 it is 1210', () => {
@@ -148,7 +148,7 @@ describe('SA4 · س6 / س7: the Ask drafts', () => {
       type: 'out',
       amount: 7_000,
       fund: 'درج الكاش',
-      note: 'طباعة',
+      note: 'طباعة ملصق أسعار',
     });
     expect(wordParts(r.parts).join(' ')).toContain('هذه مسودة. راجعها واحفظها');
   });

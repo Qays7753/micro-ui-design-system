@@ -7,6 +7,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEBTS,
+  DELIVERIES,
+  DRIVERS,
+  OTHER_PARTIES,
+  REVIEW_QUEUE,
+  REPORTS_QUEUE,
   FUNDS,
   LISTINGS,
   MOVEMENTS,
@@ -83,7 +88,7 @@ describe('SA2 · the unsaved draft never counts', () => {
     expect(draft.type).toBe('out');
     expect(draft.fund).toBe('cash');
     expect(draft.amount).toBe(7_000);
-    expect(draft.note).toBe('طباعة');
+    expect(draft.note).toBe('طباعة ملصق أسعار');
   });
   it('removing it changes no balance (it was never inside)', () => {
     const without = MOVEMENTS.filter((m) => m.saved);
@@ -194,5 +199,60 @@ describe('SA2 · the market shows 5 listings', () => {
     const p5 = LISTINGS.find((l) => l.id === 'ع5')!;
     expect(p5.status).toBe('rejected');
     expect(p5.rejectReason).toBe('الصور غير واضحة');
+  });
+});
+
+describe('جولة المستخدم · the data is one coherent life across roles', () => {
+  it('every movement link lands on an existing object', () => {
+    for (const m of MOVEMENTS) {
+      if (m.linkedOrderId) expect(ORDERS.some((o) => o.id === m.linkedOrderId)).toBe(true);
+      if (m.linkedDebtId) expect(DEBTS.some((d) => d.id === m.linkedDebtId)).toBe(true);
+      if (m.linkedDeliveryId) expect(DELIVERIES.some((d) => d.id === m.linkedDeliveryId)).toBe(true);
+    }
+  });
+  it('every order and debt link lands on existing objects', () => {
+    for (const o of ORDERS) {
+      if (o.linkedDebtId) expect(DEBTS.some((d) => d.id === o.linkedDebtId)).toBe(true);
+      if (o.linkedMovementId) expect(MOVEMENTS.some((m) => m.id === o.linkedMovementId)).toBe(true);
+      if (o.linkedDeliveryId) expect(DELIVERIES.some((d) => d.id === o.linkedDeliveryId)).toBe(true);
+    }
+    for (const d of DEBTS) {
+      if (d.linkedOrderId) expect(ORDERS.some((o) => o.id === d.linkedOrderId)).toBe(true);
+      if (d.paidByMovement) expect(MOVEMENTS.some((m) => m.id === d.paidByMovement)).toBe(true);
+    }
+  });
+  it('the review queue refs all resolve, and ع4 edit matches its own data', () => {
+    for (const r of REVIEW_QUEUE) {
+      if (r.kind === 'driver') expect(DRIVERS.some((d) => d.id === r.ref)).toBe(true);
+      else expect(LISTINGS.some((l) => l.id === r.ref)).toBe(true);
+    }
+    const p4 = LISTINGS.find((l) => l.id === 'ع4')!;
+    expect(p4.status).toBe('approvedWithEdit');
+    expect(p4.editedPrice).toBeLessThan(p4.price!);
+    for (const r of REPORTS_QUEUE) expect(LISTINGS.find((l) => l.id === r.ref)?.reports?.length).toBe(3);
+  });
+  it('the driver ت4 belongs to a real second owner (صالون لمسة)', () => {
+    const t4 = DELIVERIES.find((d) => d.id === 'ت4')!;
+    expect(t4.owner).toBe('صالون لمسة');
+    expect(OTHER_PARTIES.salonLamsa).toBe('صالون لمسة');
+  });
+  it('the §5.1 buyer market stays 5 listings', () => {
+    expect(visibleListings(LISTINGS).map((l) => l.id)).toEqual(['ع1', 'ع2', 'ع4', 'ع6', 'ع7']);
+  });
+  it('the hard cases exist: a long name, a negative fund, a missing value, a big amount', () => {
+    const long = 'مؤسسة الخطيب للأقمشة والأستك';
+    expect(MOVEMENTS.some((m) => m.party === long)).toBe(true);
+    expect(LISTINGS.some((l) => l.supplier === long)).toBe(true);
+    expect(DEBTS.some((d) => d.party === long && d.side === 'againstYou')).toBe(true);
+    // سالب: المحفظة
+    expect(fundBalance(MOVEMENTS.filter((m) => m.saved), 'wallet')).toBe(-3000);
+    // مفقود «—»: طلب بلا سعر
+    expect(ORDERS.some((o) => o.price === null)).toBe(true);
+    // كبير: 450 د (طقم العرس) و1,280 د (دين الخطيب)
+    expect(MOVEMENTS.some((m) => m.amount === 450_000)).toBe(true);
+    expect(DEBTS.some((d) => d.total === 1_280_000)).toBe(true);
+  });
+  it('every debt tells its story', () => {
+    for (const d of DEBTS) expect(d.note?.length ?? 0).toBeGreaterThan(8);
   });
 });

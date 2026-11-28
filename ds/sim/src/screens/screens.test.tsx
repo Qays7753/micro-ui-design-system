@@ -101,7 +101,7 @@ describe('SA7أ — the owner screens (§5.1)', () => {
     expect(screen.getByText(/أعلى من أمس/)).toBeTruthy();
     expect(screen.getByText(/من 21 حركة/)).toBeTruthy();
     // The draft row is a REAL ObjectRow (the map names it so).
-    expect(screen.getByText('مسودة · طباعة')).toBeTruthy();
+    expect(screen.getByText('مسودة · طباعة ملصق أسعار')).toBeTruthy();
     // The batch-2 cards are markers, never substitutes.
     expect(screen.getAllByText('يُركَّب لاحقًا: FundCard').length).toBe(3);
     expect(screen.getAllByText('يُركَّب لاحقًا: DebtCard').length).toBeGreaterThanOrEqual(4);
@@ -141,7 +141,7 @@ describe('SA7أ — the owner screens (§5.1)', () => {
     // §5.2.7: the market shows exactly 5 listings.
     const cells = screen.getAllByText('يُركَّب لاحقًا: ListingCard');
     expect(cells.length).toBe(5);
-    expect(screen.getByText('طحين أبيض 50 كغ')).toBeTruthy();
+    expect(screen.getByText('طحين أبيض فاخر 50 كغ')).toBeTruthy();
     // The search narrows the grid.
     const field = screen.getByPlaceholderText('ابحث في السوق');
     fireEvent.change(field, { target: { value: 'خيوط' } });

@@ -230,7 +230,7 @@ export const QUESTIONS: readonly AskQuestionRow[] = [
     keys: ['سجل', 'مصروف'],
     build: () => [
       { kind: 'answer', inline: [w('هذه مسودة. راجعها واحفظها.')] },
-      { kind: 'draft', type: 'out', amount: 7_000, fund: 'درج الكاش', party: null, note: 'طباعة' },
+      { kind: 'draft', type: 'out', amount: 7_000, fund: 'درج الكاش', party: null, note: 'طباعة ملصق أسعار' },
     ],
   },
   // س7 — سجّل بيع 25 دينار لرنا العبادي

@@ -450,6 +450,7 @@ export function ObjectSheetShell({ title, refId, onDismiss }: { title: string; r
               caption={settled ? 'الحالة' : debt.overdue ? 'الحالة: متأخر' : 'الحالة: —'}
             />
             {debt.linkedOrderId ? <ObjectRow label={`طلب ${debt.linkedOrderId}`} caption="مرتبط بـ" /> : null}
+            {debt.note ? <ObjectRow label={debt.note} caption="القصة" /> : null}
           </Surface>
           {settled ? (
             <p className="sim-form-help">سُدّد بالكامل — لا دفعة عليه.</p>

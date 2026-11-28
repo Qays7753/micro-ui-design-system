@@ -67,7 +67,7 @@ describe('جولة المستخدم — المورد ينشر ويعدّل', () 
   test('تعديل سعر عرض منشور — المنشور مقابل الجديد، والتعديل للمراجعة', async () => {
     await supplier();
     // افتح ع1 (معتمد) ثم «عدّل العرض»
-    await press(screen.getAllByText('طحين أبيض 50 كغ')[0]!);
+    await press(screen.getAllByText('طحين أبيض فاخر 50 كغ')[0]!);
     await press(screen.getByText('عدّل العرض'));
     expect(screen.getByText('المنشور الآن')).toBeTruthy();
     const send = screen.getByText('أرسل التعديل').closest('button')!;
@@ -87,7 +87,7 @@ describe('جولة المستخدم — المورد ينشر ويعدّل', () 
     );
     await press(screen.getByText('ورشة الياسمين للخياطة'));
     await press(screen.getAllByRole('tab').find((b) => b.textContent === 'السوق')!);
-    fireEvent.click(screen.getAllByText('قماش ساتان، لفّة 25 م')[0]!); // بطاقة السوق onClick
+    fireEvent.click(screen.getAllByText('قماش ساتان أبيض — لفّة 25 م')[0]!); // بطاقة السوق onClick
     await act(async () => { await new Promise((r) => setTimeout(r, 60)); });
     await press(screen.getByText('أبلغ عن العرض'));
     const send = screen.getByText('أرسل البلاغ').closest('button')!;

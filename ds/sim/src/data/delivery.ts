@@ -51,7 +51,7 @@ export const DELIVERIES: readonly Delivery[] = [
     status: 'inProgress',
     evidence: 'photo',
     evidenceProvided: null,
-    description: 'قماش للخياطة المتعاونة',
+    description: 'كوز قماش للخياطة المتعاونة — من مخزن الورشة',
   },
   {
     id: 'ت4',
