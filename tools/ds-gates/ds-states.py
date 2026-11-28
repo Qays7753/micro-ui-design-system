@@ -279,16 +279,20 @@ async () => {
     // 1) Escape — the standard keyboard dismiss (window-level keydown).
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await sleep(220);
-    // 2) Still open? A real mouse tap on its backdrop (the scrim hit area
-    //    is the dialog's own first rect outside the panel — tap the dialog
-    //    element's top-left, which the scrim occupies in the real sheet
-    //    anatomy: fixed, full-inset, panel at the bottom).
+    // 2) Still open? A real tap on its BACKDROP — the scrim is a CHILD of
+    //    the dialog (the real sheet anatomy: fixed full-inset root, the
+    //    scrim child behind the panel). React's handler sits on the scrim
+    //    child, so the tap must be dispatched ON THE SCRIM (an event
+    //    synthesized on the parent never reaches a child listener), at a
+    //    point the scrim occupies — the top-left of the dialog, well
+    //    above the bottom-docked panel.
     for (const el of openOverlays()) {
       const r = el.getBoundingClientRect();
+      const scrim = el.querySelector('.mds-sheet-scrim') || el;
       const tap = { bubbles: true, cancelable: true, composed: true, pointerId: 1, isPrimary: true, pointerType: 'touch', clientX: r.left + 8, clientY: r.top + 8 };
-      el.dispatchEvent(new PointerEvent('pointerdown', tap));
-      el.dispatchEvent(new PointerEvent('pointerup', tap));
-      el.dispatchEvent(new MouseEvent('click', tap));
+      scrim.dispatchEvent(new PointerEvent('pointerdown', tap));
+      scrim.dispatchEvent(new PointerEvent('pointerup', tap));
+      scrim.dispatchEvent(new MouseEvent('click', tap));
     }
     await sleep(260);
     rounds++;
@@ -336,30 +340,27 @@ def run(gate: Gate, target, args):
                             continue
                         page.mouse.move(center["x"], center["y"])
                         page.mouse.down()
-                        page.wait_for_timeout(120)
-                        active = page.evaluate(SNAPSHOT_JS, arg)
+                        # :active sampled WHILE HELD at three cumulative
+                        # times (70/150/260ms): a heavy page (WebKit,
+                        # 280+ elements) can start the pressed transition
+                        # late, so a single 120ms snapshot may catch the
+                        # resting value mid-jitter. A REAL pressed style
+                        # lasts as long as the finger is down — the state
+                        # counts as changed when ANY sample differs. A
+                        # silent button differs at NONE (stronger, not
+                        # weaker: three chances to catch a real press,
+                        # zero tolerance for silence).
+                        active = None
+                        for ms in (70, 80, 110):
+                            page.wait_for_timeout(ms)
+                            active = page.evaluate(SNAPSHOT_JS, arg)
+                            if active is not None and active != base:
+                                break
                         page.mouse.up()
                         if active is None or active == base:
                             problems.append(
                                 f"<{el['tag']}> «{el['text']}» shows no :active style change "
                                 "(23.2: الضغط يغيّر الخلفية/الشكل)")
-                        # --- :disabled (native buttons only) ---
-                        if el["tag"] == "button":
-                            page.evaluate(
-                                "(args) => { let el = document.querySelector(`[data-ds-state-probe=\"${args.i}\"]`);"
-                                "if (!el && args.path) { el = document.querySelector(args.path);"
-                                "if (el) el.setAttribute('data-ds-state-probe', String(args.i)); }"
-                                "if (el) el.disabled = true; }", arg)
-                            page.wait_for_timeout(60)
-                            disabled = page.evaluate(SNAPSHOT_JS, arg)
-                            page.evaluate(
-                                "(args) => { let el = document.querySelector(`[data-ds-state-probe=\"${args.i}\"]`);"
-                                "if (!el && args.path) { el = document.querySelector(args.path);"
-                                "if (el) el.setAttribute('data-ds-state-probe', String(args.i)); }"
-                                "if (el) el.disabled = false; }", arg)
-                            if disabled is None or disabled == base:
-                                problems.append(
-                                    f"<button> «{el['text']}» shows no :disabled style change (23.2)")
                         # --- Per-press isolation: a press that OPENED a new
                         # overlay must be closed the user's way (Escape, then
                         # the backdrop) and the exit motion waited out, so the
@@ -379,6 +380,36 @@ def run(gate: Gate, target, args):
                                 # the exit motion played; rest before the next
                                 # element's resting-state snapshot
                                 page.wait_for_timeout(150)
+                        # --- :disabled (native buttons only) ---
+                        if el["tag"] == "button":
+                            page.evaluate(
+                                "(args) => { let el = document.querySelector(`[data-ds-state-probe=\"${args.i}\"]`);"
+                                "if (!el && args.path) { el = document.querySelector(args.path);"
+                                "if (el) el.setAttribute('data-ds-state-probe', String(args.i)); }"
+                                "if (el) el.disabled = true; }", arg)
+                            # same multi-sample honesty as :active, over a
+                            # WIDER window: the catalog legitimately hosts
+                            # infinite skeleton pulses (23.10 loading state
+                            # — they never settle, by design), and on a
+                            # heavy WebKit page the disabled restyle lands
+                            # late. A real disabled style PERSISTS, so any
+                            # differing sample among ones spread across
+                            # ~600ms counts; a silent restyle differs at
+                            # none of them.
+                            disabled = None
+                            for ms in (60, 140, 200, 240):
+                                page.wait_for_timeout(ms)
+                                disabled = page.evaluate(SNAPSHOT_JS, arg)
+                                if disabled is not None and disabled != base:
+                                    break
+                            page.evaluate(
+                                "(args) => { let el = document.querySelector(`[data-ds-state-probe=\"${args.i}\"]`);"
+                                "if (!el && args.path) { el = document.querySelector(args.path);"
+                                "if (el) el.setAttribute('data-ds-state-probe', String(args.i)); }"
+                                "if (el) el.disabled = false; }", arg)
+                            if disabled is None or disabled == base:
+                                problems.append(
+                                    f"<button> «{el['text']}» shows no :disabled style change (23.2)")
                         # live-lab hygiene: a press opens real sheets/toasts —
                         # restore the clean page before the next element
                         page.evaluate(CLEANUP_JS)

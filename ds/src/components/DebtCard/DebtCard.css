@@ -6,6 +6,11 @@
 /* Card chrome: the shared mds-card-shell (ObjectCard.css). */
 .mds-debt-card:disabled {
   cursor: default;
+  /* 23.2: the disabled card reads the disabled word color on its shell
+     and border — the inner texts inherit (the children set no own
+     color; the shared card-shell texts follow the shell). */
+  color: var(--mds-color-disabled-fg);
+  border-color: var(--mds-color-disabled-fg);
 }
 
 /* First row: mark 44 → 12 → the text column; the remaining amount anchors

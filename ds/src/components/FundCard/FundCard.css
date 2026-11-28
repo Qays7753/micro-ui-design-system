@@ -24,6 +24,16 @@
 
 .mds-fund-card:disabled {
   cursor: default;
+  /* 23.2: the disabled card reads the disabled word color — the shell
+     dims and the inner texts inherit it (the loading skeleton keeps its
+     own surface, Money included). */
+  color: var(--mds-color-disabled-fg);
+  border-color: var(--mds-color-disabled-fg);
+}
+
+.mds-fund-card:disabled .mds-fund-card-name,
+.mds-fund-card:disabled .mds-fund-card-last {
+  color: inherit;
 }
 
 /* ObjectCard anatomy with the fund header: mark sm 32 → 8 → name; the
