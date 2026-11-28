@@ -261,8 +261,19 @@ class Day:
         print(f"  · {text}")
 
 
-def reset_and_enter(page, role_row, wait=".mds-context-bar"):
+def reset_and_enter(page, role_row, wait=".mds-context-bar", font="100"):
     page.evaluate("() => window.localStorage.clear()")
+    if font != "100":
+        # ضبط الخط عبر نفس مفتاح التخزين الذي تحفظ به المحاكاة هويتها —
+        # شارة شاشة الأدوار بلا لمس مطوّل عمدًا (اللوحة من داخل أي دور).
+        page.evaluate(
+            """(font) => { const key = 'micro-sim:v1';
+                 const raw = localStorage.getItem(key);
+                 let env = { version: 1, state: {} };
+                 try { env = JSON.parse(raw) || env; } catch { }
+                 env.state = { ...env.state, identity: { ...(env.state?.identity ?? {}), fontScale: Number(font) } };
+                 localStorage.setItem(key, JSON.stringify(env)); }""",
+            font)
     page.reload(wait_until="networkidle")
     page.wait_for_selector("[data-sim-role-screen]", timeout=10000)
     page.locator(f'[data-sim-role-screen] .mds-object-row:has-text("{role_row}")').first.tap()
@@ -274,7 +285,7 @@ def reset_and_enter(page, role_row, wait=".mds-context-bar"):
 
 def owner_day(a: Day):
     a.say("— يوم المالك: الجمعة، ورشة الياسمين للخياطة")
-    reset_and_enter(a.page, "ورشة الياسمين")
+    reset_and_enter(a.page, "ورشة الياسمين", font=a.font)
     a.shot("today")
     ov = a.overflow()
     if ov > 0:
@@ -408,7 +419,7 @@ def owner_day(a: Day):
 
 def driver_day(a: Day):
     a.say("— يوم السائق: عمر الزعبي")
-    reset_and_enter(a.page, "عمر الزعبي")
+    reset_and_enter(a.page, "عمر الزعبي", font=a.font)
     a.shot("orders")
     a.note(f"أول شاشة: {a.screen()}")
     # ت4: بطاقة صالون لمسة تفتح ورقتها فيها «سعرك» + «أرسل العرض» (ر4.2)
@@ -455,7 +466,7 @@ def driver_day(a: Day):
 
 def supplier_day(a: Day):
     a.say("— يوم المورد: مخبز الأصيل للجملة")
-    reset_and_enter(a.page, "مخبز الأصيل")
+    reset_and_enter(a.page, "مخبز الأصيل", font=a.font)
     a.shot("listings")
     a.note(f"أول شاشة: {a.screen()}")
     a.say(f"يرى عروضه الخمسة؟ {a.has('ع3') and a.has('ع5')}")
@@ -493,7 +504,7 @@ def supplier_day(a: Day):
 
 def reviewer_day(a: Day):
     a.say("— يوم المراجع: مراجعة المنصة")
-    reset_and_enter(a.page, "مراجعة المنصة")
+    reset_and_enter(a.page, "مراجعة المنصة", font=a.font)
     a.shot("review")
     a.note(f"أول شاشة: {a.screen()}")
     # ع3: ورقة القرار فيها الاعتماد والرفض
@@ -538,7 +549,7 @@ def reviewer_day(a: Day):
 
 def guest_day(a: Day):
     a.say("— يوم الزائر ثم المشتري")
-    reset_and_enter(a.page, "بلا حساب", wait="[data-sim-screen]")
+    reset_and_enter(a.page, "بلا حساب", wait="[data-sim-screen]", font=a.font)
     a.shot("market")
     ov = a.overflow()
     if ov > 0:
@@ -597,21 +608,15 @@ def main():
         page.goto(SIM_URL, wait_until="networkidle")
 
         if font != "100":
-            # Turn on خط 200% via the sim panel (long-press the version badge).
-            page.wait_for_selector("[data-sim-role-screen]", timeout=10000)
-            page.locator("[data-sim-version]").first.click(delay=800)
-            t0 = time.time()
-            while time.time() - t0 < 3:
-                if page.evaluate("() => !!document.querySelector('.mds-sheet')"):
-                    break
-                time.sleep(0.05)
-            sw = page.locator('.mds-sheet [role="switch"]:has-text("خط 200%")')
-            if not sw.count():
-                sw = page.locator('.mds-sheet [role="switch"]').last
-            sw.first.tap()
-            time.sleep(0.4)
-            page.touchscreen.tap(195, 120)
-            time.sleep(0.4)
+            # ضبط الخط بمفتاح التخزين نفسه ثم إعادة تحميل واحدة — نفس المسار
+            # الذي تسلكه لوحة المحاكاة (شارة شاشة الأدوار بلا لمس مطوّل عمدًا).
+            page.evaluate(
+                """() => { const key = 'micro-sim:v1';
+                   const raw = localStorage.getItem(key);
+                   let env = { version: 1, state: {} };
+                   try { env = JSON.parse(raw) || env; } catch { }
+                   env.state = { ...env.state, identity: { ...(env.state?.identity ?? {}), fontScale: 200 } };
+                   localStorage.setItem(key, JSON.stringify(env)); }""")
             page.reload(wait_until="networkidle")
 
         roles = [only] if only else list(DAYS)
