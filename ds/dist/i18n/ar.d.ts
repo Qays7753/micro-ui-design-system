@@ -592,6 +592,10 @@ export declare const ar: {
         readonly kind: "badge";
         readonly text: "تاريخ البيع";
     };
+    readonly 'field.dueDate': {
+        readonly kind: "badge";
+        readonly text: "تاريخ الاستحقاق";
+    };
     readonly 'title.dateQuickChips': {
         readonly kind: "title";
         readonly text: "التواريخ السريعة";
@@ -855,6 +859,22 @@ export declare const ar: {
     readonly 'month.srCellCount': {
         readonly kind: "screen-reader";
         readonly text: "{name}، {counted}";
+    };
+    readonly 'datePicker.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "{label}، {date}";
+    };
+    readonly 'title.datePicker': {
+        readonly kind: "title";
+        readonly text: "منتقي التاريخ";
+    };
+    readonly 'lab.h.datePicker': {
+        readonly kind: "title";
+        readonly text: "حقل تاريخ النموذج";
+    };
+    readonly 'lab.datePickerHint': {
+        readonly kind: "help";
+        readonly text: "التسمية تفتح ورقة الشهر، واختيار اليوم يغلقها.";
     };
     readonly 'title.monthGrid': {
         readonly kind: "title";

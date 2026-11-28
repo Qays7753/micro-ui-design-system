@@ -1,0 +1,63 @@
+/*
+ * DatePicker.css — ADDENDUM §3.4 (a composition, §9.4). The field box
+ * rides TextField's own input class + the shared .mds-picker-field-*
+ * anatomy (base.css); the sheet composes PeriodSwitcher + MonthGrid —
+ * their CSS is theirs. This file owns only the date-specific pieces.
+ * Every value rides a token by name; no raw hex/px/ms (ds-raw-values).
+ */
+
+.mds-date-field {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mds-date-field-label {
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-type-label-color, var(--mds-color-text-primary));
+  margin-block-end: var(--mds-layout-label-to-field);
+}
+
+/* The error border (§3.4-4, like TextField). */
+.mds-date-field-box--error {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+/* The date text: DD/MM/YYYY with tabular figures inside an LTR run (ج7 —
+   the AmountField isolation, no unicode-bidi). */
+.mds-date-field-text {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+
+.mds-date-field-icon {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-date-field--disabled .mds-date-field-label {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-date-field--disabled .mds-picker-field-box {
+  background-color: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-disabled-bg);
+}
+
+.mds-date-field--disabled .mds-date-field-icon {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* The composition sheet's month grid: a FULL-BLEED strip — it undoes the
+   sheet body's inline padding (و-2 item 26: the calendar strip runs edge
+   to edge; the switcher row above keeps the sheet's own margins). */
+.mds-date-sheet-grid {
+  margin-inline: calc(-1 * var(--mds-layout-sheet-padding));
+  inline-size: calc(100% + 2 * var(--mds-layout-sheet-padding));
+}
+
+/* The save-time error line under the field (§3.4-4 — the shared choose
+   error with DateQuickChips' own, §1.8-4). */
+.mds-date-field-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}

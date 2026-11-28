@@ -37,11 +37,6 @@ export interface DateQuickChipsProps {
   disabled?: boolean;
   /** error = saved with nothing chosen: «اختر التاريخ» under the row. */
   state?: Extract<DataState, 'idle' | 'error'>;
-  /** The «تاريخ آخر» chip was pressed with no custom date yet: until the
-   * library's month sheet lands (PeriodSwitcher + MonthGrid — the shared
-   * sheet of the DatePicker composition), the HOST opens its own picker
-   * from here (the kh16 interim pattern). */
-  onPress?: () => void;
   /** React 19 ref-as-prop on the radiogroup root. */
   ref?: Ref<HTMLDivElement>;
   /** Standard pass-throughs. */

@@ -15,15 +15,18 @@
  *   radio named «اليوم، 27/11/2026» (word + date).
  * - error (§1.8-4): saving with nothing chosen shows «اختر التاريخ» under
  *   the row — a line under, never a repeated date text (criterion 4).
- * - The trailing chip with no custom date fires onPress: until the
- *   library's month sheet lands (the DatePicker composition's shared
- *   sheet — PeriodSwitcher + MonthGrid are their own units), the host
- *   opens its own picker from that press (the kh16 interim pattern).
+ * - The trailing chip with no custom date opens THE COMPOSITION'S OWN
+ *   month sheet (ADDENDUM §3.4-2: DateQuickChips rides the DatePicker
+ *   sheet — PeriodSwitcher month-only + MonthGrid single, no ActionBar);
+ *   picking a day reports it through onChange and closes. min and max
+ *   flow into the sheet's days (§1.8-2).
  * - No <input type="date"> anywhere (criterion 3, rule 11).
  */
+import { useState } from 'react';
 import { t } from '../../i18n/ar';
 import { CalendarIcon } from '../../icons';
 import { usePress } from '../../lib/use-press';
+import { MonthSheet } from '../DatePicker/index';
 import type { DateQuickChipOption } from './DateQuickChips.types';
 import type { DateQuickChipsProps } from './DateQuickChips.types';
 import './DateQuickChips.css';
@@ -51,13 +54,13 @@ export function DateQuickChips({
   onChange,
   disabled = false,
   state = 'idle',
-  onPress,
   className,
   id,
   style,
   ref,
   ...rest
 }: DateQuickChipsProps) {
+  const [sheetOpen, setSheetOpen] = useState(false);
   const quickSelected = items.some((item) => item.value === value);
   /** A value none of the quick chips carries rides the trailing chip. */
   const customDate = value !== undefined && !quickSelected ? value : undefined;
@@ -104,11 +107,24 @@ export function DateQuickChips({
           customDate={customDate}
           disabled={disabled}
           onChange={onChange}
-          onPress={onPress}
+          onOpenSheet={() => setSheetOpen(true)}
         />
       </div>
       {state === 'error' ? (
         <span className="mds-date-quick-error mds-type-caption">{t('dateQuick.choose')}</span>
+      ) : null}
+      {sheetOpen ? (
+        <MonthSheet
+          label={t('dateQuick.other')}
+          value={customDate}
+          min={min}
+          max={max}
+          onChange={(next) => {
+            onChange?.(next);
+            setSheetOpen(false);
+          }}
+          onDismiss={() => setSheetOpen(false)}
+        />
       ) : null}
     </div>
   );
@@ -153,21 +169,22 @@ function QuickChip({
 }
 
 /** The trailing chip: «تاريخ آخر» (calendar 16) until a custom date
- * exists, then the date itself, selected (§1.8-2). */
+ * exists, then the date itself, selected (§1.8-2). With no custom date,
+ * the press opens the composition's own month sheet (§3.4-2). */
 function OtherChip({
   customDate,
   disabled,
   onChange,
-  onPress,
+  onOpenSheet,
 }: {
   customDate: string | undefined;
   disabled: boolean;
   onChange?: (value: string) => void;
-  onPress?: () => void;
+  onOpenSheet: () => void;
 }) {
   const selected = customDate !== undefined;
   const { isPressed, pressProps } = usePress({
-    onPress: () => (selected ? onChange?.(customDate) : onPress?.()),
+    onPress: () => (selected ? onChange?.(customDate) : onOpenSheet()),
     disabled,
   });
   const classes = [

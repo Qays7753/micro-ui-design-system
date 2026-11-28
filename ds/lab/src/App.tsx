@@ -20,8 +20,8 @@
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, PeriodSwitcher, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
-import { formatDateParts, weekStartOf, MonthGrid } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, PeriodSwitcher, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { formatDateParts, weekStartOf, MonthGrid, DatePicker } from '@micro/ds';
 import type { PeriodValue, MonthGridRange } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
@@ -87,6 +87,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'duration-picker', name: t('title.durationPicker') },
   { id: 'period-switcher', name: t('title.periodSwitcher') },
   { id: 'month-grid', name: t('title.monthGrid') },
+  { id: 'date-picker', name: t('title.datePicker') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -222,6 +223,11 @@ export function App() {
   // proof); the view garden shows the no-buttons anatomy.
   const [monthDay, setMonthDay] = useState<string | undefined>('30/11/2026');
   const [monthRange, setMonthRange] = useState<MonthGridRange | undefined>({ start: '02/11/2026', end: '05/11/2026' });
+  // 4.15 — DatePicker: §3.4-10's data («30/11/2026» chosen at rest) plus
+  // an empty garden whose pick demos the field's own sheet; the error
+  // line shows when a save happens with nothing chosen (§3.4-4).
+  const [dueDate, setDueDate] = useState<string | undefined>('30/11/2026');
+  const [dueDateError, setDueDateError] = useState(false);
   const monthItems: Record<string, number> = {
     '23/11/2026': 1,
     '24/11/2026': 2,
@@ -229,17 +235,10 @@ export function App() {
     '27/11/2026': 3,
     '30/11/2026': 1,
   };
-  const [datePickerOpen, setDatePickerOpen] = useState(false);
-  // the interim picker serves two targets: the catalog garden and the
-  // movement sheet's own date field (§746's composition order).
-  const [dateTarget, setDateTarget] = useState<'sale' | 'movement'>('sale');
+  // 4.15 — the movement sheet's own date field: the chips' «تاريخ آخر»
+  // now opens the LIBRARY's real month sheet (the DatePicker composition,
+  // ADDENDUM §3.4-2) — the interim host picker is gone.
   const [movementSheetDate, setMovementSheetDate] = useState<string | undefined>('27/11/2026');
-  const applyPickedDate = (date: string) => {
-    if (dateTarget === 'movement') setMovementSheetDate(date);
-    else setSaleDate(date);
-    setSaleDateError(false);
-    setDatePickerOpen(false);
-  };
   const quickDates = [
     { value: '27/11/2026', label: t('dateWord.today') },
     { value: '26/11/2026', label: t('dateWord.yesterday') },
@@ -282,24 +281,6 @@ export function App() {
      (10.2 (5)) and the full needs-you list. */
   const demoSheets = (
     <>
-      {/* 4.10 — the HOST's interim date picker (kh16 pattern): the
-          «تاريخ آخر» press opens it until the library's month sheet lands
-          (PeriodSwitcher + MonthGrid, then the DatePicker composition
-          wiring). Five real upcoming dates; picking one sets the value. */}
-      {datePickerOpen ? (
-        <Sheet label={t('dateQuick.other')} onDismiss={() => setDatePickerOpen(false)}>
-          <Surface>
-            {['29/11/2026', '30/11/2026', '01/12/2026', '02/12/2026', '03/12/2026'].map((date) => (
-              <ObjectRow
-                key={date}
-                label={date}
-                leading={<CalendarIcon size={20} />}
-                onPress={() => applyPickedDate(date)}
-              />
-            ))}
-          </Surface>
-        </Sheet>
-      ) : null}
       {projectOpen ? (
         <Sheet label={t('sheet.projectTitle')} onDismiss={() => setProjectOpen(false)}>
           <Surface>
@@ -447,10 +428,6 @@ export function App() {
             items={quickDates}
             value={movementSheetDate}
             onChange={setMovementSheetDate}
-            onPress={() => {
-              setDateTarget('movement');
-              setDatePickerOpen(true);
-            }}
             data-ds-check="date-quick-sheet"
           />
           <SaveState saveState={saving ? 'sending' : 'draft'} />
@@ -1778,8 +1755,9 @@ export function App() {
           <div className="lab-row lab-row--full">
             <span className="lab-label">{t('field.saleDate')}</span>
             {/* §1.8-10: «تاريخ البيع», «اليوم» selected. The «تاريخ آخر»
-                press opens the HOST's picker sheet (the kh16 interim
-                pattern) until the library's month sheet lands. */}
+                press opens the LIBRARY's real month sheet (the DatePicker
+                composition, ADDENDUM §3.4-2 — the interim host picker is
+                gone). */}
             <DateQuickChips
               label={t('field.saleDate')}
               items={quickDates}
@@ -1789,10 +1767,6 @@ export function App() {
                 setSaleDateError(false);
               }}
               state={saleDateError ? 'error' : 'idle'}
-              onPress={() => {
-                setDateTarget('sale');
-                setDatePickerOpen(true);
-              }}
               data-ds-check="date-quick-chips"
             />
           </div>
@@ -1954,6 +1928,57 @@ export function App() {
               month="12/2026"
               mode="view"
               items={{ '05/12/2026': 2, '20/12/2026': 3 }}
+            />
+          </div>
+        </section>
+
+        {/* ---- DatePicker (addendum §3.4): the form date, a composition ---- */}
+        <section className="lab-section" id="date-picker">
+          <h2 className="lab-title">{t('lab.h.datePicker')}<span className="lab-tech">{t('title.datePicker')}</span></h2>
+          <p className="lab-note">{t('lab.datePickerHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.default')}</span>
+            {/* §3.4-10's data: «30/11/2026» chosen, with a min that keeps
+                the sheet's early days disabled. NO optional here — the
+                clear button unmounts on its own press (the 4.11 lesson),
+                so it never sits at rest in the scan; the empty garden
+                below carries the optional pair instead (its clear mounts
+                only after a pick). The press opens THE composition sheet:
+                PeriodSwitcher month-only + MonthGrid single, no
+                ActionBar — picking a day closes it. */}
+            <div className="lab-garden">
+              <DatePicker
+                label={t('field.dueDate')}
+                value={dueDate}
+                min={formatDateParts({ ...todayParts, day: 20 })}
+                onChange={(next) => {
+                  setDueDate(next);
+                  setDueDateError(false);
+                }}
+                state={dueDateError ? 'error' : 'idle'}
+                data-ds-check="date-picker"
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                data-ds-exempt=""
+                onPress={() => setDueDateError(dueDate === undefined)}
+              >
+                {t('button.saveMovement')}
+              </Button>
+            </div>
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('state.empty')}</span>
+            {/* the empty field: no text, the icon stays; its pick demos the
+                sheet's default month (the current month, §3.4-4). It is
+                OPTIONAL — after a pick the clear button appears (never at
+                rest, per the 4.11 lesson). */}
+            <DatePicker
+              label={t('field.dueDate')}
+              value={undefined}
+              optional
+              onChange={(next) => setDueDate(next)}
             />
           </div>
         </section>

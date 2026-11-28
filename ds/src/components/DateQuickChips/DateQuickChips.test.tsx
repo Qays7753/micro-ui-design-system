@@ -68,13 +68,27 @@ describe('DateQuickChips (BATCH2-SPECS §1.8)', () => {
     expect(onChange).toHaveBeenCalledWith('28/11/2026');
   });
 
-  it('«تاريخ آخر» with no custom date fires onPress (the interim hook)', () => {
+  it('«تاريخ آخر» with no custom date opens THE composition month sheet (§3.4-2)', () => {
     const onChange = vi.fn();
-    const onPress = vi.fn();
-    render(<DateQuickChips label="تاريخ البيع" items={QUICK} onChange={onChange} onPress={onPress} />);
+    render(<DateQuickChips label="تاريخ البيع" items={QUICK} onChange={onChange} />);
     press(screen.getByRole('radio', { name: ar['dateQuick.other'].text }));
-    expect(onPress).toHaveBeenCalledOnce();
+    // the REAL month sheet: the grid + the month-only PeriodSwitcher
+    expect(screen.getByRole('grid')).not.toBeNull();
+    expect(screen.getByRole('button', { name: ar['period.srMonthPrev'].text })).not.toBeNull();
     expect(onChange).not.toHaveBeenCalled();
+    // picking a day reports it and closes the sheet (criterion 2)
+    press(screen.getByRole('button', { name: /30 تشرين الثاني، اثنين/ }));
+    expect(onChange).toHaveBeenCalledWith('30/11/2026');
+    expect(screen.queryByRole('grid')).toBeNull();
+  });
+
+  it('the sheet the chip opens respects the chips min and max (§1.8-3)', () => {
+    render(<DateQuickChips label="تاريخ البيع" items={QUICK} min="27/11/2026" />);
+    press(screen.getByRole('radio', { name: ar['dateQuick.other'].text }));
+    const before = screen.getByRole('button', { name: /26 تشرين الثاني، خميس/ }) as HTMLButtonElement;
+    const today = screen.getByRole('button', { name: /27 تشرين الثاني، جمعة/ }) as HTMLButtonElement;
+    expect(before.disabled).toBe(true);
+    expect(today.disabled).toBe(false);
   });
 
   it('a quick chip outside [min, max] disables (§1.8-3)', () => {

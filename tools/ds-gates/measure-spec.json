@@ -191,6 +191,13 @@
       "_note": "§3.5-10's month 11/2026: names row 24 (space) + 5 week rows × size.touch-min 48 + the strip's own 2 hairline borders = 266 (November 2026 starts Sunday, 30 days → 5 rows)"
     },
     {
+      "id": "date-picker",
+      "height": {
+        "px": 84
+      },
+      "_note": "addendum §3.4: root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + box 56 (size.field) — the shared TextField anatomy (the time-picker entry)"
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192
