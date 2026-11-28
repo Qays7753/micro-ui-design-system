@@ -748,6 +748,106 @@ export declare const ar: {
         readonly kind: "help";
         readonly text: "المدة تظهر بعد اختيار الوقت، وتُعتمد من الورقة.";
     };
+    readonly 'period.day': {
+        readonly kind: "badge";
+        readonly text: "يوم";
+    };
+    readonly 'period.week': {
+        readonly kind: "badge";
+        readonly text: "أسبوع";
+    };
+    readonly 'period.month': {
+        readonly kind: "badge";
+        readonly text: "شهر";
+    };
+    readonly 'period.custom': {
+        readonly kind: "button";
+        readonly text: "فترة مخصصة";
+    };
+    readonly 'period.apply': {
+        readonly kind: "button";
+        readonly text: "اعرض الفترة";
+    };
+    readonly 'period.today': {
+        readonly kind: "button";
+        readonly text: "اليوم";
+    };
+    readonly 'period.thisWeek': {
+        readonly kind: "button";
+        readonly text: "هذا الأسبوع";
+    };
+    readonly 'period.thisMonth': {
+        readonly kind: "button";
+        readonly text: "هذا الشهر";
+    };
+    readonly 'period.sheetTitle': {
+        readonly kind: "title";
+        readonly text: "حجم الفترة";
+    };
+    readonly 'period.sizeGroup': {
+        readonly kind: "screen-reader";
+        readonly text: "حجم الفترة";
+    };
+    readonly 'period.srName': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة: {spoken}، غيّر الفترة";
+    };
+    readonly 'period.spokenTo': {
+        readonly kind: "screen-reader";
+        readonly text: "إلى";
+    };
+    readonly 'period.srDayPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "اليوم السابق";
+    };
+    readonly 'period.srDayNext': {
+        readonly kind: "screen-reader";
+        readonly text: "اليوم التالي";
+    };
+    readonly 'period.srWeekPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "الأسبوع السابق";
+    };
+    readonly 'period.srWeekNext': {
+        readonly kind: "screen-reader";
+        readonly text: "الأسبوع التالي";
+    };
+    readonly 'period.srMonthPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "الشهر السابق";
+    };
+    readonly 'period.srMonthNext': {
+        readonly kind: "screen-reader";
+        readonly text: "الشهر التالي";
+    };
+    readonly 'period.srCustomPrev': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة السابقة";
+    };
+    readonly 'period.srCustomNext': {
+        readonly kind: "screen-reader";
+        readonly text: "الفترة التالية";
+    };
+    readonly 'title.periodSwitcher': {
+        readonly kind: "title";
+        readonly text: "مبدّل الفترة";
+    };
+    readonly 'lab.h.periodSwitcher': {
+        readonly kind: "title";
+        readonly text: "تنقّل الفترات";
+    };
+    readonly 'lab.periodSwitcherHint': {
+        readonly kind: "help";
+        readonly text: "السابق والتالي يتنقّلان، والتسمية تفتح ورقة الحجم.";
+    };
+    readonly 'lab.periodDayRow': {
+        readonly kind: "badge";
+        readonly text: "تنقّل يومي";
+    };
+    readonly 'lab.periodMonthOnlyRow': {
+        readonly kind: "badge";
+        readonly text: "شهر فقط";
+    };
     readonly 'lab.h.money': {
         readonly kind: "title";
         readonly text: "شكل المبلغ ووحدته";

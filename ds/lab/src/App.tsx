@@ -20,7 +20,9 @@
 import { useState } from 'react';
 import type { KeypadKey } from '@micro/ds';
 import type { MovementTypeValue } from '@micro/ds';
-import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { AmountKeypad, ActionBar, AmountVisibilityProvider, AmountVisibilityToggle, AskButton, AskSymbolIcon, BackIcon, Button, Checkbox, AmountField, Radio, SearchField, TextArea, Toggle, ConfirmSheet, ContextBar, DeltaUpIcon, EmptyState, EntityMark, FilterChips, FundBankIcon, FundCashIcon, FundWalletIcon, HeroSurface, IconButton, InlineBanner, Metric, MetricSmall, CalendarIcon, MovementInIcon, MovementTypeControl, Money, QuantityStepper, DateQuickChips, DurationPicker, TimePicker, PeriodSwitcher, NavDeliveryIcon, NavFinanceIcon, NavMarketIcon, NavOrdersIcon, NavTodayIcon, NotificationsButton, ObjectCard, ObjectRow, PageHeader, ProjectSwitcher, RetryIcon, SaveState, Section, SelectedIcon, SegmentedControl, Sheet, Skeleton, SlidersIcon, AmountsHiddenIcon, AmountsShownIcon, StatusBadge, Surface, TabBar, TabBarTab, TextField, Tile, Toast, Well, t, useCountUp, overrideTexts, resetTextOverrides } from '@micro/ds';
+import { formatDateParts, weekStartOf } from '@micro/ds';
+import type { PeriodValue } from '@micro/ds';
 import { amounts, drivers, edgeCases, funds, parties, projects } from './data';
 import './app.css';
 
@@ -83,6 +85,7 @@ const SECTIONS: { id: string; name: string }[] = [
   { id: 'date-quick-chips', name: t('title.dateQuickChips') },
   { id: 'time-picker', name: t('title.timePicker') },
   { id: 'duration-picker', name: t('title.durationPicker') },
+  { id: 'period-switcher', name: t('title.periodSwitcher') },
   { id: 'object-row', name: t('title.objectRow') },
   { id: 'object-card', name: t('title.objectCard') },
   { id: 'metric', name: t('title.metric') },
@@ -197,6 +200,21 @@ export function App() {
   // field does not exist before a time (criterion 2): the garden is a real
   // mini form where the duration field appears only after the time.
   const [orderDuration, setOrderDuration] = useState<number | undefined>(undefined);
+  // 4.13 — PeriodSwitcher: every garden starts at the CURRENT period of
+  // its size (the lab clock — at review time that IS the spec's own data
+  // «11/2026», and the day label reads «اليوم»): «السابق» steps back and
+  // the compact jump button «هذا الشهر»/«هذا الأسبوع»/«اليوم» APPEARS live
+  // — it never exists at scan time, because it unmounts on its own press
+  // (the 4.11 clear-button lesson: a self-unmounting button at rest fakes
+  // a states violation). The month-only garden previews the DatePicker
+  // composition's single-size anatomy (the label is not a button —
+  // ADDENDUM §3.4-2).
+  const todayParts = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
+  const thisMonth = formatDateParts({ year: todayParts.year, month: todayParts.month, day: 1 });
+  const [financePeriod, setFinancePeriod] = useState<PeriodValue>({ size: 'month', start: thisMonth });
+  const [weekPeriod, setWeekPeriod] = useState<PeriodValue>({ size: 'week', start: formatDateParts(weekStartOf(todayParts, 0)) });
+  const [dayPeriod, setDayPeriod] = useState<PeriodValue>({ size: 'day', start: formatDateParts(todayParts) });
+  const [monthOnlyPeriod, setMonthOnlyPeriod] = useState<PeriodValue>({ size: 'month', start: thisMonth });
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   // the interim picker serves two targets: the catalog garden and the
   // movement sheet's own date field (§746's composition order).
@@ -1836,6 +1854,44 @@ export function App() {
                 />
               ) : null}
             </div>
+          </div>
+        </section>
+
+        {/* ---- PeriodSwitcher (§1.27): the period row over period content ---- */}
+        <section className="lab-section" id="period-switcher">
+          <h2 className="lab-title">{t('lab.h.periodSwitcher')}<span className="lab-tech">{t('title.periodSwitcher')}</span></h2>
+          <p className="lab-note">{t('lab.periodSwitcherHint')}</p>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('nav.finance')}</span>
+            {/* §1.27-10's data: the month 11/2026. «السابق» steps to
+                10/2026 and the compact «هذا الشهر» appears; the label
+                button opens the size sheet (يوم/أسبوع/شهر — the custom
+                row arrives with the MonthGrid wiring in 4.15, the same
+                documented kh16 interim as 4.10's sheet). */}
+            <PeriodSwitcher
+              value={financePeriod}
+              onChange={setFinancePeriod}
+              data-ds-check="period-switcher"
+            />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('nav.orders')}</span>
+            {/* the CURRENT week: «السابق» steps back and «هذا الأسبوع»
+                appears (criterion 2's outside state), and it jumps back. */}
+            <PeriodSwitcher value={weekPeriod} onChange={setWeekPeriod} />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('lab.periodDayRow')}</span>
+            {/* the day size at today: the label reads «اليوم» (§1.27-2's
+                day form); «السابق» steps a day and «اليوم» appears. */}
+            <PeriodSwitcher value={dayPeriod} onChange={setDayPeriod} />
+          </div>
+          <div className="lab-row lab-row--full">
+            <span className="lab-label">{t('lab.periodMonthOnlyRow')}</span>
+            {/* single-size items: the month-only anatomy the DatePicker
+                composition rides (ADDENDUM §3.4-2) — the label is NOT a
+                button and no size sheet; the arrows switch months. */}
+            <PeriodSwitcher value={monthOnlyPeriod} onChange={setMonthOnlyPeriod} items={['month']} />
           </div>
         </section>
 

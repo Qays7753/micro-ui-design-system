@@ -177,6 +177,13 @@
       "_note": "root = label 20 (type.label.line) + gap 8 (layout.label-to-field) + box 56 (size.field) — the TextField anatomy"
     },
     {
+      "id": "period-switcher",
+      "height": {
+        "token": "size.touch-min"
+      },
+      "_note": "rule 4-7: the ONE control row at size.touch-min (criterion 1)"
+    },
+    {
       "id": "hero",
       "height": {
         "px": 192
