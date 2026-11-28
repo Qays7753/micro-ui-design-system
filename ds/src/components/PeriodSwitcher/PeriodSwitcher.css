@@ -1,0 +1,147 @@
+/*
+ * PeriodSwitcher.css — BATCH2-SPECS §1.27. The arrows ride IconButton's
+ * own anatomy, the jump button Button's, the sheet Sheet's, and the size
+ * segments SegmentedControl's — composed, not copied (ds-dup). This file
+ * owns only the row, the centered label, and the custom row. Every value
+ * rides a token by name; no raw hex/px/ms (ds-raw-values).
+ */
+
+/* The ONE control row (criterion 1): height size.touch-min, no
+   background. At 320: 48 + 48 + 96 (the jump button) + the label's
+   remaining 96 — exactly the spec's arithmetic (§1.27-6). */
+.mds-period-switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  min-height: var(--mds-size-touch-min);
+  width: 100%;
+}
+
+/* The centered label (button or plain text): fills the middle, its text
+   never wraps — it truncates with «…» at 200% (§1.27-5) and the expand
+   caret (16) sits at its end. The date runs read LTR with tabular
+   figures (ج7) — the AmountField isolation (no unicode-bidi). */
+.mds-period-label {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-space-4);
+  min-width: 0;
+  /* The label (button or text) rides the row's full height — the touch
+     floor (م3) needs the BUTTON at size.touch-min, not just the row. */
+  min-height: var(--mds-size-touch-min);
+}
+
+.mds-period-label--button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--mds-color-text-primary);
+  font-family: inherit;
+  border-radius: var(--mds-radius-xs);
+}
+
+.mds-period-label--button:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+.mds-period-label--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-period-label-text {
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  /* The label swap fades (motion.fade, §1.27-5) — the key-swap remount
+     replays this entry fade (the Money swap pattern). */
+  animation: mds-period-label-swap var(--mds-motion-fade-ms) linear;
+}
+
+@keyframes mds-period-label-swap {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* The expand caret (16) at the label's end — quiet, it only hints. */
+.mds-period-label-icon {
+  color: var(--mds-color-text-secondary);
+}
+
+/* The native :disabled treatment (23.2 — the 4.11 lesson: every native
+   button carries one even when the app never disables it). */
+.mds-period-label--button:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-period-label--button:disabled .mds-period-label-icon {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* The «الحالية» jump button: Button's own compact secondary anatomy; it
+   fades in (motion.fade, §1.27-5) — the remount replays the entry fade. */
+.mds-period-jump {
+  flex: 0 0 auto;
+  animation: mds-period-jump-in var(--mds-motion-fade-ms) linear;
+}
+
+@keyframes mds-period-jump-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* The «فترة مخصصة» row inside the size sheet: its own arm row (§1.27-2). */
+.mds-period-custom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--mds-space-8);
+  width: 100%;
+  min-height: var(--mds-size-touch-min);
+  margin-block-start: var(--mds-space-16);
+  padding-inline: var(--mds-layout-chip-padding);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-sm);
+  background: none;
+  color: var(--mds-color-text-primary);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.mds-period-custom--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-period-custom--armed {
+  border-color: var(--mds-color-brand-text);
+  border-width: var(--mds-border-field-focus);
+}
+
+.mds-period-custom:focus-visible {
+  border-color: var(--mds-color-brand-text);
+  outline: none;
+}
+
+/* BRIEF 23.14: reduced motion turns every movement into a fade — here, off. */
+@media (prefers-reduced-motion: reduce) {
+  .mds-period-label-text,
+  .mds-period-jump {
+    animation: none;
+  }
+}

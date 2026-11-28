@@ -1,7 +1,7 @@
 /**
  * format-money.ts — BRIEF section 8, complete, pure (no DOM, no Arabic text:
  * all words come from the `texts` argument, bound by callers to
- * src/i18n/ar.ts `moneyTexts`).
+ * src/i18n/ar.ts `getMoneyTexts()`).
  *
  * Rules implemented (BRIEF 8):
  * - Western digits only; thousands separator ',' and decimal '.'.
@@ -22,7 +22,7 @@
 export type MoneyFlow = 'in' | 'out' | 'transfer';
 /** Debt side (BRIEF 8: لك / عليك). */
 export type DebtSide = 'forYou' | 'againstYou';
-/** Every word formatMoney needs; bound to ar.ts `moneyTexts` by callers. */
+/** Every word formatMoney needs; bound to ar.ts `getMoneyTexts()` by callers. */
 export interface MoneyAriaTexts {
     /** Display unit after the number, e.g. د */
     readonly unit: string;
@@ -87,8 +87,8 @@ export interface MoneyResult {
  * Format one money value. Pure: same input, same output.
  *
  * ```ts
- * formatMoney('-35', { texts: moneyTexts }).display   // '−35 د'
- * formatMoney('12.500', { texts: moneyTexts }).aria    // '12 دينار و500 فلس'
+ * formatMoney('-35', { texts: getMoneyTexts() }).display   // '−35 د'
+ * formatMoney('12.500', { texts: getMoneyTexts() }).aria    // '12 دينار و500 فلس'
  * formatMoney(45, { debt: 'forYou', texts }).display   // 'لك 45 د'
  * ```
  */

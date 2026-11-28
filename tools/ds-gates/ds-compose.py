@@ -7,8 +7,11 @@ The criteria scope to the demo-compose screen ([data-ds-check="compose"]) —
 the catalog is a sample zoo, not a screen (the ds-signal precedent); on the
 catalog view the gate reports the scope note instead of the screen checks.
 
-  c17  (rule 17, و-2 item 10) exactly ONE hero-number component
-       (HeroSurface or Metric) in the screen                          (limit 1)
+  c17  (rule 17, و-2 item 10) AT MOST ONE hero-number component
+       (HeroSurface or Metric) in the screen — the brief's «سطح بطل واحد
+       في الصفحة» is a maximum, and 1.7 ت1 removes the hero from «مشروع
+       اليوم» entirely (HeroSurface lives in «المالية» only), so zero is a
+       valid screen                                                  (limit 1)
   c18  (rule 18, و-2 item 11) ≤ 3 distinct AMOUNT font sizes — amounts only
        (money value/missing, hero value, metric value, row/card/tile
        values); the diff line's caption is not an amount               (≤ 3)
@@ -39,6 +42,12 @@ catalog view the gate reports the scope note instead of the screen checks.
   د3   quality.max-hub-sections: sections in the screen                  (≤ 6)
   د7   quality.max-text-lines (و-2 item 27: measured at font 100%, system
        texts only): every text block renders ≤ 2 lines                   (≤ 2)
+  f74  (owner 2026-11-28) the lab tools button covers NO content (and
+       never ContextBar/TabBar) — it rides a reserved dock band outside
+       the scroll flow. Checked on the DEFAULT (folded-tools) layout: the
+       second pass re-runs the whole composition set on that layout too
+       (it is the owner's actual phone view), with the pinned pass above
+       keeping every documented target reachable                     (0px²)
 
 All bounds come from docs/design-system/tokens.json (type.label,
 layout.section-to-section, quality.max-hub-sections) — nothing hardcoded.
@@ -46,6 +55,7 @@ Fixtures: bad (mock anatomy violating c17/c18/c19/c20/c21/c22/c31/c36/c43/c69/
 c73/د7) must fail; clean (the composed anatomy at every bound) must pass.
 """
 import json
+import re
 from pathlib import Path
 
 from common import CONFIG, ROOT, Gate, gate_main, browser_session, DEFAULT_CONTEXT, \
@@ -62,9 +72,10 @@ COMPOSE_JS = """
   const problems = [];
   const px = (v) => parseFloat(v) || 0;
 
-  // c17 — one hero-number component
+  // c17 — at most one hero-number component (1.7 ت1: a screen may carry
+  // none — the hero belongs to «المالية»)
   const heroes = screen.querySelectorAll('.mds-hero-surface, .mds-metric');
-  if (heroes.length !== 1) problems.push('[c17] hero-number components = ' + heroes.length + ' (limit 1): '
+  if (heroes.length > 1) problems.push('[c17] hero-number components = ' + heroes.length + ' (limit 1): '
     + Array.from(heroes).map(desc).join(', '));
 
   // c18 — ≤ 3 distinct amount font sizes (amounts only)
@@ -214,6 +225,28 @@ COMPOSE_JS = """
     if (lines > 2.2) problems.push('[d7] text block renders ~' + lines.toFixed(1) + ' lines > 2: ' + desc(el) + ' «' + (el.textContent || '').trim().slice(0, 20) + '»');
   }
 
+  // f74 — owner 2026-11-28: the lab tools button covers NO content (and
+  // never ContextBar/TabBar). It rides a RESERVED dock band outside the
+  // scroll flow; a fixed overlay would intersect the content column here.
+  const fab = screen.querySelector('.lab-tools-fab');
+  if (fab) {
+    const fr = fab.getBoundingClientRect();
+    const inter = (other) => {
+      if (!other) return 0;
+      const or2 = other.getBoundingClientRect();
+      const w = Math.max(0, Math.min(fr.right, or2.right) - Math.max(fr.left, or2.left));
+      const h = Math.max(0, Math.min(fr.bottom, or2.bottom) - Math.max(fr.top, or2.top));
+      return w * h;
+    };
+    const col = screen.querySelector('[data-ds-check="compose-content"]');
+    const ctxBar = screen.querySelector('.mds-context-bar');
+    const tabBar = screen.querySelector('.mds-tab-bar');
+    for (const [name, el] of [['the content column', col], ['ContextBar', ctxBar], ['TabBar', tabBar]]) {
+      const area = inter(el);
+      if (area > 0.5) problems.push('[f74] the tools button overlaps ' + name + ' (' + area.toFixed(0) + 'px²) — it must cover no content');
+    }
+  }
+
   return { problems };
 }
 """
@@ -259,6 +292,39 @@ def run(gate: Gate, target, args):
                             "buttons, gaps, grid, titles, empty, controls, hub, lines — all within bounds")
         except Exception as exc:
             gate.fail(check_id, f"browser error: {exc!r}")
+
+    # f74 pass — the DEFAULT (folded-tools) layout: the owner's actual phone
+    # view. The pinned pass above keeps every documented target reachable;
+    # this pass re-runs the whole composition set on the default layout and
+    # holds the tools-button clearance rule (the fab only exists there).
+    default_url = re.sub(r"[?&]tools=1", "", url).rstrip("?&")
+    wants_default = ("view=compose" in default_url) or ("view=" not in default_url and "?" not in default_url) \
+        or ("view=default" in default_url)
+    if wants_default:
+        for engine in CONFIG["engines"]:
+            if args.engine != "both" and engine != args.engine:
+                continue
+            check_id = f"ds-compose/page-default/{engine}"
+            try:
+                with browser_session(engine) as session:
+                    page = session.page(**DEFAULT_CONTEXT)
+                    page.goto(default_url, wait_until="load", timeout=20000)
+                    wait_lab_ready(page)
+                    page.wait_for_timeout(150)
+                    result = page.evaluate(COMPOSE_JS, bounds)
+                    if result.get("noscreen"):
+                        gate.ok(check_id, "no compose screen on the default layout")
+                        continue
+                    problems = result["problems"]
+                    if problems:
+                        gate.fail(check_id, f"{len(problems)} violations on the default (folded) layout")
+                        for p in problems[:24]:
+                            gate.fail("ds-compose/default-violation/" + engine, p)
+                    else:
+                        gate.ok(check_id, "default (folded) layout clean: the whole composition set "
+                                "+ the tools button covers no content (f74), clears ContextBar/TabBar")
+            except Exception as exc:
+                gate.fail(check_id, f"browser error: {exc!r}")
 
     if server:
         server.stop()

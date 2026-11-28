@@ -1,0 +1,51 @@
+/* AmountKeypad.css — the in-app amount number pad (ADDENDUM §1.4, 23.x).
+ * Every value rides a token by name (the raw-values gate holds it). */
+
+.mds-keypad {
+  direction: ltr;
+  display: grid;
+  /* (container − 3 × space) ÷ 4 per key — the spec's own width rule. */
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--mds-space-8);
+}
+
+.mds-keypad-key {
+  /* height from the pair token; width from the grid column. */
+  block-size: var(--mds-size-keypad-key-56);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mds-radius-md);
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  background-color: var(--mds-color-surface);
+  color: var(--mds-color-text-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background-color var(--mds-motion-quick);
+}
+
+.mds-keypad-key--pressed {
+  /* 23.2: the press reads as a surface press. */
+  background-color: var(--mds-color-surface-pressed);
+}
+
+.mds-keypad-key--disabled,
+.mds-keypad-key:disabled {
+  background-color: var(--mds-color-surface);
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-keypad-key--backspace {
+  /* column 4, rows 1–2 — ONE key of both rows' height (§1.4-2): the span
+     stretches it; the fixed key height must not clamp it (a clamped key
+     left an empty gap under itself — caught in the 4.7 review). */
+  block-size: auto;
+}
+
+.mds-keypad-key-label {
+  /* number-lg (the shared class) carries the font; the color rides the key. */
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}

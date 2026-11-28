@@ -175,6 +175,146 @@ export const ar = {
   // what it is and when it is used, two or three words; the technical name
   // renders small beside it (lab-title's .lab-tech).
   'lab.h.amountToggle': { kind: 'title', text: 'زر إخفاء الأرقام' },
+  // 3ج.1 — the live override demo (the plan's own example: «سجّل حركة»).
+  'title.textOverride': { kind: 'title', text: 'تجاوز النصوص' },
+  'lab.h.textOverride': { kind: 'title', text: 'نصوص من التطبيق' },
+  'lab.overrideHint': { kind: 'help', text: 'اضغط ليستبدل نص الزر، واضغط ثانية ليعود.' },
+  'lab.overrideOn': { kind: 'button', text: 'فعّل التجاوز' },
+  'lab.overrideOff': { kind: 'button', text: 'أعد نص المكتبة' },
+  'lab.overrideTarget': { kind: 'help', text: 'الهدف الحي' },
+  'lab.overrideReplacement': { kind: 'button', text: 'دبّر الحركة' },
+  // AmountKeypad (§1.4-7): the SPOKEN names — the visible glyph stays a digit.
+  'keypad.srGroup': { kind: 'screen-reader', text: 'لوحة المبالغ' },
+  'keypad.sr0': { kind: 'screen-reader', text: 'صفر' },
+  'keypad.sr1': { kind: 'screen-reader', text: 'واحد' },
+  'keypad.sr2': { kind: 'screen-reader', text: 'اثنان' },
+  'keypad.sr3': { kind: 'screen-reader', text: 'ثلاثة' },
+  'keypad.sr4': { kind: 'screen-reader', text: 'أربعة' },
+  'keypad.sr5': { kind: 'screen-reader', text: 'خمسة' },
+  'keypad.sr6': { kind: 'screen-reader', text: 'ستة' },
+  'keypad.sr7': { kind: 'screen-reader', text: 'سبعة' },
+  'keypad.sr8': { kind: 'screen-reader', text: 'ثمانية' },
+  'keypad.sr9': { kind: 'screen-reader', text: 'تسعة' },
+  'keypad.sr000': { kind: 'screen-reader', text: 'ثلاثة أصفار' },
+  'keypad.srDecimal': { kind: 'screen-reader', text: 'فاصلة' },
+  'keypad.srBackspace': { kind: 'screen-reader', text: 'احذف' },
+  // the keypad lab page (§1.4-10: typing 145.750 through the keys).
+  'title.keypad': { kind: 'title', text: 'لوحة المبالغ' },
+  'lab.h.keypad': { kind: 'title', text: 'لوحة أرقام المبالغ' },
+  'lab.keypadHint': { kind: 'help', text: 'اضغط المفاتيح يدخل المبلغ في الحقل أعلاه.' },
+  // MovementTypeControl (§1.5): the in/out/transfer switch of the movement
+  // form. The group's name is a screen-reader word; the save-time error
+  // under the control is a help sentence.
+  'movementType.srGroup': { kind: 'screen-reader', text: 'نوع الحركة' },
+  'movementType.choose': { kind: 'help', text: 'اختر نوع الحركة' },
+  'title.movementTypeControl': { kind: 'title', text: 'نوع الحركة' },
+  'lab.h.movementTypeControl': { kind: 'title', text: 'مبدّل نوع الحركة' },
+  'lab.movementTypeHint': { kind: 'help', text: 'حاول الحفظ بلا اختيار يظهر خطأ الصياغة تحته.' },
+  // QuantityStepper (§1.6): the stepper's screen-reader words (its only
+  // own texts — everything else is the app's label).
+  'quantity.increase': { kind: 'screen-reader', text: 'زيادة' },
+  'quantity.decrease': { kind: 'screen-reader', text: 'إنقاص' },
+  'field.quantity': { kind: 'badge', text: 'الكمية' },
+  'title.quantityStepper': { kind: 'title', text: 'عداد الكمية' },
+  'lab.h.quantityStepper': { kind: 'title', text: 'عداد كمية صحيحة' },
+  'lab.quantityHint': { kind: 'help', text: 'اضغط مطولًا يتسارع العد، واكتب ما تشاء.' },
+  // DateQuickChips (§1.8): the trailing chip's fixed word and the
+  // save-time error line. The quick words (اليوم/أمس/غداً) are the app's
+  // item labels; the date format is the component's own contract.
+  'dateQuick.other': { kind: 'button', text: 'تاريخ آخر' },
+  'dateQuick.choose': { kind: 'help', text: 'اختر التاريخ' },
+  'dateQuick.chipName': { kind: 'screen-reader', text: '{label}، {value}' },
+  'field.saleDate': { kind: 'badge', text: 'تاريخ البيع' },
+  'field.dueDate': { kind: 'badge', text: 'تاريخ الاستحقاق' },
+  'title.dateQuickChips': { kind: 'title', text: 'التواريخ السريعة' },
+  'lab.h.dateQuickChips': { kind: 'title', text: 'رقائق تاريخ سريعة' },
+  'lab.dateQuickHint': { kind: 'help', text: '«تاريخ آخر» يفتح منتقي التطبيق حتى ورقة الشهر.' },
+  'dateWord.today': { kind: 'badge', text: 'اليوم' },
+  'dateWord.yesterday': { kind: 'badge', text: 'أمس' },
+  'dateWord.tomorrow': { kind: 'badge', text: 'غداً' },
+  'state.customRow': { kind: 'badge', text: 'تاريخ مخصص' },
+  // TimePicker (§1.9 + addendum §2.4): the period words (chip + spoken),
+  // the grid titles, the apply action, the save-time error, and the field's
+  // spoken name pattern.
+  'time.am': { kind: 'badge', text: 'ص' },
+  'time.pm': { kind: 'badge', text: 'م' },
+  'time.amSpoken': { kind: 'screen-reader', text: 'صباحاً' },
+  'time.pmSpoken': { kind: 'screen-reader', text: 'مساءً' },
+  'time.periodGroup': { kind: 'screen-reader', text: 'الفترة' },
+  'time.hour': { kind: 'title', text: 'الساعة' },
+  'time.minutes': { kind: 'title', text: 'الدقائق' },
+  'timePicker.apply': { kind: 'button', text: 'اعتمد الوقت' },
+  'timePicker.choose': { kind: 'help', text: 'اختر الوقت' },
+  'timePicker.srName': { kind: 'screen-reader', text: '{label}، {time}' },
+  'field.deliveryTime': { kind: 'badge', text: 'وقت التسليم' },
+  'title.timePicker': { kind: 'title', text: 'منتقي الوقت' },
+  'lab.h.timePicker': { kind: 'title', text: 'حقل موعد بلحظة' },
+  'lab.timePickerHint': { kind: 'help', text: 'اضغط الحقل تفتح الورقة، واعتمد منها.' },
+  // DurationPicker (addendum §3.3): the duration words per the plural rules
+  // of 24.1(8) — one/two bare, 3-10 counted plural, 11+ counted singular,
+  // and «ونصف» for the half hour after an hour.
+  'duration.hourOne': { kind: 'badge', text: 'ساعة' },
+  'duration.hourTwo': { kind: 'badge', text: 'ساعتان' },
+  'duration.hourFew': { kind: 'badge', text: 'ساعات' },
+  'duration.hourMany': { kind: 'badge', text: 'ساعة' },
+  'duration.minuteOne': { kind: 'badge', text: 'دقيقة' },
+  'duration.minuteTwo': { kind: 'badge', text: 'دقيقتان' },
+  'duration.minuteFew': { kind: 'badge', text: 'دقائق' },
+  'duration.minuteMany': { kind: 'badge', text: 'دقيقة' },
+  'duration.half': { kind: 'badge', text: 'ونصف' },
+  'duration.and': { kind: 'badge', text: 'و' },
+  'duration.common': { kind: 'title', text: 'مدد شائعة' },
+  'duration.other': { kind: 'badge', text: 'مدة أخرى' },
+  'durationPicker.apply': { kind: 'button', text: 'اعتمد المدة' },
+  'durationPicker.srName': { kind: 'screen-reader', text: '{label}، {duration}' },
+  'field.duration': { kind: 'badge', text: 'المدة' },
+  'title.durationPicker': { kind: 'title', text: 'منتقي المدة' },
+  'lab.h.durationPicker': { kind: 'title', text: 'حقل مدة الموعد' },
+  'lab.durationPickerHint': { kind: 'help', text: 'المدة تظهر بعد اختيار الوقت، وتُعتمد من الورقة.' },
+  // PeriodSwitcher (§1.27): the period sizes, the jump words, the size
+  // sheet, and the screen-reader names. The spoken forms name the months
+  // Levantine through month.1..12 (§0.2-6); the visible month stays
+  // MM/YYYY with Western tabular digits.
+  'period.day': { kind: 'badge', text: 'يوم' },
+  'period.week': { kind: 'badge', text: 'أسبوع' },
+  'period.month': { kind: 'badge', text: 'شهر' },
+  'period.custom': { kind: 'button', text: 'فترة مخصصة' },
+  'period.apply': { kind: 'button', text: 'اعرض الفترة' },
+  'period.today': { kind: 'button', text: 'اليوم' },
+  'period.thisWeek': { kind: 'button', text: 'هذا الأسبوع' },
+  'period.thisMonth': { kind: 'button', text: 'هذا الشهر' },
+  'period.sheetTitle': { kind: 'title', text: 'حجم الفترة' },
+  'period.sizeGroup': { kind: 'screen-reader', text: 'حجم الفترة' },
+  'period.srName': { kind: 'screen-reader', text: 'الفترة: {spoken}، غيّر الفترة' },
+  'period.spokenTo': { kind: 'screen-reader', text: 'إلى' },
+  'period.srDayPrev': { kind: 'screen-reader', text: 'اليوم السابق' },
+  'period.srDayNext': { kind: 'screen-reader', text: 'اليوم التالي' },
+  'period.srWeekPrev': { kind: 'screen-reader', text: 'الأسبوع السابق' },
+  'period.srWeekNext': { kind: 'screen-reader', text: 'الأسبوع التالي' },
+  'period.srMonthPrev': { kind: 'screen-reader', text: 'الشهر السابق' },
+  'period.srMonthNext': { kind: 'screen-reader', text: 'الشهر التالي' },
+  'period.srCustomPrev': { kind: 'screen-reader', text: 'الفترة السابقة' },
+  'period.srCustomNext': { kind: 'screen-reader', text: 'الفترة التالية' },
+  'title.periodSwitcher': { kind: 'title', text: 'مبدّل الفترة' },
+  'lab.h.periodSwitcher': { kind: 'title', text: 'تنقّل الفترات' },
+  'lab.periodSwitcherHint': { kind: 'help', text: 'السابق والتالي يتنقّلان، والتسمية تفتح ورقة الحجم.' },
+  // MonthGrid (§3.5): the grid's spoken month, the cell names, the lab.
+  'month.srGrid': { kind: 'screen-reader', text: '{month} {year}' },
+  'month.srCell': { kind: 'screen-reader', text: '{day} {month}، {weekday}' },
+  'month.srCellToday': { kind: 'screen-reader', text: '{name}، {today}' },
+  'month.srCellCount': { kind: 'screen-reader', text: '{name}، {counted}' },
+  'datePicker.srName': { kind: 'screen-reader', text: '{label}، {date}' },
+  'title.datePicker': { kind: 'title', text: 'منتقي التاريخ' },
+  'lab.h.datePicker': { kind: 'title', text: 'حقل تاريخ النموذج' },
+  'lab.datePickerHint': { kind: 'help', text: 'التسمية تفتح ورقة الشهر، واختيار اليوم يغلقها.' },
+  'title.monthGrid': { kind: 'title', text: 'شبكة الشهر' },
+  'lab.h.monthGrid': { kind: 'title', text: 'تقويم الشهر' },
+  'lab.monthGridHint': { kind: 'help', text: 'اختر يومًا، أو مدى في وضع المدى.' },
+  'monthGrid.modeSingle': { kind: 'badge', text: 'اختيار يوم' },
+  'monthGrid.modeRange': { kind: 'badge', text: 'اختيار مدى' },
+  'monthGrid.modeView': { kind: 'badge', text: 'عرض فقط' },
+  'lab.periodDayRow': { kind: 'badge', text: 'تنقّل يومي' },
+  'lab.periodMonthOnlyRow': { kind: 'badge', text: 'شهر فقط' },
   'lab.h.money': { kind: 'title', text: 'شكل المبلغ ووحدته' },
   'lab.h.statusBadge': { kind: 'title', text: 'شارة الحالة' },
   'lab.h.entityMark': { kind: 'title', text: 'حرف الطرف' },
@@ -284,6 +424,14 @@ export const ar = {
   'state.driver': { kind: 'badge', text: 'وضع السائق' },
   'state.default': { kind: 'badge', text: 'افتراضي' },
   'state.landed': { kind: 'badge', text: 'وصل محفوظ' },
+  'state.todayProject': { kind: 'badge', text: 'مشروع اليوم' },
+  'today.date': { kind: 'badge', text: 'الجمعة 27/11/2026' },
+  'section.now': { kind: 'title', text: 'الآن' },
+  'now.in40': { kind: 'help', text: 'بعد 40 دقيقة' },
+  'tile.fundsNow': { kind: 'help', text: 'في الصناديق الآن' },
+  'tile.todayNext': { kind: 'help', text: 'اليوم · التالي 4:00 م' },
+  'tile.running': { kind: 'badge', text: 'جارية' },
+  'tile.offers': { kind: 'badge', text: 'عروض' },
   'state.debt': { kind: 'badge', text: 'دين' },
   'state.hidden': { kind: 'badge', text: 'مخفي' },
   'state.missing': { kind: 'badge', text: 'مفقود' },
@@ -396,6 +544,7 @@ export const ar = {
   'title.searchField': { kind: 'title', text: 'حقل البحث' },
   'lab.h.checkbox': { kind: 'title', text: 'بنود تُشَرّ مستقلة' },
   'state.errorRow': { kind: 'badge', text: 'حالة الخطأ' },
+  'state.fractionFull': { kind: 'badge', text: 'خانات كاملة' },
   'title.checkbox': { kind: 'title', text: 'مربع الاختيار' },
 
 // ---------------------------------------------------------------------------
@@ -404,13 +553,51 @@ export const ar = {
 
 export type ArKey = keyof typeof ar;
 
+// ---------------------------------------------------------------------------
+// 3ج.1 — host-app text overrides (owner note 2026-11-27: «ممكن زر من
+// الأزرار أنا اسمه بدي يتغير»). The app passes ANY PART of the dictionary;
+// every component, current and future, reads its texts through t() (and
+// getMoneyTexts() for the money aria set), so an override set ONCE at app
+// start flows everywhere. Keys are typed as ArKey — a wrong key name fails
+// typecheck. Any key the app does not pass keeps the library text. Word
+// limits (24.1) stay a DOCUMENTED RECOMMENDATION for the app and never
+// block an override (the ds-copy gate judges the library dictionary, not
+// the host app's wording).
+// ---------------------------------------------------------------------------
+
+/** What the host app may override: key -> replacement text. */
+export type TextOverrides = Partial<Record<ArKey, string>>;
+
+let overrides: TextOverrides = {};
+
+/**
+ * Replace fixed library texts from the host app. Call ONCE at startup
+ * (before the first render — the values are read at render time, so a call
+ * after mount still applies to the next render, but startup is the contract).
+ * A later call REPLACES the whole override set (it is not additive).
+ */
+export function overrideTexts(next: TextOverrides): void {
+  overrides = { ...next };
+}
+
+/** Drop every override (tests and the lab's live sample only). */
+export function resetTextOverrides(): void {
+  overrides = {};
+}
+
+/** The override for `key`, or undefined when the app passed none. */
+export function overriddenText(key: ArKey): string | undefined {
+  return overrides[key];
+}
+
 /**
  * Resolve a dictionary entry with `{param}` interpolation.
- * Unknown params are left as-is; missing params throw nothing (defensive —
- * the copy gate checks completeness separately).
+ * The host app's override (3ج.1) wins over the library text; unknown params
+ * are left as-is; missing params throw nothing (defensive — the copy gate
+ * checks completeness separately).
  */
 export function t(key: ArKey, params?: Record<string, string | number>): string {
-  let text: string = ar[key].text;
+  let text: string = overrides[key] ?? ar[key].text;
   if (params) {
     for (const [name, value] of Object.entries(params)) {
       text = text.replaceAll(`{${name}}`, String(value));
@@ -430,25 +617,31 @@ export const pluralNouns = {
   quotes: { zero: 'لا عروض', one: 'عرض واحد', two: 'عرضان', few: 'عروض', many: 'عرض' },
   results: { zero: 'لا نتائج', one: 'نتيجة واحدة', two: 'نتيجتان', few: 'نتائج', many: 'نتيجة' },
   unread: { zero: 'لا شيء غير مقروء', one: 'غير مقروء واحد', two: 'غير مقروءان', few: 'غير مقروءة', many: 'غير مقروءة' },
+  // MonthGrid (§3.5-7): the counted items of a day in a cell's name.
+  dayItems: { zero: 'لا عناصر', one: 'عنصر واحد', two: 'عنصران', few: 'عناصر', many: 'عنصر' },
 } as const satisfies Record<string, PluralForms>;
 
 export type PluralNoun = keyof typeof pluralNouns;
 
 // ---------------------------------------------------------------------------
 // Money aria texts — bound into lib/format-money.ts by callers (the lib itself
-// stays free of Arabic; BRIEF 8 + 23.17 wording).
+// stays free of Arabic; BRIEF 8 + 23.17 wording). 3ج.1: a FUNCTION, not a
+// module-level snapshot — every caller reads it at render time so host-app
+// overrides (overrideTexts) flow into the money aria set too.
 // ---------------------------------------------------------------------------
 
-export const moneyTexts: MoneyAriaTexts = {
-  unit: ar['money.unit'].text,
-  minus: ar['money.ariaMinus'].text,
-  dinar: ar['money.ariaDinar'].text,
-  fils: ar['money.ariaFils'].text,
-  and: ar['money.ariaAnd'].text,
-  forYou: ar['money.forYou'].text,
-  againstYou: ar['money.againstYou'].text,
-  hidden: ar['money.ariaHidden'].text,
-  missing: ar['money.ariaMissing'].text,
-  hiddenGlyph: ar['money.hiddenGlyph'].text,
-  missingGlyph: ar['money.missing'].text,
-};
+export function getMoneyTexts(): MoneyAriaTexts {
+  return {
+    unit: t('money.unit'),
+    minus: t('money.ariaMinus'),
+    dinar: t('money.ariaDinar'),
+    fils: t('money.ariaFils'),
+    and: t('money.ariaAnd'),
+    forYou: t('money.forYou'),
+    againstYou: t('money.againstYou'),
+    hidden: t('money.ariaHidden'),
+    missing: t('money.ariaMissing'),
+    hiddenGlyph: t('money.hiddenGlyph'),
+    missingGlyph: t('money.missing'),
+  };
+}

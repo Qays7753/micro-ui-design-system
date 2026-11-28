@@ -14,7 +14,7 @@
  */
 import { usePress } from '../../lib/use-press';
 import { AskSymbolIcon } from '../../icons';
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
 import type { AskButtonProps } from './AskButton.types';
 import './AskButton.css';
 
@@ -30,7 +30,7 @@ export function AskButton({
 }: AskButtonProps) {
   const { isPressed, pressProps } = usePress({ onPress, onLongPress });
 
-  const name = selected ? ar['sr.askUnread'].text : ar['sr.ask'].text;
+  const name = selected ? t('sr.askUnread') : t('sr.ask');
 
   const classes = ['mds-ask-button', isPressed ? 'mds-ask-button--pressed' : '', className]
     .filter(Boolean)

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ar, moneyTexts, pluralNouns, t, type TextKind } from './ar';
+import { ar, getMoneyTexts,pluralNouns, t, type TextKind } from './ar';
 
 const KINDS: readonly TextKind[] = [
   'button',
@@ -65,10 +65,10 @@ describe('ar dictionary (BRIEF 24)', () => {
   });
 
   it('binds money aria texts from the dictionary', () => {
-    expect(moneyTexts.unit).toBe('د');
-    expect(moneyTexts.minus).toBe('سالب');
-    expect(moneyTexts.hidden).toBe('المبلغ مخفي');
-    expect(moneyTexts.hiddenGlyph).toBe('••••');
+    expect(getMoneyTexts().unit).toBe('د');
+    expect(getMoneyTexts().minus).toBe('سالب');
+    expect(getMoneyTexts().hidden).toBe('المبلغ مخفي');
+    expect(getMoneyTexts().hiddenGlyph).toBe('••••');
   });
 
   it('provides plural noun forms for the counted phrases', () => {

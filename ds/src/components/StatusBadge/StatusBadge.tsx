@@ -10,7 +10,8 @@
  *   this file (BRIEF 16.20, 24).
  * - A tone change replays the quick cross-fade of 23.14 (content remount).
  */
-import { ar } from '../../i18n/ar';
+import { t } from '../../i18n/ar';
+import type { ArKey } from '../../i18n/ar';
 import { ToneDoneIcon } from '../../icons';
 import { ToneInfoIcon } from '../../icons';
 import { ToneProblemIcon } from '../../icons';
@@ -26,12 +27,14 @@ const TONE_ICONS: Partial<Record<Tone, typeof ToneDoneIcon>> = {
   info: ToneInfoIcon,
 };
 
-const DEFAULT_LABELS: Record<Tone, string> = {
-  done: ar['badge.done'].text,
-  waiting: ar['badge.waiting'].text,
-  problem: ar['badge.problem'].text,
-  info: ar['badge.info'].text,
-  neutral: ar['badge.neutral'].text,
+// 3ج.1: the tone's default word is a KEY, resolved at render time, so the
+// host app's overrideTexts flows into the badge labels too.
+const DEFAULT_LABEL_KEYS: Record<Tone, ArKey> = {
+  done: 'badge.done',
+  waiting: 'badge.waiting',
+  problem: 'badge.problem',
+  info: 'badge.info',
+  neutral: 'badge.neutral',
 };
 
 export function StatusBadge({
@@ -54,7 +57,7 @@ export function StatusBadge({
           of 23.14 replays (BRIEF: تغيّر حالة الشارة — تلاشٍ متقاطع). */}
       <span className="mds-status-badge-content" key={tone}>
         {Icon ? <Icon size={14} /> : null}
-        <span className="mds-status-badge-label">{label ?? DEFAULT_LABELS[tone]}</span>
+        <span className="mds-status-badge-label">{label ?? t(DEFAULT_LABEL_KEYS[tone])}</span>
       </span>
     </span>
   );

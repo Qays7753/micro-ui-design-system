@@ -1,7 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ar, moneyTexts } from '../../i18n/ar';
+import { ar, getMoneyTexts,} from '../../i18n/ar';
 import { AmountVisibilityProvider } from '../../lib/amount-visibility';
+import { Money } from '../Money/index';
 
 const LINE = ar['empty.movements'].text;
 import { NavTodayIcon } from '../../icons';
@@ -69,9 +70,25 @@ describe('Tile (BRIEF 23.9)', () => {
     expect(sparkline).not.toBeNull();
     expect(sparkline?.querySelector('polyline')).toBeNull();
     expect(sparkline?.querySelector('circle')).toBeNull();
-    expect(container.querySelector('.mds-tile-value')?.textContent).toBe(moneyTexts.hiddenGlyph);
+    expect(container.querySelector('.mds-tile-value')?.textContent).toBe(getMoneyTexts().hiddenGlyph);
     expect(container.textContent).not.toContain('1,250');
     expect(container.querySelector('.mds-tile-line')?.textContent).toBe(LINE);
+  });
+
+  it('a Money-node value renders itself with its unit and hides through Money (5.1 finance tile)', () => {
+    const { container } = render(
+      <Tile label={LABEL} value={<Money value="595.500" size="lg" />} trailing={ar['nav.finance'].text} />,
+    );
+    expect(container.querySelector('.mds-tile-value .mds-money')).not.toBeNull();
+    expect(container.querySelector('.mds-tile-value .mds-money-unit')?.textContent).toBe(ar['money.unit'].text);
+    // hidden: Money renders its own «••••» + unit — the tile does not swap it
+    const hiddenRender = render(
+      <AmountVisibilityProvider hidden>
+        <Tile label={LABEL} value={<Money value="595.500" size="lg" />} />,
+      </AmountVisibilityProvider>,
+    );
+    expect(hiddenRender.container.querySelector('.mds-money-value')?.textContent).toContain(getMoneyTexts().hiddenGlyph);
+    expect(hiddenRender.container.textContent).not.toContain('595.500');
   });
 
   it('keeps the missing em dash over hidden (like Money and the hero)', () => {
@@ -80,7 +97,7 @@ describe('Tile (BRIEF 23.9)', () => {
         <Tile label={LABEL} trailing={LINE} />
       </AmountVisibilityProvider>,
     );
-    expect(container.querySelector('.mds-tile-value')?.textContent).toBe(moneyTexts.missingGlyph);
+    expect(container.querySelector('.mds-tile-value')?.textContent).toBe(getMoneyTexts().missingGlyph);
   });
 
   it('keeps a NON-financial counter visible while amounts are hidden (23.22)', () => {

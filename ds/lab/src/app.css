@@ -69,6 +69,14 @@
   padding-inline: var(--mds-layout-screen-margin-phone);
 }
 
+/* 4.14 — the month grid strip runs FULL-BLEED (edge to edge, its own
+   layout.month-grid-margin = 0): undo the lab's screen padding so the
+   strip sits exactly as a phone screen places it. */
+.lab-month-full {
+  margin-inline: calc(-1 * var(--mds-layout-screen-margin-phone));
+  inline-size: calc(100% + 2 * var(--mds-layout-screen-margin-phone));
+}
+
 .lab-section {
   display: flex;
   flex-direction: column;
@@ -455,13 +463,20 @@
   height: min(680px, calc(100vh - 140px));
 }
 
-/* 3ب.0: the folded lab tools — one small round button fixed above the
-   TabBar at the START corner (never over ContextBar or TabBar); opens the
-   tools Sheet. The tools themselves keep their classic strip classes. */
+/* 3ب.0 → owner fix 2026-11-28: the folded lab tools — one small round
+   button in a RESERVED dock band between the content and the TabBar. It
+   covers NO content ever: the dock is furniture OUTSIDE the scroll flow
+   (the old fixed overlay rode over the tiles' text), and it still covers
+   neither ContextBar nor TabBar. Opens the tools Sheet. */
+.lab-tools-dock {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--mds-space-8);
+}
+
 .lab-tools-fab {
-  position: fixed;
-  inset-inline-start: var(--mds-space-8);
-  bottom: calc(env(safe-area-inset-bottom) + var(--mds-size-tab-bar) + var(--mds-space-8));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -474,9 +489,6 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  /* paints above the app screen (DOM order puts it first) but below the
-     bars/scrim/sheet/toast elevations — it never covers a sheet or toast. */
-  z-index: var(--mds-layer-sticky);
 }
 
 /* The tools sheet body: the classic strip, full width inside the sheet. */
@@ -531,4 +543,15 @@
    inline-flex row. */
 .lab-tabular-pair {
   flex-wrap: wrap;
+}
+
+/* 3ب.5: the «مشروع اليوم» head — the date caption line under the
+   PageHeader (10.2(1) + the 5.1 table), at the screen margins. */
+.lab-compose-date {
+  margin: 0;
+  padding-inline: var(--mds-layout-screen-margin-phone);
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  line-height: var(--mds-type-caption-line);
+  color: var(--mds-color-text-secondary);
 }

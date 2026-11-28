@@ -17,7 +17,7 @@
  */
 import { usePress } from '../../lib/use-press';
 import { useAmountVisibility } from '../../lib/amount-visibility';
-import { moneyTexts } from '../../i18n/ar';
+import { getMoneyTexts } from '../../i18n/ar';
 import { SparklineSvg } from '../../lib/sparkline';
 import type { TileProps } from './Tile.types';
 import './Tile.css';
@@ -49,12 +49,19 @@ export function Tile({
   // المالك»: a money tile without a sparkline would need its own marker.
   const { hidden } = useAmountVisibility();
   const isMoneyTile = draft !== undefined;
+  // A node value (a Money node — the 5.1 finance tile) renders itself: its
+  // own LTR isolation, sign, unit and hidden-amounts form; the string path
+  // keeps the tile's own glyph swap (missing «—», hidden «••••» for the
+  // finance tile only — the other tiles' counters are non-financial).
+  const isNodeValue = value !== undefined && value !== null && typeof value !== 'string';
   const number =
     value === undefined
-      ? moneyTexts.missingGlyph
-      : hidden && isMoneyTile
-        ? moneyTexts.hiddenGlyph
-        : value;
+      ? getMoneyTexts().missingGlyph
+      : isNodeValue
+        ? value
+        : hidden && isMoneyTile
+          ? getMoneyTexts().hiddenGlyph
+          : value;
   const classes = [
     'mds-tile',
     `mds-tile--${tone}`,
@@ -96,7 +103,7 @@ export function Tile({
           </span>
         ) : null}
         <span className="mds-tile-value">
-          <bdi dir="ltr">{number}</bdi>
+          {isNodeValue ? number : <bdi dir="ltr">{number}</bdi>}
         </span>
         {trailing ? <span className="mds-tile-line mds-type-caption">{trailing}</span> : null}
       </span>
