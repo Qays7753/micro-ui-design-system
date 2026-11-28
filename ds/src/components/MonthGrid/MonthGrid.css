@@ -1,0 +1,207 @@
+/*
+ * MonthGrid.css — BATCH2-SPECS §3.5. A full-width white strip: surface
+ * background, hairline surface-edge top/bottom borders only, no radius,
+ * no side borders on the phone (criterion 4). Every value rides a token
+ * by name; no raw hex/px/ms (ds-raw-values).
+ */
+
+.mds-month-grid {
+  display: block;
+  width: 100%;
+  background-color: var(--mds-color-surface);
+  border-block: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  /* The selection swap fades in quickly (§3.5-5) — the remount replays
+     this entry fade. */
+  animation: mds-month-select var(--mds-motion-quick-ms) var(--mds-motion-quick-ease);
+}
+
+@keyframes mds-month-select {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* The mode classes on the root: single (the selectable days), range
+   (the band rules below scope to it), and view (nothing selectable). */
+.mds-month-grid--single .mds-month-cell-button {
+  cursor: pointer;
+}
+
+/* View mode: no buttons at all — the static cell keeps the same anatomy. */
+.mds-month-grid--view .mds-month-cell-static {
+  cursor: default;
+}
+
+/* The day-names row: height 24 (space), micro in text-secondary centered
+   per column. */
+.mds-month-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: var(--mds-space-24);
+}
+
+.mds-month-day-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mds-color-text-secondary);
+}
+
+/* A week row: 7 equal columns — the cell width = the strip ÷ 7
+   (criterion 1). */
+.mds-month-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+/* The gridcell wrapper: layout only — the state classes ride the button
+   (the live gate reads the pressed element's own class). */
+.mds-month-cell {
+  display: block;
+  min-height: var(--mds-size-touch-min);
+}
+
+.mds-month-cell-button,
+.mds-month-cell-static {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mds-space-4);
+  padding: 0;
+  width: 100%;
+  min-height: var(--mds-size-touch-min);
+  box-sizing: border-box;
+  border: none;
+  background: none;
+  color: var(--mds-color-text-primary);
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: var(--mds-radius-xs);
+}
+
+.mds-month-cell-button:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: calc(-1 * var(--mds-border-focus-ring-offset));
+}
+
+.mds-month-cell-button:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+.mds-month-cell-button:disabled .mds-month-mark {
+  border-color: transparent;
+}
+
+.mds-month-cell-button--pressed,
+.mds-month-cell-button:active {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* The day's circle (size.day-mark) with the number inside — no leading
+   zero (criterion 3), r-full. The dot row under it keeps its height even
+   when empty, so the circle never shifts when the dots arrive. */
+.mds-month-mark {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--mds-size-day-mark);
+  block-size: var(--mds-size-day-mark);
+  border-radius: var(--mds-radius-full);
+  border: var(--mds-border-hairline) solid transparent;
+  font-variant-numeric: tabular-nums;
+}
+
+.mds-month-dots {
+  display: flex;
+  align-items: center;
+  gap: var(--mds-space-4);
+  block-size: var(--mds-size-dot-event);
+}
+
+.mds-month-dot {
+  inline-size: var(--mds-size-dot-event);
+  block-size: var(--mds-size-dot-event);
+  border-radius: var(--mds-radius-full);
+  background-color: var(--mds-color-text-secondary);
+}
+
+/* Today: the today-ring — a signal-line ring in the today-ring role. */
+.mds-month-cell-button--today .mds-month-mark {
+  border-color: var(--mds-role-today-ring);
+  border-width: var(--mds-border-signal-line);
+}
+
+/* Selected: the circle fills brand-anchor, the number goes on-anchor —
+   and the today ring stays when the selected day IS today (§3.5-2). */
+.mds-month-cell-button--selected .mds-month-mark {
+  background-color: var(--mds-color-brand-anchor);
+  border-color: var(--mds-color-brand-anchor);
+  color: var(--mds-color-on-anchor);
+}
+
+/* Range mode: the brand-selected-bg band at the circle's height joins
+   the start and end circles through the in-range cells (§3.5-2). The
+   band rides the button's own ::before, behind its content. */
+.mds-month-cell-button--in-range {
+  position: relative;
+}
+
+.mds-month-cell-button--in-range::before {
+  content: '';
+  position: absolute;
+  inset-block: calc((var(--mds-size-touch-min) - var(--mds-size-day-mark) - var(--mds-size-dot-event) - var(--mds-space-4)) / 2) auto;
+  block-size: var(--mds-size-day-mark);
+  background-color: var(--mds-color-brand-selected-bg);
+}
+
+/* The start cell: the band runs from its circle's center to the cell's
+   END edge (toward the range's body). */
+.mds-month-cell-button--range-start::before {
+  inset-inline-start: 50%;
+  inset-inline-end: 0;
+}
+
+/* The end cell: the band arrives from the cell's START edge to its
+   circle's center. */
+.mds-month-cell-button--range-end::before {
+  inset-inline-start: 0;
+  inset-inline-end: 50%;
+}
+
+/* The plain in-range cells: the band spans the full cell. */
+.mds-month-grid--range .mds-month-cell-button--in-range:not(.mds-month-cell-button--range-start):not(.mds-month-cell-button--range-end)::before {
+  inset-inline: 0;
+}
+
+/* The band sits BEHIND the circle (the content paints over it). */
+.mds-month-cell-button--in-range > * {
+  position: relative;
+}
+
+/* The tablet: the strip narrows to the content max inside a regular
+   surface — side borders and a radius appear (§3.5-2). */
+@media (min-width: 46.5rem) {
+  .mds-month-grid {
+    max-inline-size: var(--mds-breakpoint-content-max);
+    margin-inline: auto;
+    border-inline: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+    border-start-start-radius: var(--mds-radius-sm);
+    border-start-end-radius: var(--mds-radius-sm);
+    border-end-start-radius: var(--mds-radius-sm);
+    border-end-end-radius: var(--mds-radius-sm);
+  }
+}
+
+/* BRIEF 23.14: reduced motion turns every movement into a fade — here, off. */
+@media (prefers-reduced-motion: reduce) {
+  .mds-month-grid {
+    animation: none;
+  }
+}
