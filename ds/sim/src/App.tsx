@@ -4,9 +4,12 @@
  * app shell — the sim bar (§5.4) above the screen area, with the identity
  * overrides applied live through CSS variables (§5.6) and the amount
  * visibility bound to the store (ر2.4). SA7: the screen area carries the
- * §5.1 screens and the shared sheets.
+ * §5.1 screens and the shared sheets. PLAN-MOTION: the whole shell lives
+ * inside MotionProvider (ت1) — paused from visibilitychange (ت2), profile
+ * from وضع السائق (ت3), tier light from the compare switch or the saved
+ * measurement (§4.2), scale from مختبر الحركة, and the motion lab page.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { AmountVisibilityProvider, Toast } from '@micro/ds';
 import { Splash } from './splash/Splash';
 import { SimBar } from './shell/SimBar';
@@ -19,6 +22,14 @@ import { ScreenRouter } from './screens/ScreenRouter';
 import { SharedSheets } from './screens/Sheets';
 import { TASKS } from './tasks/tasks';
 import { installGhostClickGuard } from './shell/ghostClickGuard';
+import { MotionProvider } from './motion/MotionProvider';
+import { MotionLab } from './motion/lab/MotionLab';
+import { readSavedLight, saveTierLight, setMotionPrefs, useMotionPrefs } from './motion/motionPrefs';
+import { installReducedSim } from './motion/reducedSim';
+
+// «تقليل الحركة» المحاكى يعاد توجيه استعلامه قبل أول رسم (main.tsx يستدعيها
+// أيضًا — الاستدعاء هنا ضمانة للمسارات البديلة كالاختبارات).
+installReducedSim();
 
 /** The fixed simulation date (§5): الجمعة 27/11/2026. */
 export const SIM_DATE = 'الجمعة 27/11/2026';
@@ -74,6 +85,10 @@ function Shell() {
 
   const openPanel = useCallback(() => setPanelOpen(true), []);
   const openTasks = useCallback(() => setTasksOpen(true), []);
+  const openLab = useCallback(() => {
+    setPanelOpen(false);
+    setMotionPrefs({ labOpen: true });
+  }, []);
   const closeTasks = useCallback(() => setTasksOpen(false), []);
   const closePanel = useCallback(() => setPanelOpen(false), []);
 
@@ -96,9 +111,54 @@ function Shell() {
       </div>
       <SharedSheets />
       {tasksOpen ? <TasksSheet onDismiss={closeTasks} /> : null}
-      {panelOpen ? <SimPanel onDismiss={closePanel} onOpenTasks={openTasks} /> : null}
+      {panelOpen ? (
+        <SimPanel onDismiss={closePanel} onOpenTasks={openTasks} onOpenLab={openLab} />
+      ) : null}
       {toast !== null ? <Toast label={toast} onDismiss={() => setToast(null)} /> : null}
     </AmountVisibilityProvider>
+  );
+}
+
+/**
+ * المزوّد يلف التطبيق كله (ت1) — tier من وضع المقارنة وذكرى القياس المحفوظة
+ * للإصدار نفسه (§4.2)، وpaused من visibilitychange وفرض المختبر، وprofile
+ * من وضع السائق (ت3)، والسكيل من مختبر الحركة (و«بدون» يوقف كل الحركة
+ * عبر html[data-sim-motion] في motion.css فلا يتغير السكيل).
+ */
+function MotionGate({ children }: { children: ReactNode }) {
+  const state = useSim();
+  const motion = useMotionPrefs();
+
+  // ت2 — الإيقاف: paused حين document.visibilityState === "hidden".
+  const [documentPaused, setDocumentPaused] = useState(false);
+  useEffect(() => {
+    const update = () => setDocumentPaused(document.visibilityState === 'hidden');
+    update();
+    document.addEventListener('visibilitychange', update);
+    return () => document.removeEventListener('visibilitychange', update);
+  }, []);
+
+  // وضع «بدون» يوضع على <html> — مفتاح المقارنة في motion.css.
+  useEffect(() => {
+    if (motion.mode === 'off') {
+      document.documentElement.setAttribute('data-sim-motion', 'off');
+      return () => document.documentElement.removeAttribute('data-sim-motion');
+    }
+    return undefined;
+  }, [motion.mode]);
+
+  const tier = motion.mode === 'light' || readSavedLight() ? 'light' : 'auto';
+  return (
+    <MotionProvider
+      tier={tier}
+      paused={documentPaused || motion.forcedPaused}
+      profile={state.toggles.driverMode ? 'driver' : 'standard'}
+      scale={motion.mode === 'off' ? 1 : motion.labScale}
+      onTierChange={saveTierLight}
+    >
+      {children}
+      {motion.labOpen ? <MotionLab /> : null}
+    </MotionProvider>
   );
 }
 
@@ -114,8 +174,10 @@ export function App() {
 
   return (
     <SimProvider>
-      {!splashDone ? <Splash onDone={onSplashDone} /> : null}
-      <Shell />
+      <MotionGate>
+        {!splashDone ? <Splash onDone={onSplashDone} /> : null}
+        <Shell />
+      </MotionGate>
     </SimProvider>
   );
 }

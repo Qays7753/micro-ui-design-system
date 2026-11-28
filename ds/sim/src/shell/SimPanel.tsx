@@ -8,11 +8,22 @@ import { useState } from 'react';
 import { Button, ConfirmSheet, Radio, Section, Sheet, StatusBadge, Surface, Toggle } from '@micro/ds';
 import { useSim, useSimDispatch } from '../state/store';
 import { tasksProgress } from '../tasks/tasks';
+import { setMotionPrefs, useMotionPrefs } from '../motion/motionPrefs';
+import { setSimulatedReduced } from '../motion/reducedSim';
 import { IdentitySection } from './IdentitySection';
 import { VersionBadge } from './VersionBadge';
 
-export function SimPanel({ onDismiss, onOpenTasks }: { onDismiss: () => void; onOpenTasks: () => void }) {
+export function SimPanel({
+  onDismiss,
+  onOpenTasks,
+  onOpenLab,
+}: {
+  onDismiss: () => void;
+  onOpenTasks: () => void;
+  onOpenLab: () => void;
+}) {
   const { toggles, amountsHidden, tabOrder, tasks, identity } = useSim();
+  const motion = useMotionPrefs();
   const dispatch = useSimDispatch();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -61,6 +72,38 @@ export function SimPanel({ onDismiss, onOpenTasks }: { onDismiss: () => void; on
               selected={identity.fontScale === 200}
               onChange={(v) => dispatch({ type: 'identity/set', patch: { fontScale: v ? 200 : 100 } })}
             />
+          </Surface>
+        </Section>
+
+        <Section label="الحركة">
+          <Surface>
+            <Radio
+              label="وضع الحركة (زر المقارنة)"
+              value={motion.mode}
+              onChange={(v) => setMotionPrefs({ mode: v as 'addendum' | 'off' | 'light' })}
+              items={[
+                { value: 'addendum', label: 'الملحق' },
+                { value: 'off', label: 'بدون' },
+                { value: 'light', label: 'خفيف' },
+              ]}
+            />
+            <Toggle
+              label="تقليل الحركة"
+              selected={motion.reducedSim}
+              onChange={(v) => {
+                setSimulatedReduced(v);
+                setMotionPrefs({ reducedSim: v });
+              }}
+            />
+            <Toggle
+              label="إبطاء ×10"
+              selected={motion.labScale === 0.1}
+              onChange={(v) => setMotionPrefs({ labScale: v ? 0.1 : 1 })}
+            />
+            <button type="button" className="sim-panel__row" onClick={onOpenLab} data-sim-open-motion-lab>
+              <span>مختبر الحركة</span>
+              <span className="sim-panel__row-end">ح01–ح40</span>
+            </button>
           </Surface>
         </Section>
 

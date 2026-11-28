@@ -1,0 +1,24 @@
+/**
+ * motion/motion.css — ورقة الحركة (المبنية على صفات البيانات من §2.1
+ * والمتغيرات من tokens.ts بلا أي قيمة خام). هذا الملف يكبر مع الوحدات:
+ * كل وحدة تضيف قواعدها تحت تعليقها. تعارضات المكتبة تُحل هنا بالتجاوز
+ * داخل نطاق `.ds-motion-root` وحده (REPORT-MOTION «تعارض مع المكتبة»).
+ *
+ * M1 (الأساس): مفتاح «بدون» فقط — وضع المقارنة الذي يوقف كل حركة في
+ * نطاق الحركة ويُبقي الدوّار (مؤشر انتظار ضروري، 3.9). قواعد الحركات
+ * نفسها تصل مع وحداتها M2 وما بعدها.
+ */
+
+/* === «بدون» — زر المقارنة: كل حركة في نطاق الحركة فورية، بلا استثناء
+   إلا الدوّار والمخبوء عليه. المحاكاة وحدها تضع data-sim-motion="off"
+   على <html>؛ عند النقل يزال هذا القسم مع زر المقارنة. */
+html[data-sim-motion='off'] .ds-motion-root,
+html[data-sim-motion='off'] .ds-motion-root :not(.mds-button-spinner):not(.mds-button-spinner *) {
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
+/* === «تقليل الحركة» المحاكى يمر عبر data-ds-motion-reduced — قواعد كل
+   حركة تحت هذا النطاق تصل مع وحداتها. */

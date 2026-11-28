@@ -675,3 +675,102 @@ button.sim-later--tap {
 .sim-ask-limit p {
   margin: 0;
 }
+
+/* PLAN-MOTION M1: مختبر الحركة (الملحق §10) — صفحة داخل المحاكاة بملء
+   الشاشة فوق كل شيء (بلا أشرطة التطبيق)، بتمريرها الخاص. */
+.sim-motion-lab {
+  position: fixed;
+  inset: 0;
+  z-index: 60; /* صفحة المحاكاة الداخلية: فوق الشل وتحته طبقة الفتح 80 */
+  background: var(--mds-color-canvas);
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+}
+.sim-motion-lab__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--mds-layout-surface-padding-phone) / 2) var(--mds-layout-surface-padding-phone);
+  background: var(--mds-color-surface);
+  border-bottom: 1px solid var(--mds-color-surface-edge);
+}
+.sim-motion-lab__title {
+  margin: 0;
+  font-family: var(--mds-type-title-section-font);
+  font-size: var(--mds-type-title-section-size);
+  color: var(--mds-color-text-primary);
+}
+.sim-motion-lab__body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: var(--mds-layout-surface-padding-phone);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mds-layout-section-to-section);
+}
+.sim-motion-lab__speed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-layout-row-gap);
+  margin-bottom: var(--mds-layout-row-gap);
+}
+.sim-motion-lab__label {
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  color: var(--mds-color-text-primary);
+}
+.sim-motion-lab__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mds-layout-row-gap);
+}
+.sim-motion-lab__row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sim-motion-lab__row-info b {
+  font-family: var(--mds-type-body-font);
+  font-size: var(--mds-type-body-size);
+  color: var(--mds-color-text-primary);
+}
+.sim-motion-lab__meta {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  color: var(--mds-color-text-secondary);
+}
+.sim-motion-lab__row-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.sim-motion-lab__stats {
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  color: var(--mds-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.sim-motion-lab__run {
+  border: 1px solid var(--mds-color-surface-edge);
+  background: var(--mds-color-surface);
+  color: var(--mds-color-text-primary);
+  font-family: var(--mds-type-label-font);
+  font-size: var(--mds-type-label-size);
+  border-radius: var(--mds-radius-sm);
+  min-height: var(--mds-size-touch-min);
+  padding: 0 var(--mds-layout-row-padding-inline);
+}
+.sim-motion-lab__run:active {
+  background: var(--mds-color-surface-pressed);
+}
+.sim-motion-lab__note {
+  margin: 0;
+  font-family: var(--mds-type-caption-font);
+  font-size: var(--mds-type-caption-size);
+  color: var(--mds-color-text-secondary);
+}

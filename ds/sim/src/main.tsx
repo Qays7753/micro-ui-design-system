@@ -5,7 +5,12 @@ import { createRoot } from 'react-dom/client';
 import '@micro/ds/styles.css';
 import './tailwind-bridge.css';
 import './sim.css';
+import './motion/motion.css';
 import { App } from './App';
+import { installReducedSim } from './motion/reducedSim';
+
+// «تقليل الحركة» المحاكى يجب أن يعاد توجيهه قبل أول mount ليلتقطه المزوّد.
+installReducedSim();
 
 /*
  * PWA freshness (بلاغ المالك، جولة المستخدم 2026-11-28): the INSTALLED PWA
