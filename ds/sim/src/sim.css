@@ -636,3 +636,14 @@ button.sim-later--tap {
   font-size: var(--mds-type-caption-size);
   color: var(--mds-color-text-secondary);
 }
+
+/* جولة المستخدم: the unread dot on a notification row — the bell's own
+   8px ringed dot, drawn with the same tokens. */
+.sim-unread-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--mds-r-full);
+  background: var(--mds-color-brand-anchor);
+  border: 2px solid var(--mds-color-surface-card);
+}

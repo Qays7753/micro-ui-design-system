@@ -58,15 +58,68 @@ export function AskSheet({ onDismiss }: { onDismiss: () => void }) {
 }
 
 /** The notification center's place (the reviewer's empty state is real). */
+/** §5.2.9: each notification's text = the object + its new state. */
+const NOTIF_PHRASES: Record<string, string> = {
+  quote_submitted: 'وصل عرض سعر',
+  quote_expiring: 'عرض السعر ينتهي قريبًا',
+  status_changed: 'تغيّرت حالة التوصيل',
+  booking_outcome: 'نتيجة حجز التوصيل',
+  report_replied: 'ردّ المنصة على بلاغك',
+  booking_request_received: 'طلب حجز توصيل جديد',
+  evidence_expiry_reminder: 'أرفق إثبات التسليم قبل انتهاء المهلة',
+  driver_review_decision: 'قرار مراجعة الاعتماد',
+  moderation_decision: 'قرار المراجعة في عرضك',
+  listing_freshness_reminder: 'حدّث نشاط عرضك',
+};
+
+/** جولة المستخدم: the notifications READ their §5.2.9 texts now — real rows
+ *  with the unread dot and the time, tapping one marks it read and opens its
+ *  object. The NotificationCenter's place rides the sheet as a marker. */
 export function NotificationsSheet({ onDismiss }: { onDismiss: () => void }) {
   const state = useSim();
+  const dispatch = useSimDispatch();
   const role = state.role === 'guest' ? 'owner' : state.role ?? 'owner';
   const items = state.notifications.filter((n) => n.role === role);
+  const objectLine = (n: (typeof items)[number]): string => {
+    const phrase = NOTIF_PHRASES[n.key] ?? '';
+    if (n.key === 'quote_submitted' && n.object.startsWith('ت')) {
+      const d = state.deliveries.find((x) => x.id === n.object);
+      const valid = d?.quotes.find((q) => q.state === 'valid');
+      return `${n.object}: ${phrase} ${moneyText(valid?.amount ?? 0)} د`;
+    }
+    return n.object ? `${n.object}: ${phrase}` : phrase;
+  };
   return (
     <Sheet label="الإشعارات" onDismiss={onDismiss}>
       <SheetBody>
         {items.length ? (
-          <LaterMark name="NotificationCenter" note={`${items.length} إشعارات · ${items.filter((n) => !n.read).length} غير مقروءة`} />
+          <>
+          <LaterMark name="NotificationCenter" note="قائمة الإشعارات الحقيقية تُركَّب هنا" />
+          <Surface>
+            {items.map((n, i) => (
+              <ObjectRow
+                key={`${n.key}-${n.object}-${i}`}
+                label={objectLine(n)}
+                caption={n.time}
+                leading={n.read ? undefined : <span className="sim-unread-dot" aria-hidden="true" />}
+                onPress={() => {
+                  dispatch({ type: 'notification/read', key: n.key, object: n.object });
+                  const target = n.object.startsWith('ت')
+                    ? `object:${n.object}`
+                    : n.object.startsWith('ع')
+                      ? 'open-listing'
+                      : null;
+                  if (target === 'open-listing') {
+                    dispatch({ type: 'ui/openSheet', id: null });
+                    dispatch({ type: 'ui/openListing', id: n.object });
+                  } else if (target) {
+                    dispatch({ type: 'ui/openSheet', id: target });
+                  }
+                }}
+              />
+            ))}
+          </Surface>
+          </>
         ) : (
           <EmptyState label="الإشعارات تظهر هنا." />
         )}
