@@ -1,0 +1,87 @@
+/*
+ * TimePicker.css — BATCH2-SPECS §1.9 + ADDENDUM §2.4. The field box rides
+ * TextField's own input class + the shared .mds-picker-field-* anatomy
+ * (base.css — the row, box, press/focus/disabled, sheet head); the chips
+ * ride FilterChips' own chip class. This file owns only the time-specific
+ * pieces. Every value rides a token by name; no raw hex/px/ms
+ * (ds-raw-values).
+ */
+
+.mds-time-field {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mds-time-field-label {
+  font-weight: var(--mds-type-label-weight);
+  color: var(--mds-type-label-color, var(--mds-color-text-primary));
+  margin-block-end: var(--mds-layout-label-to-field);
+}
+
+/* The error border (§1.9-4, like TextField). */
+.mds-time-field-box--error {
+  border-color: var(--mds-color-status-problem-fg);
+}
+
+/* The time text: tabular figures inside an LTR run (ج7). */
+.mds-time-field-text {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+
+.mds-time-field-icon {
+  color: var(--mds-color-text-secondary);
+}
+
+.mds-time-field--disabled .mds-time-field-label {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-time-field--disabled .mds-picker-field-box {
+  background-color: var(--mds-color-disabled-bg);
+  border-color: var(--mds-color-disabled-bg);
+}
+
+.mds-time-field--disabled .mds-time-field-icon {
+  color: var(--mds-color-disabled-fg);
+}
+
+/* The save-time error line under the field (§1.9-4). */
+.mds-time-field-error {
+  color: var(--mds-color-status-problem-fg);
+  margin-block-start: var(--mds-layout-field-to-help);
+}
+
+/* The drafted time in the sheet head. */
+.mds-time-sheet-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The slot grids: a titled radiogroup of chips, 4 columns (§2.4 — 12 hour
+ * chips and 4 minute chips both ride 4). */
+.mds-time-slot {
+  display: flex;
+  flex-direction: column;
+  margin-block-start: var(--mds-space-16);
+}
+
+.mds-time-slot-title {
+  margin-block-end: var(--mds-space-8);
+}
+
+.mds-time-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--mds-layout-chip-gap);
+  min-height: var(--mds-size-touch-min);
+}
+
+.mds-time-slot-chip {
+  width: 100%;
+}
+
+.mds-time-slot-chip-label {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}

@@ -1,0 +1,97 @@
+/*
+ * QuantityStepper.css — BATCH2-SPECS §1.6. Every value rides a token by
+ * name; no raw hex/px/ms in this file (ds-raw-values).
+ */
+
+.mds-quantity-stepper {
+  direction: ltr;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mds-space-8);
+}
+
+/* The stepper button: size.icon-button circle, r-full, hairline
+   surface-edge border, the 20 icon in text-primary (§1.6-2). */
+.mds-quantity-stepper-button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--mds-size-icon-button);
+  height: var(--mds-size-icon-button);
+  padding: 0;
+  border: var(--mds-border-hairline) solid var(--mds-color-surface-edge);
+  border-radius: var(--mds-radius-full);
+  background-color: transparent;
+  color: var(--mds-color-text-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mds-quantity-stepper-button svg {
+  width: var(--mds-size-icon-20);
+  height: var(--mds-size-icon-20);
+}
+
+/* Pressed: surface-pressed background — no scale, no ripple (23.2). Both
+   the hook state and the native :active drive the same look. */
+.mds-quantity-stepper-button:active,
+.mds-quantity-stepper-button[data-pressed],
+.mds-quantity-stepper-button--pressed {
+  background-color: var(--mds-color-surface-pressed);
+}
+
+/* Hover only on fine pointers, same color as the press (23.2). */
+@media (hover: hover) and (pointer: fine) {
+  .mds-quantity-stepper-button:not(:disabled):hover {
+    background-color: var(--mds-color-surface-pressed);
+  }
+}
+
+/* Focus ring: 2px brand-text, offset 2, keyboard only (23.2). */
+.mds-quantity-stepper-button:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+/* Disabled: the icon dims (23.2) — an impossible step is visibly off. */
+.mds-quantity-stepper-button:disabled {
+  color: var(--mds-color-disabled-fg);
+  cursor: default;
+}
+
+/* The number field: amount-row figures, centered, no border, its touch
+   floor is size.touch-min wide (§1.6-2); Western digits with tabular
+   figures inside the LTR isolation. */
+.mds-quantity-stepper-input {
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  /* the field is a touch target too: its height rides the 48 floor while
+     the amount-row line centers the digits inside it. */
+  min-height: var(--mds-size-touch-min);
+  min-width: var(--mds-size-touch-min);
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: var(--mds-color-text-primary);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--mds-type-amount-row-font);
+  font-size: var(--mds-type-amount-row-size);
+  line-height: var(--mds-type-amount-row-line);
+  font-weight: var(--mds-type-amount-row-weight);
+}
+
+.mds-quantity-stepper-input:focus-visible {
+  outline: var(--mds-border-focus-ring-width) solid var(--mds-role-focus-ring);
+  outline-offset: var(--mds-border-focus-ring-offset);
+}
+
+.mds-quantity-stepper-input:disabled {
+  color: var(--mds-color-disabled-fg);
+}
+
+.mds-quantity-stepper--disabled {
+  cursor: default;
+}
